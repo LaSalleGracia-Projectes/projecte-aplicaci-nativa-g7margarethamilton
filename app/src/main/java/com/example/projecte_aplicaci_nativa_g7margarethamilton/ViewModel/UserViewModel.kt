@@ -33,6 +33,15 @@ class UserViewModel : ViewModel() {
             true
         }
     }
+    fun validateSurName(surname: String): Boolean {
+        return if (surname.length < 2) {
+            _surnameError.value = "El nombre debe tener al menos 2 caracteres"
+            false
+        } else {
+            _surnameError.value = null
+            true
+        }
+    }
 
     fun validateEmail(email: String): Boolean {
         return if (!email.matches(Regex("[^@]+@[^@]+\\.[^@]+"))) {
