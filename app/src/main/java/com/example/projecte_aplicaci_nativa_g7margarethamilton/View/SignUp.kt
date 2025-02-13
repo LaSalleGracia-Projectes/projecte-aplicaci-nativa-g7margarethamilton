@@ -27,6 +27,7 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import com.example.projecte_aplicaci_nativa_g7margarethamilton.ViewModel.UserViewModel
 import Terms
+import android.annotation.SuppressLint
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
@@ -83,82 +84,69 @@ fun SignIn(validator: UserViewModel) {
             modifier = Modifier.padding(bottom = 24.dp)
         )
 
-        OutlinedTextField(
-            value = name,
+
+        CustomOutlinedTextField(
+            modifier = Modifier,
+            name,
             onValueChange = {
-                name = it
-                validator.validateName(it)
+                name = it  // Actualiza el valor
+                validator.validateName(it)  // Valida el nuevo valor
             },
-            placeholder = { Text("Ex: Joan") },
-            isError = nameError != null,
-            supportingText = { nameError?.let { Text(it) } },
-            modifier = Modifier
-                .fillMaxWidth(),
-                //.padding(bottom = 16.dp),
-            singleLine = true
-        )
-
-        OutlinedTextField(
-            value = surName,
-            onValueChange = { surName = it },
-            placeholder = { Text("Ex: Doe") },
-            isError = nameError != null,
-            supportingText = { nameError?.let { Text(it) } },
-            modifier = Modifier
-                .fillMaxWidth(),
-                    //.padding(bottom = 16.dp),
-            singleLine = true
-        )
-
-        OutlinedTextField(
-            value = email,
+            "Ex: Joan",
+            nameError,
+            false
+            )
+        CustomOutlinedTextField(
+            modifier = Modifier,
+            surName,
             onValueChange = {
-                email = it
-                validator.validateEmail(it)
+                surName = it  // Actualiza el valor
+                validator.validateSurName(it)  // Valida el nuevo valor
             },
-            isError = emailError != null,
-            supportingText = { emailError?.let { Text(it) } },
-            placeholder = { Text("email@domain.com") },
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
-            modifier = Modifier
-                .fillMaxWidth(),
-                    //.padding(bottom = 16.dp),
-            singleLine = true
+            "Ex: Doe",
+            null,
+            false
         )
-
-        OutlinedTextField(
-            value = password,
+        CustomOutlinedTextField(
+            modifier = Modifier,
+            email,
             onValueChange = {
-                password = it
-                validator.validatePassword(it)
+                email = it  // Actualiza el valor
+                validator.validateEmail(it)  // Valida el nuevo valor
             },
-            isError = passwordError != null,
-            supportingText = { passwordError?.let { Text(it) } },
-            placeholder = { Text("Contrasenya") },
-            visualTransformation = PasswordVisualTransformation(),
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-            modifier = Modifier
-                .fillMaxWidth(),
-                    //.padding(bottom = 16.dp),
-            singleLine = true
+            "email@domain.com",
+            emailError,
+            false,
+            KeyboardType.Email
         )
 
-        OutlinedTextField(
-            value = confirmPassword,
+        CustomOutlinedTextField(
+            modifier = Modifier,
+            password,
             onValueChange = {
-                confirmPassword = it
+                password = it  // Actualiza el valor
+                validator.validatePassword(it)  // Valida el nuevo valor
+            },
+            "Contrasenya",
+            passwordError,
+            true,
+            KeyboardType.Password
+        )
+
+        CustomOutlinedTextField(
+            modifier = Modifier,
+            confirmPassword,
+            onValueChange = {
+                confirmPassword = it  // Actualiza el valor
                 validator.validateConfirmPassword(password, it)
             },
-            placeholder = { Text("Confirma la contrasenya") },
-            supportingText = { confirmPasswordError?.let { Text(it) } },
-            isError = confirmPasswordError != null,
-            visualTransformation = PasswordVisualTransformation(),
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-            modifier = Modifier
-                .fillMaxWidth(),
-                    //.padding(bottom = 24.dp),
-            singleLine = true
+            "Confirma la contrasenya",
+            confirmPasswordError,
+            true,
+            KeyboardType.Password
         )
+
+
 
         Button(
             onClick = { /* TODO */ },
@@ -203,16 +191,11 @@ fun SignIn(validator: UserViewModel) {
             Text("Ja tinc un compte")
         }
 
-        /*Text(
-            text = "Al registrar-te estàs acceptant els Terminis i Condicions",
-            style = MaterialTheme.typography.bodySmall,
-            color = Color.Gray,
-            modifier = Modifier.padding(top = 16.dp, bottom = 24.dp)
-        )*/
         Terms()
     }
 }
 
+@SuppressLint("ViewModelConstructorInComposable")
 @Preview(showBackground = true)
 @Composable
 fun SignInPreview() {
