@@ -2,6 +2,7 @@ package com.example.projecte_aplicaci_nativa_g7margarethamilton.View
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -9,18 +10,23 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -28,134 +34,157 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import com.example.projecte_aplicaci_nativa_g7margarethamilton.Routes
 import com.example.projecte_aplicaci_nativa_g7margarethamilton.ViewModel.UserViewModel
 
 @Composable
-fun LogIn(validator: UserViewModel) {
+fun LogIn(navController: NavController, validator: UserViewModel) {
     var email by rememberSaveable { mutableStateOf("") }
     var password by rememberSaveable { mutableStateOf("") }
     val emailError by validator.emailError.collectAsState()
     val passwordError by validator.passwordError.collectAsState()
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .verticalScroll(rememberScrollState())
-            .padding(horizontal = 24.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        // Espacio flexible en la parte superior
-        Spacer(modifier = Modifier.weight(0.2f))
-
-        // Título
-        Text(
-            text = "Flow2Day!",
-            style = MaterialTheme.typography.headlineLarge,
-            fontWeight = FontWeight.Bold,
-            modifier = Modifier.padding(bottom = 40.dp)
-        )
-
-        // Contenedor del formulario
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(16.dp),
-            modifier = Modifier.fillMaxWidth()
+    Box(modifier = Modifier.fillMaxSize()) {
+        // Close button
+        // Close button
+        IconButton(
+            onClick = { navController.navigate(Routes.Welcome.route) },
+            modifier = Modifier
+                .align(Alignment.TopEnd)
+                .padding(16.dp)
         ) {
-            Text(
-                text = "Inici de sessió",
-                style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.Medium,
+            Icon(
+                imageVector = Icons.Default.Close,
+                contentDescription = "Close"
             )
+        }
 
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(horizontal = 24.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
+            // App title
             Text(
-                text = "Introdueix el teu correu electronic",
-                style = MaterialTheme.typography.bodyMedium,
-                color = Color.Gray,
+                text = "Flow2Day!",
+                fontSize = 35.sp,
+                fontWeight = FontWeight.Bold,
+                color = Color(0xFF2E3B4E),
                 modifier = Modifier.padding(bottom = 8.dp)
             )
 
-            CustomOutlinedTextField(
-                modifier = Modifier,
-                email,
+            // Login subtitle
+            Text(
+                text = "Login",
+                fontSize = 18.sp,
+                color = Color(0xFF2E3B4E),
+                modifier = Modifier.padding(bottom = 32.dp)
+            )
+
+            // Email field
+            OutlinedTextField(
+                value = email,
                 onValueChange = {
                     email = it
                     validator.validateEmail(it)
                 },
-                "email@domain.com",
-                null,
-                false,
-                KeyboardType.Email
+                placeholder = { Text("Email") },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 16.dp),
+                singleLine = true,
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
+                colors = OutlinedTextFieldDefaults.colors(
+                    unfocusedBorderColor = Color.LightGray,
+                    focusedBorderColor = Color.Gray
+                )
             )
 
-            CustomOutlinedTextField(
-                modifier = Modifier,
-                password,
+            // Password field
+            OutlinedTextField(
+                value = password,
                 onValueChange = {
                     password = it
                     validator.validatePassword(it)
                 },
-                "Contrasenya",
-                null,
-                true,
-                KeyboardType.Password
-            )
-
-            Button(
-                onClick = { /* TODO */ },
+                placeholder = { Text("Password") },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(48.dp),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = Color.Black
+                    .padding(bottom = 4.dp),
+                singleLine = true,
+                visualTransformation = PasswordVisualTransformation(),
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+                colors = OutlinedTextFieldDefaults.colors(
+                    unfocusedBorderColor = Color.LightGray,
+                    focusedBorderColor = Color.Gray
                 )
+            )
+
+            // Forgot password text
+            Text(
+                text = "Lorem ipsum sit amet?",
+                color = Color.DarkGray,
+                fontSize = 14.sp,
+                modifier = Modifier
+                    .align(Alignment.Start)
+                    .padding(bottom = 24.dp)
+            )
+
+            // Login button
+            Button(
+                onClick = { /* TODO */ },
+                enabled = if (email.isNotEmpty() || password.isNotEmpty()) {
+                    true
+                } else {
+                    false
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(50.dp),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color(0xFF2E3B4E)
+                ),
+                shape = MaterialTheme.shapes.small
             ) {
-                Text("Inicia sessió")
+                Text("Login")
             }
 
+            // Or separator
             Text(
                 text = "or",
                 color = Color.Gray,
-                modifier = Modifier.padding(vertical = 8.dp)
+                modifier = Modifier.padding(vertical = 12.dp)
             )
 
+            // Google login button
             Button(
                 onClick = { /* TODO */ },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(48.dp),
+                    .height(50.dp),
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = Color.LightGray
-                )
+                    containerColor = Color(0xFF7D8A99)
+                ),
+                shape = MaterialTheme.shapes.small
             ) {
-                Text("Inicia sessió amb Google", color = Color.Black)
+                Text("Login With Google")
             }
         }
-
-        Spacer(modifier = Modifier.weight(0.3f))
-
-        // Botón de registro en la parte inferior
-        Button(
-            onClick = { /* TODO */ },
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(48.dp),
-            colors = ButtonDefaults.buttonColors(
-                containerColor = Color.Black
-            )
-        ) {
-            Text("Registra't")
-        }
-        Spacer(modifier = Modifier.weight(0.2f))
     }
 }
 
-@SuppressLint("ViewModelConstructorInComposable")
-@Preview(showBackground = true, showSystemUi = true)
-@Composable
-fun LoginPreview() {
-
-    val validator = UserViewModel()
-    LogIn(validator)
-}
+//@SuppressLint("ViewModelConstructorInComposable")
+//@Preview(showBackground = true, showSystemUi = true)
+//@Composable
+//fun LoginPreview() {
+//    val validator = UserViewModel()
+//    LogIn(validator)
+//}
