@@ -44,7 +44,7 @@ class UserViewModel : ViewModel() {
     }
 
     fun validateEmail(email: String): Boolean {
-        return if (!email.matches(Regex("[^@]+@[^@]+\\.[^@]+"))) {
+        return if (!email.matches(Regex("[^@]+@[^@]+\\.[^@]+")) && email.isNotEmpty()) {
             _emailError.value = "Email no válido"
             false
         } else {
