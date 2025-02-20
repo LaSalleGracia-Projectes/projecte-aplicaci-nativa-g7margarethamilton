@@ -26,12 +26,11 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import com.example.projecte_aplicaci_nativa_g7margarethamilton.Routes
 
 @Composable
-fun WelcomeScreen(
-    onLoginClick: () -> Unit = {},
-    onRegisterClick: () -> Unit = {}
-) {
+fun WelcomeView(navController: NavController) {
     Scaffold { paddingValues ->
         Box(
             modifier = Modifier
@@ -77,14 +76,14 @@ fun WelcomeScreen(
 
                 // Login Button
                 Button(
-                    onClick = onLoginClick,
+                    onClick = {navController.navigate(Routes.Login.route)},
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(56.dp),
                     colors = ButtonDefaults.buttonColors(
                         containerColor = Color(0xFF2E3B4E)
                     ),
-                    shape = RoundedCornerShape(6.dp)
+                    shape = MaterialTheme.shapes.small
                 ) {
                     Text(
                         text = "Login",
@@ -96,14 +95,14 @@ fun WelcomeScreen(
 
                 // Register Button
                 OutlinedButton(
-                    onClick = onRegisterClick,
+                    onClick = {navController.navigate(Routes.Register.route)},
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(56.dp),
                     colors = ButtonDefaults.outlinedButtonColors(
                         containerColor = Color(0xFF738290),
                     ),
-                    shape = RoundedCornerShape(6.dp)
+                    shape = MaterialTheme.shapes.small
                 ) {
                     Text(
                         text = "Register",
@@ -118,10 +117,10 @@ fun WelcomeScreen(
 
 @Preview(showBackground = true)
 @Composable
-fun WelcomeScreenPreview() {
+fun WelcomeViewPreview() {
     MaterialTheme {
         Surface {
-            WelcomeScreen()
+            //WelcomeView()
         }
     }
 }
