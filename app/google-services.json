@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "114440577753",
+    "project_id": "margaret-hamilton-b1e83",
+    "storage_bucket": "margaret-hamilton-b1e83.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:114440577753:android:85cf63c46153236ffc14c8",
+        "android_client_info": {
+          "package_name": "com.example.projecte_aplicaci_nativa_g7margarethamilton"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA6386dVv6Pi-zd-LbY-LNlPSyJnaizHxo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
