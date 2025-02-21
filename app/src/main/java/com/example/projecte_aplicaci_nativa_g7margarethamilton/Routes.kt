@@ -5,4 +5,8 @@ object Welcome : Routes("welcome")
 object Register : Routes("register")
 object Login : Routes("login")
 
+// Nuevas rutas para la bottom nav
+object Home : Routes("home")
+object Settings : Routes("settins")
+object Profile : Routes("profile")
 }
