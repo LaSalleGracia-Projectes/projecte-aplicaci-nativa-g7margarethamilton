@@ -1,5 +1,6 @@
 package com.example.projecte_aplicaci_nativa_g7margarethamilton.View
 
+import Terms
 import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -236,6 +237,8 @@ fun SignIn(navController: NavController, validator: UserViewModel) {
             ) {
                 Text("Register With Google")
             }
+
+            Terms()
         }
     }
 }
