@@ -1,79 +1,94 @@
 package com.example.projecte_aplicaci_nativa_g7margarethamilton.ViewModel
 
-
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import java.time.LocalDate
 
 class UserViewModel : ViewModel() {
-    private val _nameError = MutableStateFlow<String?>(null)
-    val nameError = _nameError.asStateFlow()
-
-    private val _surnameError = MutableStateFlow<String?>(null)
-    val surnameError = _surnameError.asStateFlow()
+    private val _nicknameError = MutableStateFlow<String?>(null)
+    val nicknameError = _nicknameError.asStateFlow()
+    private var nicknameValid = false
 
     private val _emailError = MutableStateFlow<String?>(null)
     val emailError = _emailError.asStateFlow()
+    private var emailValid = false
 
     private val _passwordError = MutableStateFlow<String?>(null)
     val passwordError = _passwordError.asStateFlow()
+    private var passwordValid = false
 
     private val _confirmPasswordError = MutableStateFlow<String?>(null)
     val confirmPasswordError = _confirmPasswordError.asStateFlow()
+    private var confirmPasswordValid = false
 
-    fun validateName(name: String): Boolean {
-        return if (name.length < 2) {
-            _nameError.value = "El nombre debe tener al menos 2 caracteres"
-            false
+    var _correctFormat = MutableStateFlow(false)
+    val correctFormat = _correctFormat.asStateFlow()
+
+    fun validateNickname(nickname: String): Boolean {
+        if (nickname.length < 2) {
+            _nicknameError.value = "El nombre debe tener al menos 2 caracteres"
+            nicknameValid = false
+            return false
         } else {
-            _nameError.value = null
-            true
-        }
-    }
-    fun validateSurName(surname: String): Boolean {
-        return if (surname.length < 2) {
-            _surnameError.value = "El nombre debe tener al menos 2 caracteres"
-            false
-        } else {
-            _surnameError.value = null
-            true
+            _nicknameError.value = null
+            nicknameValid = true
+            return true
         }
     }
 
     fun validateEmail(email: String): Boolean {
-        return if (!email.matches(Regex("[^@]+@[^@]+\\.[^@]+")) && email.isNotEmpty()) {
+        if (!email.matches(Regex("[^@]+@[^@]+\\.[^@]+")) && email.isNotEmpty()) {
             _emailError.value = "Email no válido"
-            false
+            emailValid = false
+            return false
         } else {
             _emailError.value = null
-            true
+            emailValid = true
+            return true
         }
     }
 
-
     fun validatePassword(password: String): Boolean {
-        return if (!password.matches(Regex("^(?=.*[A-Za-z])(?=.*\\d).{8,}$"))) {
-            _passwordError.value =
-                "La contraseña deben ser 9 dígitos y contener al menos una letra y un número"
-            false
+        if (!password.matches(Regex("^(?=.*[A-Za-z])(?=.*\\d).{9,}$"))) {
+            _passwordError.value = "La contraseña debe tener al menos 8 caracteres y contener al menos una letra y un número"
+            passwordValid = false
+            return false
         } else {
             _passwordError.value = null
-            true
+            passwordValid = true
+            return true
         }
     }
 
     fun validateConfirmPassword(password1: String, password2: String): Boolean {
-        return if (password1 != password2) {
+        if (password1 != password2) {
             _confirmPasswordError.value = "Las contraseñas deben coincidir"
-            false
+            confirmPasswordValid = false
+            return false
         } else {
             _confirmPasswordError.value = null
-            true
+            confirmPasswordValid = true
+            return true
         }
     }
 
+    fun validateLogin(email: String, password: String) {
+        if ((!email.matches(Regex("[^@]+@[^@]+\\.[^@]+")) && email.isNotEmpty()) || !password.matches(Regex("^(?=.*[A-Za-z])(?=.*\\d).{8,}$"))) {
+            _correctFormat.value = false
+        } else {
+            _correctFormat.value = true
+        }
+    }
 
+    fun validateSignUp(nickname: String, email: String, password: String, confirmPassword: String) {
+        if (nickname.length < 2 || (!email.matches(Regex("[^@]+@[^@]+\\.[^@]+")) && email.isNotEmpty()) || !password.matches(Regex("^(?=.*[A-Za-z])(?=.*\\d).{8,}$")) || password != confirmPassword) {
+            _correctFormat.value = false
+        } else {
+            _correctFormat.value = true
+        }
+    }
+
+    fun rebootCorrectFormat() {
+        _correctFormat.value = false
+    }
 }

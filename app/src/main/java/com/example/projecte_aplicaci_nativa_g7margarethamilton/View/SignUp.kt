@@ -1,7 +1,6 @@
 package com.example.projecte_aplicaci_nativa_g7margarethamilton.View
 
 import Terms
-import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -31,7 +30,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -39,31 +37,25 @@ import com.example.projecte_aplicaci_nativa_g7margarethamilton.Routes
 import com.example.projecte_aplicaci_nativa_g7margarethamilton.ViewModel.UserViewModel
 
 @Composable
-fun SignIn(navController: NavController, validator: UserViewModel) {
-    var name by rememberSaveable { mutableStateOf("") }
-    var surName by rememberSaveable { mutableStateOf("") }
+fun SignIn(navController: NavController, viewModel: UserViewModel) {
+    var nickname by rememberSaveable { mutableStateOf("") }
     var email by rememberSaveable { mutableStateOf("") }
     var password by rememberSaveable { mutableStateOf("") }
     var confirmPassword by rememberSaveable { mutableStateOf("") }
 
-    val nameError by validator.nameError.collectAsState()
-    val emailError by validator.emailError.collectAsState()
-    val passwordError by validator.passwordError.collectAsState()
-    val confirmPasswordError by validator.confirmPasswordError.collectAsState()
-    val surNameError by validator.surnameError.collectAsState()
-
-    var esValido =
-        if (name.isNotEmpty() && surName.isNotEmpty() && email.isNotEmpty() && password.isNotEmpty() && confirmPassword.isNotEmpty() &&
-            nameError!!.isEmpty() && emailError!!.isEmpty() && passwordError!!.isEmpty() && confirmPasswordError!!.isEmpty() && surNameError!!.isEmpty()) {
-            true
-        } else {
-            false
-        }
+    val nicknameError by viewModel.nicknameError.collectAsState()
+    val emailError by viewModel.emailError.collectAsState()
+    val passwordError by viewModel.passwordError.collectAsState()
+    val confirmPasswordError by viewModel.confirmPasswordError.collectAsState()
+    val correctFormat by viewModel.correctFormat.collectAsState()
 
     Box(modifier = Modifier.fillMaxSize()) {
         // Close button
         IconButton(
-            onClick = { navController.navigate(Routes.Welcome.route) },
+            onClick = {
+                viewModel.rebootCorrectFormat()
+                navController.navigate(Routes.Welcome.route)
+            },
             modifier = Modifier
                 .align(Alignment.TopEnd)
                 .padding(16.dp)
@@ -99,10 +91,11 @@ fun SignIn(navController: NavController, validator: UserViewModel) {
 
             // Name field
             OutlinedTextField(
-                value = name,
+                value = nickname,
                 onValueChange = {
-                    name = it
-                    validator.validateName(it)
+                    nickname = it
+                    viewModel.validateNickname(it)
+                    viewModel.validateSignUp(nickname, email, password, confirmPassword)
                 },
                 placeholder = { Text("Nombre") },
                 modifier = Modifier
@@ -113,27 +106,8 @@ fun SignIn(navController: NavController, validator: UserViewModel) {
                     unfocusedBorderColor = Color.LightGray,
                     focusedBorderColor = Color.Gray
                 ),
-                isError = nameError != null,
-                supportingText = { nameError?.let { Text(it) } },
-            )
-
-            // First Name field
-            OutlinedTextField(
-                value = surName,
-                onValueChange = {
-                    surName = it
-                },
-                placeholder = { Text("Apellido") },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(bottom = 12.dp),
-                singleLine = true,
-                colors = OutlinedTextFieldDefaults.colors(
-                    unfocusedBorderColor = Color.LightGray,
-                    focusedBorderColor = Color.Gray
-                ),
-                isError = surNameError != null,
-                supportingText = { surNameError?.let { Text(it) } },
+                isError = nicknameError != null,
+                supportingText = { nicknameError?.let { Text(it) } },
             )
 
             // Email field
@@ -141,7 +115,8 @@ fun SignIn(navController: NavController, validator: UserViewModel) {
                 value = email,
                 onValueChange = {
                     email = it
-                    validator.validateEmail(it)
+                    viewModel.validateEmail(it)
+                    viewModel.validateSignUp(nickname, email, password, confirmPassword)
                 },
                 placeholder = { Text("Email") },
                 modifier = Modifier
@@ -162,7 +137,8 @@ fun SignIn(navController: NavController, validator: UserViewModel) {
                 value = password,
                 onValueChange = {
                     password = it
-                    validator.validatePassword(it)
+                    viewModel.validatePassword(it)
+                    viewModel.validateSignUp(nickname, email, password, confirmPassword)
                 },
                 placeholder = { Text("Contraseña") },
                 modifier = Modifier
@@ -184,7 +160,8 @@ fun SignIn(navController: NavController, validator: UserViewModel) {
                 value = confirmPassword,
                 onValueChange = {
                     confirmPassword = it
-                    validator.validateConfirmPassword(password, it)
+                    viewModel.validateConfirmPassword(password, it)
+                    viewModel.validateSignUp(nickname, email, password, confirmPassword)
                 },
                 placeholder = { Text("Repite la contraseña") },
                 modifier = Modifier
@@ -212,7 +189,7 @@ fun SignIn(navController: NavController, validator: UserViewModel) {
                     containerColor = Color(0xFF2E3B4E)
                 ),
                 shape = MaterialTheme.shapes.small,
-                enabled = esValido
+                enabled = correctFormat
             ) {
                 Text("Register")
             }
@@ -233,7 +210,8 @@ fun SignIn(navController: NavController, validator: UserViewModel) {
                 colors = ButtonDefaults.buttonColors(
                     containerColor = Color(0xFF7D8A99)
                 ),
-                shape = MaterialTheme.shapes.small
+                shape = MaterialTheme.shapes.small,
+                enabled = false
             ) {
                 Text("Register With Google")
             }
