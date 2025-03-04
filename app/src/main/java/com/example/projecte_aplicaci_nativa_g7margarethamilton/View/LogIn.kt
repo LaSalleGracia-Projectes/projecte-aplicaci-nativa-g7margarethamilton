@@ -142,7 +142,9 @@ fun LogIn(navController: NavController, viewModel: UserViewModel) {
 
             // Login button
             Button(
-                onClick = { /* TODO */ },
+                onClick = {
+                    // TODO: Login app
+                },
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(50.dp),
@@ -164,7 +166,9 @@ fun LogIn(navController: NavController, viewModel: UserViewModel) {
 
             // Google login button
             Button(
-                onClick = { /* TODO */ },
+                onClick = {
+                    // TODO: Login app amb Google
+                },
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(50.dp),

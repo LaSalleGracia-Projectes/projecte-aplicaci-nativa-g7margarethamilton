@@ -181,7 +181,11 @@ fun SignIn(navController: NavController, viewModel: UserViewModel) {
 
             // Register button
             Button(
-                onClick = { /* TODO */ },
+                onClick = {
+                    // TODO: Register user
+                    // TODO: Validate register
+                    // TODO: Login user
+                },
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(50.dp),
@@ -203,7 +207,11 @@ fun SignIn(navController: NavController, viewModel: UserViewModel) {
 
             // Google register button
             Button(
-                onClick = { /* TODO */ },
+                onClick = {
+                    // TODO: Register amb Google
+                    // TODO: Validate register
+                    // TODO: Login app amb Google
+                },
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(50.dp),
