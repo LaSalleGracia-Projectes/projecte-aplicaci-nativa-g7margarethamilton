@@ -96,13 +96,15 @@ fun LogIn(navController: NavController, viewModel: UserViewModel) {
                 placeholder = { Text("Email") },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(bottom = 16.dp),
+                    .padding(bottom = 12.dp),
                 singleLine = true,
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
                 colors = OutlinedTextFieldDefaults.colors(
                     unfocusedBorderColor = Color.LightGray,
                     focusedBorderColor = Color.Gray
-                )
+                ),
+                isError = emailError != null,
+                supportingText = { emailError?.let { Text(it) } },
             )
 
             // Password field
@@ -113,17 +115,19 @@ fun LogIn(navController: NavController, viewModel: UserViewModel) {
                     viewModel.validatePassword(it)
                     viewModel.validateLogin(email, password)
                 },
-                placeholder = { Text("Password") },
+                placeholder = { Text("Contraseña") },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(bottom = 4.dp),
+                    .padding(bottom = 12.dp),
                 singleLine = true,
                 visualTransformation = PasswordVisualTransformation(),
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
                 colors = OutlinedTextFieldDefaults.colors(
                     unfocusedBorderColor = Color.LightGray,
                     focusedBorderColor = Color.Gray
-                )
+                ),
+                isError = passwordError != null,
+                supportingText = { passwordError?.let { Text(it) } },
             )
 
             // Forgot password text
