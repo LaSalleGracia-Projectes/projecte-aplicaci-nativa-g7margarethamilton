@@ -90,5 +90,9 @@ class UserViewModel : ViewModel() {
 
     fun rebootCorrectFormat() {
         _correctFormat.value = false
+        _nicknameError.value = null
+        _emailError.value = null
+        _passwordError.value = null
+        _confirmPasswordError.value = null
     }
 }
