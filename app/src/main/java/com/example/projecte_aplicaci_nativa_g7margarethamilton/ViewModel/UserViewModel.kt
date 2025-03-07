@@ -1,8 +1,15 @@
 package com.example.projecte_aplicaci_nativa_g7margarethamilton.ViewModel
 
 import androidx.lifecycle.ViewModel
+import com.example.projecte_aplicaci_nativa_g7margarethamilton.Model.Usuari
+import com.example.projecte_aplicaci_nativa_g7margarethamilton.api.ApiRepository
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class UserViewModel : ViewModel() {
     private val _nicknameError = MutableStateFlow<String?>(null)
@@ -23,6 +30,11 @@ class UserViewModel : ViewModel() {
 
     var _correctFormat = MutableStateFlow(false)
     val correctFormat = _correctFormat.asStateFlow()
+
+    private val _missatgeRegister = MutableStateFlow("")
+    val missatgeRegister: StateFlow<String> = _missatgeRegister
+
+    val repository = ApiRepository()
 
     fun validateNickname(nickname: String): Boolean {
         if (nickname.length < 2) {
@@ -95,4 +107,21 @@ class UserViewModel : ViewModel() {
         _passwordError.value = null
         _confirmPasswordError.value = null
     }
+
+    fun register(usuari: Usuari){
+        CoroutineScope(Dispatchers.IO).launch {
+            val response = repository.register(usuari)
+            withContext(Dispatchers.Main){
+                if(response.isSuccessful){
+                    _missatgeRegister.value = "Usuari registrat"
+                }else{
+                    _missatgeRegister.value = "Error en el registre"
+                }
+            }
+        }
+    }
+    fun clearMissatgeRegister() {
+        _missatgeRegister.value = ""
+    }
+
 }

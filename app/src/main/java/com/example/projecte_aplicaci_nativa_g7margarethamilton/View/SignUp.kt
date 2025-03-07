@@ -35,6 +35,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.projecte_aplicaci_nativa_g7margarethamilton.Routes
 import com.example.projecte_aplicaci_nativa_g7margarethamilton.ViewModel.UserViewModel
+import com.example.projecte_aplicaci_nativa_g7margarethamilton.Model.Usuari
 
 @Composable
 fun SignIn(navController: NavController, viewModel: UserViewModel) {
@@ -48,6 +49,7 @@ fun SignIn(navController: NavController, viewModel: UserViewModel) {
     val passwordError by viewModel.passwordError.collectAsState()
     val confirmPasswordError by viewModel.confirmPasswordError.collectAsState()
     val correctFormat by viewModel.correctFormat.collectAsState()
+    val missatgeRegister by viewModel.missatgeRegister.collectAsState()
 
     Box(modifier = Modifier.fillMaxSize()) {
         // Close button
@@ -176,15 +178,17 @@ fun SignIn(navController: NavController, viewModel: UserViewModel) {
                 ),
                 isError = confirmPasswordError != null,
                 supportingText = { confirmPasswordError?.let { Text(it) } },
-
                 )
 
             // Register button
             Button(
-                onClick = {
-                    // TODO: Register user
-                    // TODO: Validate register
-                    // TODO: Login user
+                onClick = { 
+                    val usuari = Usuari(
+                        nickname = nickname,
+                        email = email,
+                        contrasenya = password
+                    )
+                    viewModel.register(usuari)
                 },
                 modifier = Modifier
                     .fillMaxWidth()
@@ -196,6 +200,14 @@ fun SignIn(navController: NavController, viewModel: UserViewModel) {
                 enabled = correctFormat
             ) {
                 Text("Register")
+            }
+
+            if (missatgeRegister.isNotEmpty()) {
+                Text(
+                    text = missatgeRegister,
+                    color = if (missatgeRegister == "Usuari registrat") Color.Green else Color.Red,
+                    modifier = Modifier.padding(vertical = 8.dp)
+                )
             }
 
             // Or separator
