@@ -14,6 +14,18 @@ data class RegisterResponse(
     val avatar_url: String
 )
 
+data class LoginResponse(
+    val tokenApp: String,
+    val user: UserResponse,
+    val message: String
+)
+
+data class UserResponse(
+    val email: String,
+    val nickname: String,
+    val avatar_url: String
+)
+
 interface ApiService {
 
     @POST("auth/register")
@@ -21,7 +33,10 @@ interface ApiService {
         @Body usuario: Usuari
     ): Response<RegisterResponse>
 
-
+    @POST("auth/app/login")
+    suspend fun login(
+        @Body usuario: Usuari
+    ): Response<LoginResponse>
 
     companion object{
         private const val BASE_URL = "http://10.0.2.2:3000/api/v1/"

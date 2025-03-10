@@ -6,4 +6,6 @@ class ApiRepository {
     val apiInterface = ApiService.create()
 
     suspend fun register(usuari: Usuari) = apiInterface.register(usuari)
+    
+    suspend fun login(usuari: Usuari) = apiInterface.login(usuari)
 }
