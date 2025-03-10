@@ -9,12 +9,17 @@ import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Body
 
+data class RegisterResponse(
+    val message: String,
+    val avatar_url: String
+)
+
 interface ApiService {
 
     @POST("auth/register")
     suspend fun register(
         @Body usuario: Usuari
-    ): Response<Unit>
+    ): Response<RegisterResponse>
 
 
 

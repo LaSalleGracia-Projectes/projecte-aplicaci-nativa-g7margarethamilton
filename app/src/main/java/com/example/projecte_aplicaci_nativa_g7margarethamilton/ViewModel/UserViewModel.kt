@@ -110,12 +110,23 @@ class UserViewModel : ViewModel() {
 
     fun register(usuari: Usuari){
         CoroutineScope(Dispatchers.IO).launch {
-            val response = repository.register(usuari)
-            withContext(Dispatchers.Main){
-                if(response.isSuccessful){
-                    _missatgeRegister.value = "Usuari registrat"
-                }else{
-                    _missatgeRegister.value = "Error en el registre"
+            try {
+                val response = repository.register(usuari)
+                withContext(Dispatchers.Main){
+                    if(response.isSuccessful){
+                        val registerResponse = response.body()
+                        _missatgeRegister.value = registerResponse?.message ?: "Usuario registrado exitosamente"
+                    } else {
+                        when (response.code()) {
+                            409 -> _missatgeRegister.value = "El usuario ya existe"
+                            400 -> _missatgeRegister.value = "Datos de registro inválidos"
+                            else -> _missatgeRegister.value = "Error en el registro"
+                        }
+                    }
+                }
+            } catch (e: Exception) {
+                withContext(Dispatchers.Main) {
+                    _missatgeRegister.value = "Error de conexión: ${e.message}"
                 }
             }
         }

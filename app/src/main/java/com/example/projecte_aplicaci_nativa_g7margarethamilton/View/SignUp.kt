@@ -186,7 +186,7 @@ fun SignIn(navController: NavController, viewModel: UserViewModel) {
                     val usuari = Usuari(
                         nickname = nickname,
                         email = email,
-                        contrasenya = password
+                        password = password
                     )
                     viewModel.register(usuari)
                 },

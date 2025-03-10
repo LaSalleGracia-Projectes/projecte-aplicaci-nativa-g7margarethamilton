@@ -5,5 +5,6 @@ import android.provider.ContactsContract.CommonDataKinds.Nickname
 data class Usuari(
     var nickname: String,
     var email: String,
-    var contrasenya: String
-    )
+    var password: String,
+    var google_id: String? = null
+)
