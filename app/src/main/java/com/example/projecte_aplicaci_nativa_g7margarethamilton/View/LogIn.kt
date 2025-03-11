@@ -19,6 +19,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -143,7 +144,7 @@ fun LogIn(navController: NavController, viewModel: UserViewModel) {
             // Login button
             Button(
                 onClick = {
-                    // TODO: Login app
+                    viewModel.login(email, password)
                 },
                 modifier = Modifier
                     .fillMaxWidth()
@@ -155,6 +156,24 @@ fun LogIn(navController: NavController, viewModel: UserViewModel) {
                 enabled = correctFormat
             ) {
                 Text("Login")
+            }
+
+            val missatgeLogin by viewModel.missatgeLogin.collectAsState()
+            if (missatgeLogin.isNotEmpty()) {
+                Text(
+                    text = missatgeLogin,
+                    color = if (missatgeLogin.contains("exitoso")) Color.Green else Color.Red,
+                    modifier = Modifier.padding(vertical = 8.dp)
+                )
+            }
+
+            val currentUser by viewModel.currentUser.collectAsState()
+            if (currentUser != null) {
+                LaunchedEffect(currentUser) {
+                    navController.navigate(Routes.Home.route) {
+                        popUpTo(Routes.Login.route) { inclusive = true }
+                    }
+                }
             }
 
             // Or separator
