@@ -7,6 +7,7 @@ object Login : Routes("login")
 
 // Nuevas rutas para la bottom nav
 object Home : Routes("home")
-object Settings : Routes("settins")
+object Settings : Routes("settings")
 object Profile : Routes("profile")
+object DailyTasks : Routes("daily_tasks")
 }
