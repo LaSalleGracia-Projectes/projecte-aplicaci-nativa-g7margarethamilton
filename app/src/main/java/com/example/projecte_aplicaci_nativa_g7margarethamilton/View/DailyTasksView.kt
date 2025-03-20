@@ -24,6 +24,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.example.projecte_aplicaci_nativa_g7margarethamilton.Routes
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.*
@@ -69,70 +70,75 @@ fun DailyTasksView(navController: NavController) {
         )
     }
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Color.White)
-            .padding(16.dp)
-    ) {
-        // Header
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(bottom = 16.dp)
-        ) {
-            // Close button
-            IconButton(
-                onClick = { /* TODO: Handle navigation */ },
-                modifier = Modifier.align(Alignment.TopEnd)
-            ) {
-                Icon(
-                    imageVector = Icons.Default.Close,
-                    contentDescription = "Cerrar",
-                    tint = Color.Black
-                )
-            }
-
-            // Title and date
-            Column(
-                modifier = Modifier.align(Alignment.TopStart)
-            ) {
-                Text(
-                    text = "Tasques del día",
-                    fontSize = 24.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = Color.Black
-                )
-                Text(
-                    text = currentDate.format(formatter),
-                    fontSize = 18.sp,
-                    color = Color.Gray
-                )
-            }
-
-            // Calendar button
-            Button(
-                onClick = { /* TODO: Handle calendar */ },
-                modifier = Modifier
-                    .align(Alignment.TopEnd)
-                    .padding(top = 40.dp),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = Color(0xFF2E3B4E)
-                )
-            ) {
-                Text("Calendari")
-            }
-        }
-
-        // Tasks list
+    Scaffold(
+        bottomBar = { BottomNavBar(navController) }
+    ) { paddingValues ->
         Column(
             modifier = Modifier
-                .fillMaxWidth()
-                .verticalScroll(rememberScrollState())
+                .fillMaxSize()
+                .background(Color.White)
+                .padding(16.dp)
+                .padding(paddingValues)
         ) {
-            tasks.forEach { task ->
-                TaskItem(task)
-                Spacer(modifier = Modifier.height(8.dp))
+            // Header
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 16.dp)
+            ) {
+                // Close button
+                IconButton(
+                    onClick = { navController.navigate(Routes.Home.route) },
+                    modifier = Modifier.align(Alignment.TopEnd)
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Close,
+                        contentDescription = "Cerrar",
+                        tint = Color.Black
+                    )
+                }
+
+                // Title and date
+                Column(
+                    modifier = Modifier.align(Alignment.TopStart)
+                ) {
+                    Text(
+                        text = "Tasques del día",
+                        fontSize = 24.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = Color.Black
+                    )
+                    Text(
+                        text = currentDate.format(formatter),
+                        fontSize = 18.sp,
+                        color = Color.Gray
+                    )
+                }
+
+                // Calendar button
+                Button(
+                    onClick = { /* TODO: Handle calendar */ },
+                    modifier = Modifier
+                        .align(Alignment.TopEnd)
+                        .padding(top = 40.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = Color(0xFF2E3B4E)
+                    )
+                ) {
+                    Text("Calendari")
+                }
+            }
+
+            // Tasks list
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .verticalScroll(rememberScrollState())
+            ) {
+                tasks.forEach { task ->
+                    TaskItem(task)
+                    Spacer(modifier = Modifier.height(8.dp))
+                }
             }
         }
     }
