@@ -1,5 +1,7 @@
 package com.example.projecte_aplicaci_nativa_g7margarethamilton.View
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
 import androidx.lifecycle.ViewModel
 import androidx.navigation.NavHostController
@@ -9,6 +11,7 @@ import com.example.projecte_aplicaci_nativa_g7margarethamilton.Routes
 import com.example.projecte_aplicaci_nativa_g7margarethamilton.ViewModel.UserViewModel
 
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun EntryPoint(navController: NavHostController, viewModel: UserViewModel){
 
@@ -23,7 +26,7 @@ fun EntryPoint(navController: NavHostController, viewModel: UserViewModel){
         // Nuevas rutas
         composable(Routes.Home.route) { HomeView(navController) }
         composable(Routes.Settings.route) { SettingsView(navController) }
-        composable(Routes.Profile.route) { ProfileView(navController) }
+        composable(Routes.Profile.route) { ProfileView(navController, viewModel) }
         composable(Routes.DailyTasks.route) { DailyTasksView(navController) }
     }
 }
