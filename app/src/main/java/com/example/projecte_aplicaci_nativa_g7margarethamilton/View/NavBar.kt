@@ -29,8 +29,8 @@ sealed class BottomNavItem(
 @Composable
 fun BottomNavBar(navController: NavController) {
     val items = listOf(
-        BottomNavItem.Home,
         BottomNavItem.Settings,
+        BottomNavItem.Home,
         BottomNavItem.Profile
     )
 

@@ -170,7 +170,7 @@ fun LogIn(navController: NavController, viewModel: UserViewModel) {
             val currentUser by viewModel.currentUser.collectAsState()
             if (currentUser != null) {
                 LaunchedEffect(currentUser) {
-                    navController.navigate(Routes.Home.route) {
+                    navController.navigate(Routes.DailyTasks.route) {
                         popUpTo(Routes.Login.route) { inclusive = true }
                     }
                 }
