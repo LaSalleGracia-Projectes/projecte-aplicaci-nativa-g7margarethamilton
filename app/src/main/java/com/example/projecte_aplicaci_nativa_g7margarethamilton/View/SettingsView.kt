@@ -34,7 +34,6 @@ fun SettingsView(navController: NavController) {
                     )
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = Color.White,
                     titleContentColor = Color.Black
                 ),
             )
