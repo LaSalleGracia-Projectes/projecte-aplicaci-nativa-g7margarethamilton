@@ -6,7 +6,9 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.outlined.ExitToApp
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.outlined.ExitToApp
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -37,7 +39,7 @@ fun ProfileView(navController: NavController, viewModel: UserViewModel) {
                 title = {
                     Text(
                         text = "Perfil",
-                        fontSize = 22.sp,
+                        fontSize = 30.sp,
                         fontWeight = FontWeight.Medium
                     )
                 },
@@ -50,7 +52,6 @@ fun ProfileView(navController: NavController, viewModel: UserViewModel) {
                     }
                 },
                 colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-                    containerColor = Color.White,
                     titleContentColor = Color.Black
                 )
             )
@@ -65,6 +66,9 @@ fun ProfileView(navController: NavController, viewModel: UserViewModel) {
             horizontalAlignment = Alignment.Start,
             verticalArrangement = Arrangement.Top
         ) {
+
+            Spacer(modifier = Modifier.height(20.dp))
+
             Box(
                 modifier = Modifier.fillMaxWidth(),
                 contentAlignment = Alignment.Center
@@ -161,14 +165,24 @@ fun ProfileView(navController: NavController, viewModel: UserViewModel) {
                 )
             }
 
-            Spacer(modifier = Modifier.weight(1f))
+            Spacer(modifier = Modifier.height(30.dp))
 
-            // Línea divisoria
-            HorizontalDivider(
-                modifier = Modifier.padding(bottom = 8.dp),
-                thickness = 1.dp,
-                color = Color.LightGray
-            )
+            //Botón cerrar sesión
+            IconButton(
+                onClick = {
+                    navController.navigate("welcome")
+                    viewModel.logout()
+                },
+                modifier = Modifier
+                    .align(Alignment.End)
+            ) {
+                Icon(
+                    imageVector = Icons.AutoMirrored.Outlined.ExitToApp,
+                    contentDescription = "Cerrar Sesión",
+                    modifier = Modifier.size(50.dp)
+                )
+            }
+
         }
     }
 }
