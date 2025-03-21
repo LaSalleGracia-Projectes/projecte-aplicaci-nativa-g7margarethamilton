@@ -27,6 +27,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import coil3.compose.AsyncImage
 import com.example.projecte_aplicaci_nativa_g7margarethamilton.R
 import com.example.projecte_aplicaci_nativa_g7margarethamilton.viewModel.UserViewModel
 
@@ -126,18 +127,18 @@ fun ProfileView(navController: NavController, viewModel: UserViewModel) {
                                     .clip(CircleShape)
                                     .background(
                                         Brush.radialGradient(
-                                        colors = listOf(primaryColor, secondaryColor)
-                                    ))
-                                    .padding(4.dp)
+                                            colors = listOf(primaryColor, secondaryColor)
+                                        ))
+                                    .padding(4.dp),
+                                contentAlignment = Alignment.Center  // Añadimos contentAlignment aquí
                             ) {
-                                Image(
-                                    painter = painterResource(id = R.drawable.profile_avatar_placeholder_large),
+                                AsyncImage(
+                                    model = currentUser?.avatar_url,
                                     contentDescription = "Imagen de perfil",
                                     modifier = Modifier
                                         .fillMaxSize()
-                                        .clip(CircleShape)
-                                        .background(Color.White),
-                                    contentScale = ContentScale.Crop
+                                        .clip(CircleShape),
+                                    contentScale = ContentScale.Crop  // Asegura que la imagen cubra todo el espacio
                                 )
                             }
                         }
