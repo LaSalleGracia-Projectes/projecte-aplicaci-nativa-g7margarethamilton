@@ -1,4 +1,4 @@
-package com.example.projecte_aplicaci_nativa_g7margarethamilton.View
+package com.example.projecte_aplicaci_nativa_g7margarethamilton.view
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border

@@ -1,11 +1,9 @@
 package com.example.projecte_aplicaci_nativa_g7margarethamilton.api
-import com.example.projecte_aplicaci_nativa_g7margarethamilton.Model.Usuari
+import com.example.projecte_aplicaci_nativa_g7margarethamilton.model.Usuari
 import okhttp3.OkHttpClient
 import retrofit2.Response
 import retrofit2.Retrofit
-import retrofit2.http.Query
 import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Body
 
@@ -37,6 +35,8 @@ interface ApiService {
     suspend fun login(
         @Body usuario: Usuari
     ): Response<LoginResponse>
+
+
 
     companion object{
         private const val BASE_URL = "http://10.0.2.2:3000/api/v1/"

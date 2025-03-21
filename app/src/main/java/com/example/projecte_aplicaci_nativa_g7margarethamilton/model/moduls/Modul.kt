@@ -1,6 +1,6 @@
-package com.example.projecte_aplicaci_nativa_g7margarethamilton.Model.moduls
+package com.example.projecte_aplicaci_nativa_g7margarethamilton.model.moduls
 
-import com.example.projecte_aplicaci_nativa_g7margarethamilton.Model.Usuari
+import com.example.projecte_aplicaci_nativa_g7margarethamilton.model.Usuari
 
 abstract class Modul(
     val idModul: Int,

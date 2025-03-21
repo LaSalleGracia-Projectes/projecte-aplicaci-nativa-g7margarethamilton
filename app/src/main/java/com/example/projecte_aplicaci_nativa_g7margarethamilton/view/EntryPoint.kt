@@ -1,14 +1,13 @@
-package com.example.projecte_aplicaci_nativa_g7margarethamilton.View
+package com.example.projecte_aplicaci_nativa_g7margarethamilton.view
 
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
-import androidx.lifecycle.ViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.projecte_aplicaci_nativa_g7margarethamilton.Routes
-import com.example.projecte_aplicaci_nativa_g7margarethamilton.ViewModel.UserViewModel
+import com.example.projecte_aplicaci_nativa_g7margarethamilton.viewModel.UserViewModel
 
 
 @RequiresApi(Build.VERSION_CODES.O)

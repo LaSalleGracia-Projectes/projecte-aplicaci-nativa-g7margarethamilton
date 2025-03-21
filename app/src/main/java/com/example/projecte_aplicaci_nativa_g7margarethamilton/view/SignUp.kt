@@ -1,4 +1,4 @@
-package com.example.projecte_aplicaci_nativa_g7margarethamilton.View
+package com.example.projecte_aplicaci_nativa_g7margarethamilton.view
 
 import Terms
 import androidx.compose.foundation.layout.Box
@@ -34,8 +34,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.projecte_aplicaci_nativa_g7margarethamilton.Routes
-import com.example.projecte_aplicaci_nativa_g7margarethamilton.ViewModel.UserViewModel
-import com.example.projecte_aplicaci_nativa_g7margarethamilton.Model.Usuari
+import com.example.projecte_aplicaci_nativa_g7margarethamilton.viewModel.UserViewModel
+import com.example.projecte_aplicaci_nativa_g7margarethamilton.model.Usuari
 
 @Composable
 fun SignIn(navController: NavController, viewModel: UserViewModel) {

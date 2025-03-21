@@ -1,7 +1,7 @@
-package com.example.projecte_aplicaci_nativa_g7margarethamilton.ViewModel
+package com.example.projecte_aplicaci_nativa_g7margarethamilton.viewModel
 
 import androidx.lifecycle.ViewModel
-import com.example.projecte_aplicaci_nativa_g7margarethamilton.Model.Usuari
+import com.example.projecte_aplicaci_nativa_g7margarethamilton.model.Usuari
 import com.example.projecte_aplicaci_nativa_g7margarethamilton.api.ApiRepository
 import com.example.projecte_aplicaci_nativa_g7margarethamilton.api.UserResponse
 import kotlinx.coroutines.CoroutineScope

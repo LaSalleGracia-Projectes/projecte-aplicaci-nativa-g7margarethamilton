@@ -1,6 +1,6 @@
 package com.example.projecte_aplicaci_nativa_g7margarethamilton.api
 
-import com.example.projecte_aplicaci_nativa_g7margarethamilton.Model.Usuari
+import com.example.projecte_aplicaci_nativa_g7margarethamilton.model.Usuari
 
 class ApiRepository {
     val apiInterface = ApiService.create()
