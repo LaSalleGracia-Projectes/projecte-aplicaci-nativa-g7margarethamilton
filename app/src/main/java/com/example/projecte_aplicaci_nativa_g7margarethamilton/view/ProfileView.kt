@@ -19,6 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -27,6 +28,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import coil3.compose.AsyncImage
 import com.example.projecte_aplicaci_nativa_g7margarethamilton.R
 import com.example.projecte_aplicaci_nativa_g7margarethamilton.viewModel.UserViewModel
 
@@ -44,21 +46,24 @@ fun ProfileView(navController: NavController, viewModel: UserViewModel) {
             Color(0xFFE0E0E0)
         )
     )
+    val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
+
 
     Scaffold(
+        modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
-            TopAppBar(
+            CenterAlignedTopAppBar(
                 title = {
                     Text(
                         text = "Perfil",
-                        fontSize = 24.sp,
+                        fontSize = 30.sp,
                         fontWeight = FontWeight.SemiBold,
-                        color = Color.White
+                        color = Color.Black
                     )
                 },
                 navigationIcon = {
                     //FIX: la flecha lleva a la pantalla de welcome
-                    IconButton(onClick = { navController.popBackStack() }) {
+                    IconButton(onClick = { /*navController.popBackStack()*/ }) {
                         Icon(
                             imageVector = Icons.Default.ArrowBack,
                             contentDescription = "Volver",
@@ -78,7 +83,7 @@ fun ProfileView(navController: NavController, viewModel: UserViewModel) {
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = primaryColor
+                    titleContentColor = Color.Black
                 )
             )
         },
@@ -126,18 +131,18 @@ fun ProfileView(navController: NavController, viewModel: UserViewModel) {
                                     .clip(CircleShape)
                                     .background(
                                         Brush.radialGradient(
-                                        colors = listOf(primaryColor, secondaryColor)
-                                    ))
-                                    .padding(4.dp)
+                                            colors = listOf(primaryColor, secondaryColor)
+                                        ))
+                                    .padding(4.dp),
+                                contentAlignment = Alignment.Center  // Añadimos contentAlignment aquí
                             ) {
-                                Image(
-                                    painter = painterResource(id = R.drawable.profile_avatar_placeholder_large),
+                                AsyncImage(
+                                    model = currentUser?.avatar_url,
                                     contentDescription = "Imagen de perfil",
                                     modifier = Modifier
                                         .fillMaxSize()
-                                        .clip(CircleShape)
-                                        .background(Color.White),
-                                    contentScale = ContentScale.Crop
+                                        .clip(CircleShape),
+                                    contentScale = ContentScale.Crop  // Asegura que la imagen cubra todo el espacio
                                 )
                             }
                         }
@@ -223,7 +228,7 @@ fun ProfileView(navController: NavController, viewModel: UserViewModel) {
                         },
                         modifier = Modifier.padding(top = 8.dp),
                         colors = ButtonDefaults.buttonColors(
-                            containerColor = primaryColor
+                            containerColor = Color.Red
                         ),
                         contentPadding = PaddingValues(horizontal = 24.dp, vertical = 12.dp),
                         shape = RoundedCornerShape(8.dp)
