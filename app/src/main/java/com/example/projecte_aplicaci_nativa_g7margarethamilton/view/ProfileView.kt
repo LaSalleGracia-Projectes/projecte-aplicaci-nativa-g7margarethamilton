@@ -78,7 +78,7 @@ fun ProfileView(navController: NavController, viewModel: UserViewModel) {
                         Icon(
                             imageVector = Icons.Default.Edit,
                             contentDescription = "Editar perfil",
-                            tint = Color.White
+                            tint = Color.Black
                         )
                     }
                 },
