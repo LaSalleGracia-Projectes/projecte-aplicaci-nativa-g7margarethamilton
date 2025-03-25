@@ -32,6 +32,7 @@ import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.StrokeJoin
 import androidx.compose.ui.graphics.vector.path
 import androidx.compose.ui.unit.dp
+import com.example.projecte_aplicaci_nativa_g7margarethamilton.Routes
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -85,7 +86,7 @@ fun SettingsView(navController: NavController) {
             SettingOption(
                 title = "Sobre nosaltres",
                 icon = Icons.Default.Info,
-                onClick = { /* TODO: Navigate to About Us */ }
+                onClick = { navController.navigate(Routes.AboutUs.route) }
             )
             
             SettingOption(
