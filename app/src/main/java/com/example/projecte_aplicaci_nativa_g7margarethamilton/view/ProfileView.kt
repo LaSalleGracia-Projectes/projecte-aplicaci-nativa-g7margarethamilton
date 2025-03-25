@@ -19,6 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -45,21 +46,24 @@ fun ProfileView(navController: NavController, viewModel: UserViewModel) {
             Color(0xFFE0E0E0)
         )
     )
+    val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
+
 
     Scaffold(
+        modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
-            TopAppBar(
+            CenterAlignedTopAppBar(
                 title = {
                     Text(
                         text = "Perfil",
-                        fontSize = 24.sp,
+                        fontSize = 30.sp,
                         fontWeight = FontWeight.SemiBold,
-                        color = Color.White
+                        color = Color.Black
                     )
                 },
                 navigationIcon = {
                     //FIX: la flecha lleva a la pantalla de welcome
-                    IconButton(onClick = { navController.popBackStack() }) {
+                    IconButton(onClick = { /*navController.popBackStack()*/ }) {
                         Icon(
                             imageVector = Icons.Default.ArrowBack,
                             contentDescription = "Volver",
@@ -79,7 +83,7 @@ fun ProfileView(navController: NavController, viewModel: UserViewModel) {
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = primaryColor
+                    titleContentColor = Color.Black
                 )
             )
         },
@@ -224,7 +228,7 @@ fun ProfileView(navController: NavController, viewModel: UserViewModel) {
                         },
                         modifier = Modifier.padding(top = 8.dp),
                         colors = ButtonDefaults.buttonColors(
-                            containerColor = primaryColor
+                            containerColor = Color.Red
                         ),
                         contentPadding = PaddingValues(horizontal = 24.dp, vertical = 12.dp),
                         shape = RoundedCornerShape(8.dp)
