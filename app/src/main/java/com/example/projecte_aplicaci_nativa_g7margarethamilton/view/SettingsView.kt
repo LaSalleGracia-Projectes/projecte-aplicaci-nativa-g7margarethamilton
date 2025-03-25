@@ -29,8 +29,10 @@ fun SettingsView(navController: NavController) {
                 title = {
                     Text(
                         text = "Ajustes",
-                        fontSize = 30.sp
-                    )
+                        fontSize = 30.sp,
+                        fontWeight = FontWeight.SemiBold,
+                        color = Color.Black
+                        )
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
                     titleContentColor = Color.Black
