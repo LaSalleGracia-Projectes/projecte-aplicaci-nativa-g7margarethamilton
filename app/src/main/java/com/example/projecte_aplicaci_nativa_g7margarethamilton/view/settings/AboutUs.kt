@@ -26,8 +26,6 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.projecte_aplicaci_nativa_g7margarethamilton.R
-import kotlinx.serialization.Serializable
-
 
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
@@ -36,7 +34,6 @@ fun AboutUsView(navController: NavController) {
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
     val backgroundColor = Color(0xFFF8F8F8)
 
-    // Contenido del carrusel
     val images = listOf(
         R.drawable.profile_avatar_placeholder_large,
         R.drawable.profile_avatar_placeholder_large,
@@ -45,14 +42,11 @@ fun AboutUsView(navController: NavController) {
     )
 
     val texts = listOf(
-        "Flow2Day es una aplicación innovadora diseñada para ayudarte a gestionar tu tiempo de manera eficiente.",
-        "Nuestra misión es simplificar tu día a día con herramientas intuitivas y efectivas.",
-        "Un equipo apasionado por la tecnología y la productividad.",
-        "Comprometidos con la excelencia y la satisfacción del usuario."
+        "Hola soy Carlos.",
+        "Hola soy Jaime.",
+        "Hola soy Nahomy.",
+        "Hola soy Jaume."
     )
-
-    val pagerState = rememberPagerState(pageCount = { images.size })
-    val currentPage by remember { derivedStateOf { pagerState.currentPage } }
 
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
@@ -60,7 +54,7 @@ fun AboutUsView(navController: NavController) {
             CenterAlignedTopAppBar(
                 title = {
                     Text(
-                        text = "Sobre nosaltres",
+                        text = "Sobre nosotros",
                         fontSize = 30.sp,
                         fontWeight = FontWeight.SemiBold,
                         color = Color.Black
@@ -99,47 +93,13 @@ fun AboutUsView(navController: NavController) {
                 modifier = Modifier.padding(vertical = 16.dp)
             )
 
-            // Carrusel de imágenes
-            HorizontalPager(
-                state = pagerState,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(200.dp)
-            ) { page ->
-                Image(
-                    painter = painterResource(id = images[page]),
-                    contentDescription = "Imagen ${page + 1}",
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clip(MaterialTheme.shapes.medium),
-                    contentScale = ContentScale.Crop
-                )
-            }
+            CarruselImagenes(images = images, texts = texts)
 
-            // Indicadores de página
-            Row(
-                Modifier
-                    .height(50.dp)
-                    .fillMaxWidth(),
-                horizontalArrangement = Arrangement.Center,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                repeat(images.size) { iteration ->
-                    val color = if (currentPage == iteration) Color(0xFF2E3B4E) else Color.LightGray
-                    Box(
-                        modifier = Modifier
-                            .padding(2.dp)
-                            .clip(CircleShape)
-                            .background(color)
-                            .size(8.dp)
-                    )
-                }
-            }
+            Spacer(modifier = Modifier.height(24.dp))
 
-            // Texto descriptivo
             Text(
-                text = texts[currentPage],
-                fontSize = 16.sp,
+                text = "Nuestra aplicación Flow2Day está diseñada para ayudarte a gestionar tu tiempo de manera eficiente y efectiva. Con una interfaz intuitiva y herramientas poderosas, te ayudamos a mantenerte organizado y enfocado en tus objetivos.",
+                fontSize = 18.sp,
                 color = Color(0xFF2E3B4E),
                 textAlign = TextAlign.Center,
                 modifier = Modifier.padding(horizontal = 16.dp)
@@ -147,9 +107,64 @@ fun AboutUsView(navController: NavController) {
         }
     }
 }
+
+@OptIn(ExperimentalFoundationApi::class)
+@Composable
+fun CarruselImagenes(images: List<Int>, texts: List<String>) {
+    val pagerState = rememberPagerState(pageCount = { images.size })
+    val currentPage by remember { derivedStateOf { pagerState.currentPage } }
+
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        HorizontalPager(
+            state = pagerState,
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(200.dp)
+        ) { page ->
+            Image(
+                painter = painterResource(id = images[page]),
+                contentDescription = "Imagen ${page + 1}",
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clip(MaterialTheme.shapes.medium),
+                contentScale = ContentScale.Crop
+            )
+        }
+
+        Row(
+            Modifier
+                .height(50.dp)
+                .fillMaxWidth(),
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            repeat(images.size) { iteration ->
+                val color = if (currentPage == iteration) Color(0xFF2E3B4E) else Color.LightGray
+                Box(
+                    modifier = Modifier
+                        .padding(2.dp)
+                        .clip(CircleShape)
+                        .background(color)
+                        .size(8.dp)
+                )
+            }
+        }
+
+        Text(
+            text = texts[currentPage],
+            fontSize = 16.sp,
+            color = Color(0xFF2E3B4E),
+            textAlign = TextAlign.Center,
+            modifier = Modifier.padding(horizontal = 16.dp)
+        )
+    }
+}
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
-fun AboutUsPreview() {
+fun AboutUsViewPreview() {
     val navController = rememberNavController()
     AboutUsView(navController)
 }
+
