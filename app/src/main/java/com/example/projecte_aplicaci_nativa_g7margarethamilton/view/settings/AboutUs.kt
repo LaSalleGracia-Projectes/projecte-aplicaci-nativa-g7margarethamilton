@@ -42,10 +42,10 @@ fun AboutUsView(navController: NavController) {
     )
 
     val texts = listOf(
-        "Hola soy Carlos.",
-        "Hola soy Jaime.",
-        "Hola soy Nahomy.",
-        "Hola soy Jaume."
+        "Hola soy Carlos.\n",
+        "Hola soy Jaime.\n",
+        "Hola soy Nahomy.\n",
+        "Hola soy Jaume.\n"
     )
 
     Scaffold(
@@ -85,25 +85,32 @@ fun AboutUsView(navController: NavController) {
                 .padding(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(
-                text = "Flow2Day!",
-                fontSize = 32.sp,
-                fontWeight = FontWeight.Bold,
-                color = Color(0xFF2E3B4E),
-                modifier = Modifier.padding(vertical = 16.dp)
-            )
+            Spacer(modifier = Modifier.height(8.dp))
 
             CarruselImagenes(images = images, texts = texts)
 
             Spacer(modifier = Modifier.height(24.dp))
+            Column {
+                Text(
+                    text = "Flow2Day!",
+                    fontSize = 30.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = Color(0xFF2E3B4E),
+                    textAlign = TextAlign.Start,
+                    modifier = Modifier.padding(horizontal = 16.dp)
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+                Text(
+                    text = "Nuestra aplicación Flow2Day está diseñada para ayudarte a gestionar tu tiempo de manera eficiente y efectiva. Con una interfaz intuitiva y herramientas poderosas, te ayudamos a mantenerte organizado y enfocado en tus objetivos.",
+                    fontSize = 18.sp,
+                    color = Color(0xFF2E3B4E),
+                    textAlign = TextAlign.Start,
+                    modifier = Modifier
+                        .padding(horizontal = 16.dp)
+                        .align(Alignment.Start)
+                )
 
-            Text(
-                text = "Nuestra aplicación Flow2Day está diseñada para ayudarte a gestionar tu tiempo de manera eficiente y efectiva. Con una interfaz intuitiva y herramientas poderosas, te ayudamos a mantenerte organizado y enfocado en tus objetivos.",
-                fontSize = 18.sp,
-                color = Color(0xFF2E3B4E),
-                textAlign = TextAlign.Center,
-                modifier = Modifier.padding(horizontal = 16.dp)
-            )
+            }
         }
     }
 }
@@ -161,6 +168,7 @@ fun CarruselImagenes(images: List<Int>, texts: List<String>) {
         )
     }
 }
+
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun AboutUsViewPreview() {
