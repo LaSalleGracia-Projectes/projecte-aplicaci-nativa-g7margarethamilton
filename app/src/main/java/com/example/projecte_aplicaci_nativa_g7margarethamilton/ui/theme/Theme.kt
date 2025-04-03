@@ -11,6 +11,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 
+private val ButtonTextColor = Color(0xFFFFFFFF)
+
 // Light Theme
 private val LightColorScheme = lightColorScheme(
     primary = Color(0xFF5A4FF3), // Links or buttons
@@ -27,26 +29,27 @@ private val LightColorScheme = lightColorScheme(
     onError = Color(0xFFFFFFFF) // Extra
 )
 
-// Dark Theme
+// Dark Theme (adjusted for visual contrast)
 private val DarkColorScheme = darkColorScheme(
-    primary = Color(0xFF4237A8), // Links or buttons
-    secondary = Color(0xFF008035), // Buttons, checks, OK
-    tertiary = Color(0xFFB38700), // Whatever you need
-    background = Color(0xFF12171C), // Titles
-    surface = Color(0xFF46515A), // Common text or subtitles
-    onPrimary = Color(0xFFCCCCCC), // Extra
-    onSecondary = Color(0xFF12171C), // Titles
-    onTertiary = Color(0xFF12171C), // Titles
-    onBackground = Color(0xFFCCCCCC), // Extra
-    onSurface = Color(0xFFADB8C0), // Interest text or button text with links
-    error = Color(0xFFA33041), // Error or buttons
-    onError = Color(0xFFCCCCCC) // Extra
+    primary = Color(0xFF5A4FF3), // Links or buttons
+    secondary = Color(0xFF00C04D), // Buttons, checks, OK
+    tertiary = Color(0xFFFFBB00), // Whatever you need
+    background = Color(0xFF12171C), // Very dark background
+    surface = Color(0xFF1E2A33), // Dark surface
+    onPrimary = Color(0xFFFFFFFF), // Dark text on bright primary
+    onSecondary = Color(0xFFFFFFFF), // Dark text on bright secondary
+    onTertiary = Color(0xFFFFFFFF), // Light text for titles
+    onBackground = Color(0xFFFFFFFF), // Light text on dark background
+    onSurface = Color(0xFFDAE3EA), // Light grey for readable text
+    error = Color(0xFFED455D), // Error or buttons
+    onError = Color(0xFF12171C) // Dark text on bright error background
 )
 
 @Composable
 fun Projecteaplicacinativag7margarethamiltonTheme(
-    darkTheme: Boolean = isSystemInDarkTheme(),
-    dynamicColor: Boolean = true,
+    //darkTheme: Boolean = isSystemInDarkTheme(),
+    darkTheme: Boolean = true,
+    dynamicColor: Boolean = false,
     content: @Composable () -> Unit
 ) {
     val colorScheme = when {
