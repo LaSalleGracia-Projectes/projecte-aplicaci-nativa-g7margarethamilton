@@ -74,7 +74,7 @@ fun LogIn(navController: NavController, viewModel: UserViewModel) {
                 text = "Flow2Day!",
                 fontSize = 35.sp,
                 fontWeight = FontWeight.Bold,
-                color = Color(0xFF2E3B4E),
+                color = MaterialTheme.colorScheme.onTertiary,
                 modifier = Modifier.padding(bottom = 8.dp)
             )
 
@@ -82,7 +82,7 @@ fun LogIn(navController: NavController, viewModel: UserViewModel) {
             Text(
                 text = "Login",
                 fontSize = 18.sp,
-                color = Color(0xFF2E3B4E),
+                color = MaterialTheme.colorScheme.onTertiary,
                 modifier = Modifier.padding(bottom = 32.dp)
             )
 
@@ -101,8 +101,8 @@ fun LogIn(navController: NavController, viewModel: UserViewModel) {
                 singleLine = true,
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
                 colors = OutlinedTextFieldDefaults.colors(
-                    unfocusedBorderColor = Color.LightGray,
-                    focusedBorderColor = Color.Gray
+                    unfocusedBorderColor = MaterialTheme.colorScheme.onSurface,
+                    focusedBorderColor = MaterialTheme.colorScheme.onBackground
                 ),
                 isError = emailError != null,
                 supportingText = { emailError?.let { Text(it) } },
@@ -124,8 +124,8 @@ fun LogIn(navController: NavController, viewModel: UserViewModel) {
                 visualTransformation = PasswordVisualTransformation(),
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
                 colors = OutlinedTextFieldDefaults.colors(
-                    unfocusedBorderColor = Color.LightGray,
-                    focusedBorderColor = Color.Gray
+                    unfocusedBorderColor = MaterialTheme.colorScheme.onSurface,
+                    focusedBorderColor = MaterialTheme.colorScheme.onBackground
                 ),
                 isError = passwordError != null,
                 supportingText = { passwordError?.let { Text(it) } },
@@ -133,8 +133,8 @@ fun LogIn(navController: NavController, viewModel: UserViewModel) {
 
             // Forgot password text
             Text(
-                text = "Lorem ipsum sit amet?",
-                color = Color.DarkGray,
+                text = "Forgot your password?",
+                color = MaterialTheme.colorScheme.onTertiary,
                 fontSize = 14.sp,
                 modifier = Modifier
                     .align(Alignment.Start)
@@ -150,7 +150,7 @@ fun LogIn(navController: NavController, viewModel: UserViewModel) {
                     .fillMaxWidth()
                     .height(50.dp),
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = Color(0xFF2E3B4E)
+                    containerColor = MaterialTheme.colorScheme.primary
                 ),
                 shape = MaterialTheme.shapes.small,
                 enabled = correctFormat
@@ -162,7 +162,7 @@ fun LogIn(navController: NavController, viewModel: UserViewModel) {
             if (missatgeLogin.isNotEmpty()) {
                 Text(
                     text = missatgeLogin,
-                    color = if (missatgeLogin.contains("exitoso")) Color.Green else Color.Red,
+                    color = if (missatgeLogin.contains("exitoso")) MaterialTheme.colorScheme.secondary else MaterialTheme.colorScheme.error,
                     modifier = Modifier.padding(vertical = 8.dp)
                 )
             }
@@ -179,7 +179,7 @@ fun LogIn(navController: NavController, viewModel: UserViewModel) {
             // Or separator
             Text(
                 text = "or",
-                color = Color.Gray,
+                color = MaterialTheme.colorScheme.onTertiary,
                 modifier = Modifier.padding(vertical = 12.dp)
             )
 
@@ -192,7 +192,7 @@ fun LogIn(navController: NavController, viewModel: UserViewModel) {
                     .fillMaxWidth()
                     .height(50.dp),
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = Color(0xFF7D8A99)
+                    containerColor = MaterialTheme.colorScheme.primary
                 ),
                 shape = MaterialTheme.shapes.small,
                 enabled = correctFormat
