@@ -48,7 +48,7 @@ private val DarkColorScheme = darkColorScheme(
 @Composable
 fun Projecteaplicacinativag7margarethamiltonTheme(
     //darkTheme: Boolean = isSystemInDarkTheme(),
-    darkTheme: Boolean = true,
+    darkTheme: Boolean = false,
     dynamicColor: Boolean = false,
     content: @Composable () -> Unit
 ) {

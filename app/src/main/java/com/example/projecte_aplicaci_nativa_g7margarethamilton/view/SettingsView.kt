@@ -39,7 +39,6 @@ import com.example.projecte_aplicaci_nativa_g7margarethamilton.Routes
 @Composable
 fun SettingsView(navController: NavController) {
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
-    val backgroundColor = Color(0xFFF8F8F8)
     var showTermsModal by remember { mutableStateOf(false) }
 
     Scaffold(
@@ -51,18 +50,18 @@ fun SettingsView(navController: NavController) {
                         text = "Ajustes",
                         fontSize = 30.sp,
                         fontWeight = FontWeight.SemiBold,
-                        color = Color.Black
+                        color = MaterialTheme.colorScheme.onTertiary,
                     )
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = backgroundColor,
-                    titleContentColor = Color.Black
+                    containerColor = MaterialTheme.colorScheme.background,
+                    titleContentColor = MaterialTheme.colorScheme.onTertiary,
                 ),
                 scrollBehavior = scrollBehavior
             )
         },
         bottomBar = { BottomNavBar(navController) },
-        containerColor = backgroundColor
+        containerColor = MaterialTheme.colorScheme.background,
     ) { paddingValues ->
         Column(
             modifier = Modifier
@@ -117,7 +116,7 @@ fun SettingOption(
             .clip(RoundedCornerShape(12.dp))
             .clickable(onClick = onClick),
         colors = CardDefaults.cardColors(
-            containerColor = Color.White
+            containerColor = MaterialTheme.colorScheme.surface,
         ),
         elevation = CardDefaults.cardElevation(
             defaultElevation = 2.dp
@@ -138,7 +137,7 @@ fun SettingOption(
                 Icon(
                     imageVector = icon,
                     contentDescription = null,
-                    tint = Color(0xFF2E3B4E),
+                    tint = MaterialTheme.colorScheme.primary,
                     modifier = Modifier.size(24.dp)
                 )
                 Spacer(modifier = Modifier.width(16.dp))
@@ -146,13 +145,13 @@ fun SettingOption(
                     text = title,
                     fontSize = 20.sp,
                     fontWeight = FontWeight.Medium,
-                    color = Color(0xFF2E3B4E)
+                    color = MaterialTheme.colorScheme.onTertiary,
                 )
             }
             Icon(
                 imageVector = Icons.AutoMirrored.Filled.ArrowForward,
                 contentDescription = "Ir a $title",
-                tint = Color(0xFF2E3B4E),
+                tint = MaterialTheme.colorScheme.primary,
                 modifier = Modifier.size(20.dp)
             )
         }
