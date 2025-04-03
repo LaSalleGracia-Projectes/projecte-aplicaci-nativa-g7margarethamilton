@@ -58,7 +58,7 @@ fun ProfileView(navController: NavController, viewModel: UserViewModel) {
                         text = "Perfil",
                         fontSize = 30.sp,
                         fontWeight = FontWeight.SemiBold,
-                        color = Color.Black
+                        color = MaterialTheme.colorScheme.onTertiary
                     )
                 },
                 navigationIcon = {
@@ -67,7 +67,7 @@ fun ProfileView(navController: NavController, viewModel: UserViewModel) {
                         Icon(
                             imageVector = Icons.Default.ArrowBack,
                             contentDescription = "Volver",
-                            tint = Color.White
+                            tint = MaterialTheme.colorScheme.onPrimary
                         )
                     }
                 },
@@ -78,12 +78,12 @@ fun ProfileView(navController: NavController, viewModel: UserViewModel) {
                         Icon(
                             imageVector = Icons.Default.Edit,
                             contentDescription = "Editar perfil",
-                            tint = Color.Black
+                            tint = MaterialTheme.colorScheme.onPrimary
                         )
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
-                    titleContentColor = Color.Black
+                    titleContentColor = MaterialTheme.colorScheme.onTertiary
                 )
             )
         },
@@ -93,7 +93,7 @@ fun ProfileView(navController: NavController, viewModel: UserViewModel) {
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
-                .background(Color(0xFFF8F8F8))
+                .background(MaterialTheme.colorScheme.background)
         ) {
             Column(
                 modifier = Modifier
@@ -107,7 +107,7 @@ fun ProfileView(navController: NavController, viewModel: UserViewModel) {
                         .fillMaxWidth()
                         .padding(bottom = 16.dp),
                     colors = CardDefaults.cardColors(
-                        containerColor = Color.White
+                        containerColor = MaterialTheme.colorScheme.surface
                     ),
                     elevation = CardDefaults.cardElevation(
                         defaultElevation = 4.dp
@@ -155,7 +155,7 @@ fun ProfileView(navController: NavController, viewModel: UserViewModel) {
                                 text = it.nickname,
                                 fontSize = 28.sp,
                                 fontWeight = FontWeight.Bold,
-                                color = Color.Black
+                                color = MaterialTheme.colorScheme.onTertiary
                             )
                         }
 
@@ -166,7 +166,7 @@ fun ProfileView(navController: NavController, viewModel: UserViewModel) {
                             text = "\"Apasionada del bienestar | Vida saludable | Equilibrio, energía y felicidad cada día\"",
                             fontSize = 16.sp,
                             fontWeight = FontWeight.Normal,
-                            color = Color.Gray,
+                            color = MaterialTheme.colorScheme.onTertiary,
                             modifier = Modifier.padding(horizontal = 24.dp)
                         )
                     }
@@ -178,7 +178,7 @@ fun ProfileView(navController: NavController, viewModel: UserViewModel) {
                         .fillMaxWidth()
                         .padding(bottom = 16.dp),
                     colors = CardDefaults.cardColors(
-                        containerColor = Color.White
+                        containerColor = MaterialTheme.colorScheme.surface
                     ),
                     elevation = CardDefaults.cardElevation(
                         defaultElevation = 2.dp
@@ -188,7 +188,7 @@ fun ProfileView(navController: NavController, viewModel: UserViewModel) {
                     Column(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(24.dp)
+                            .padding(24.dp),
                     ) {
                         // Usuario desde
                         InfoRow(
@@ -228,7 +228,7 @@ fun ProfileView(navController: NavController, viewModel: UserViewModel) {
                         },
                         modifier = Modifier.padding(top = 8.dp),
                         colors = ButtonDefaults.buttonColors(
-                            containerColor = Color.Red
+                            containerColor = MaterialTheme.colorScheme.error,
                         ),
                         contentPadding = PaddingValues(horizontal = 24.dp, vertical = 12.dp),
                         shape = RoundedCornerShape(8.dp)
@@ -255,7 +255,7 @@ fun ProfileView(navController: NavController, viewModel: UserViewModel) {
 private fun InfoRow(title: String, value: String, iconTint: Color) {
     Row(
         modifier = Modifier.fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.CenterVertically,
     ) {
         Column(
             modifier = Modifier.weight(1f)
@@ -264,14 +264,14 @@ private fun InfoRow(title: String, value: String, iconTint: Color) {
                 text = title,
                 fontSize = 14.sp,
                 fontWeight = FontWeight.Medium,
-                color = Color.Gray
+                color = MaterialTheme.colorScheme.onSurface,
             )
 
             Text(
                 text = value,
                 fontSize = 18.sp,
                 fontWeight = FontWeight.Normal,
-                color = Color.Black,
+                color = MaterialTheme.colorScheme.onTertiary,
                 modifier = Modifier.padding(top = 4.dp)
             )
         }
