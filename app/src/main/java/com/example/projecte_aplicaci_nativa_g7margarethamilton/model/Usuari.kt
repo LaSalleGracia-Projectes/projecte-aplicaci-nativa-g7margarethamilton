@@ -4,5 +4,5 @@ data class Usuari(
     var nickname: String,
     var email: String,
     var password: String,
-    var google_id: String? = null
+    var google_id: String? = null,
 )
