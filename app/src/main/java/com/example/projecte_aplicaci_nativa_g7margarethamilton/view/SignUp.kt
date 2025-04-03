@@ -79,7 +79,7 @@ fun SignIn(navController: NavController, viewModel: UserViewModel) {
                 text = "Flow2Day!",
                 fontSize = 35.sp,
                 fontWeight = FontWeight.Bold,
-                color = Color(0xFF2E3B4E),
+                color =  MaterialTheme.colorScheme.onTertiary,
                 modifier = Modifier.padding(top = 120.dp, bottom = 8.dp)
             )
 
@@ -87,7 +87,7 @@ fun SignIn(navController: NavController, viewModel: UserViewModel) {
             Text(
                 text = "Register",
                 fontSize = 18.sp,
-                color = Color(0xFF2E3B4E),
+                color =  MaterialTheme.colorScheme.onTertiary,
                 modifier = Modifier.padding(bottom = 24.dp)
             )
 
@@ -105,8 +105,8 @@ fun SignIn(navController: NavController, viewModel: UserViewModel) {
                     .padding(bottom = 12.dp),
                 singleLine = true,
                 colors = OutlinedTextFieldDefaults.colors(
-                    unfocusedBorderColor = Color.LightGray,
-                    focusedBorderColor = Color.Gray
+                    unfocusedBorderColor = MaterialTheme.colorScheme.onSurface,
+                    focusedBorderColor = MaterialTheme.colorScheme.onBackground
                 ),
                 isError = nicknameError != null,
                 supportingText = { nicknameError?.let { Text(it) } },
@@ -127,8 +127,8 @@ fun SignIn(navController: NavController, viewModel: UserViewModel) {
                 singleLine = true,
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
                 colors = OutlinedTextFieldDefaults.colors(
-                    unfocusedBorderColor = Color.LightGray,
-                    focusedBorderColor = Color.Gray
+                    unfocusedBorderColor = MaterialTheme.colorScheme.onSurface,
+                    focusedBorderColor = MaterialTheme.colorScheme.onBackground
                 ),
                 isError = emailError != null,
                 supportingText = { emailError?.let { Text(it) } },
@@ -150,8 +150,8 @@ fun SignIn(navController: NavController, viewModel: UserViewModel) {
                 visualTransformation = PasswordVisualTransformation(),
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
                 colors = OutlinedTextFieldDefaults.colors(
-                    unfocusedBorderColor = Color.LightGray,
-                    focusedBorderColor = Color.Gray
+                    unfocusedBorderColor = MaterialTheme.colorScheme.onSurface,
+                    focusedBorderColor = MaterialTheme.colorScheme.onBackground
                 ),
                 isError = passwordError != null,
                 supportingText = { passwordError?.let { Text(it) } },
@@ -173,8 +173,8 @@ fun SignIn(navController: NavController, viewModel: UserViewModel) {
                 visualTransformation = PasswordVisualTransformation(),
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
                 colors = OutlinedTextFieldDefaults.colors(
-                    unfocusedBorderColor = Color.LightGray,
-                    focusedBorderColor = Color.Gray
+                    unfocusedBorderColor = MaterialTheme.colorScheme.onSurface,
+                    focusedBorderColor = MaterialTheme.colorScheme.onBackground
                 ),
                 isError = confirmPasswordError != null,
                 supportingText = { confirmPasswordError?.let { Text(it) } },
@@ -194,7 +194,7 @@ fun SignIn(navController: NavController, viewModel: UserViewModel) {
                     .fillMaxWidth()
                     .height(50.dp),
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = Color(0xFF2E3B4E)
+                    containerColor = MaterialTheme.colorScheme.primary
                 ),
                 shape = MaterialTheme.shapes.small,
                 enabled = correctFormat
@@ -205,7 +205,7 @@ fun SignIn(navController: NavController, viewModel: UserViewModel) {
             if (missatgeRegister.isNotEmpty()) {
                 Text(
                     text = missatgeRegister,
-                    color = if (missatgeRegister == "Usuari registrat") Color.Green else Color.Red,
+                    color = if (missatgeRegister == "Usuari registrat") MaterialTheme.colorScheme.secondary else MaterialTheme.colorScheme.error,
                     modifier = Modifier.padding(vertical = 8.dp)
                 )
             }
@@ -213,7 +213,7 @@ fun SignIn(navController: NavController, viewModel: UserViewModel) {
             // Or separator
             Text(
                 text = "or",
-                color = Color.Gray,
+                color =  MaterialTheme.colorScheme.onTertiary,
                 modifier = Modifier.padding(vertical = 12.dp)
             )
 
@@ -228,7 +228,7 @@ fun SignIn(navController: NavController, viewModel: UserViewModel) {
                     .fillMaxWidth()
                     .height(50.dp),
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = Color(0xFF7D8A99)
+                    containerColor = MaterialTheme.colorScheme.primary
                 ),
                 shape = MaterialTheme.shapes.small,
                 enabled = false

@@ -119,7 +119,7 @@ fun LogIn(navController: NavController, viewModel: UserViewModel) {
                 placeholder = { Text("Contraseña") },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(bottom = 12.dp),
+                    .padding(bottom = 0.dp),
                 singleLine = true,
                 visualTransformation = PasswordVisualTransformation(),
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
