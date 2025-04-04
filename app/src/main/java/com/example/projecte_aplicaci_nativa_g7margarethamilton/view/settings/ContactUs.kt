@@ -7,15 +7,19 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
@@ -25,6 +29,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
@@ -35,7 +40,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import com.example.projecte_aplicaci_nativa_g7margarethamilton.view.BottomNavBar
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -94,11 +98,14 @@ fun ContactUsView(navController: NavController) {
                 modifier = Modifier.padding(16.dp)
             )
             Spacer(modifier = Modifier.padding(8.dp))
-            var text by remember { mutableStateOf("") }
 
+            var text by remember { mutableStateOf("") }
+            var maxChars = 140
+            var isTextValid = text.length <= maxChars && text.isNotEmpty()
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
+                    .height(200.dp)
                     .background(Color.White, RoundedCornerShape(8.dp))
                     .border(1.dp, Color.Gray, RoundedCornerShape(8.dp))
                     .padding(16.dp)
@@ -117,8 +124,30 @@ fun ContactUsView(navController: NavController) {
                         innerTextField()
                     }
                 )
+                Text(
+                    text = "${text.length}/$maxChars",
+                    color = if (text.length > maxChars) Color.Red else Color.Gray,
+                    modifier = Modifier
+                        .align(Alignment.BottomEnd)
+                        .padding(8.dp)
+                )
             }
 
+            Spacer(modifier = Modifier.padding(8.dp))
+
+            Button(
+                onClick = {/*TODO: Enviar el mensaje */ },
+                modifier = Modifier
+                    .height(50.dp)
+                .align(Alignment.End),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color(0xFF2E3B4E)
+                ),
+                shape = MaterialTheme.shapes.small,
+                enabled = isTextValid
+            ) {
+                Text("Enviar")
+            }
         }
     }
 }
