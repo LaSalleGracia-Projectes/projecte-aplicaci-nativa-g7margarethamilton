@@ -38,14 +38,6 @@ fun ProfileView(navController: NavController, viewModel: UserViewModel) {
     val currentUser by viewModel.currentUser.collectAsState()
 
     // Definimos colores modernos para nuestra UI
-    val primaryColor = Color(0xFF6D7D8B)
-    val secondaryColor = Color(0xFF03DAC6)
-    val gradientBackground = Brush.verticalGradient(
-        colors = listOf(
-            Color(0xFFF5F5F5),
-            Color(0xFFE0E0E0)
-        )
-    )
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
 
 
@@ -67,7 +59,7 @@ fun ProfileView(navController: NavController, viewModel: UserViewModel) {
                         Icon(
                             imageVector = Icons.Default.ArrowBack,
                             contentDescription = "Volver",
-                            tint = MaterialTheme.colorScheme.onPrimary
+                            tint = MaterialTheme.colorScheme.onBackground
                         )
                     }
                 },
@@ -78,12 +70,12 @@ fun ProfileView(navController: NavController, viewModel: UserViewModel) {
                         Icon(
                             imageVector = Icons.Default.Edit,
                             contentDescription = "Editar perfil",
-                            tint = MaterialTheme.colorScheme.onPrimary
+                            tint = MaterialTheme.colorScheme.onBackground
                         )
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
-                    titleContentColor = MaterialTheme.colorScheme.onTertiary
+                    containerColor = MaterialTheme.colorScheme.surface
                 )
             )
         },
@@ -109,9 +101,6 @@ fun ProfileView(navController: NavController, viewModel: UserViewModel) {
                     colors = CardDefaults.cardColors(
                         containerColor = MaterialTheme.colorScheme.surface
                     ),
-                    elevation = CardDefaults.cardElevation(
-                        defaultElevation = 4.dp
-                    ),
                     shape = RoundedCornerShape(16.dp)
                 ) {
                     Column(
@@ -129,10 +118,6 @@ fun ProfileView(navController: NavController, viewModel: UserViewModel) {
                                 modifier = Modifier
                                     .size(120.dp)
                                     .clip(CircleShape)
-                                    .background(
-                                        Brush.radialGradient(
-                                            colors = listOf(primaryColor, secondaryColor)
-                                        ))
                                     .padding(4.dp),
                                 contentAlignment = Alignment.Center  // Añadimos contentAlignment aquí
                             ) {
@@ -180,9 +165,6 @@ fun ProfileView(navController: NavController, viewModel: UserViewModel) {
                     colors = CardDefaults.cardColors(
                         containerColor = MaterialTheme.colorScheme.surface
                     ),
-                    elevation = CardDefaults.cardElevation(
-                        defaultElevation = 2.dp
-                    ),
                     shape = RoundedCornerShape(16.dp)
                 ) {
                     Column(
@@ -194,7 +176,7 @@ fun ProfileView(navController: NavController, viewModel: UserViewModel) {
                         InfoRow(
                             title = "Usuari/a des-de:",
                             value = "10/01/2025",
-                            iconTint = primaryColor
+                            iconTint = MaterialTheme.colorScheme.onTertiary
                         )
 
                         Divider(
@@ -209,7 +191,7 @@ fun ProfileView(navController: NavController, viewModel: UserViewModel) {
                             InfoRow(
                                 title = "Email:",
                                 value = it.email,
-                                iconTint = primaryColor
+                                iconTint = MaterialTheme.colorScheme.onTertiary
                             )
                         }
                     }

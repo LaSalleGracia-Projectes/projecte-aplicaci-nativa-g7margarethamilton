@@ -41,14 +41,17 @@ fun BottomNavBar(navController: NavController) {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
 
-    NavigationBar {
+    NavigationBar (
+        containerColor = MaterialTheme.colorScheme.surface,
+        tonalElevation = 0.dp
+    ) {
         items.forEach { item ->
             NavigationBarItem(
                 icon = {
                     Icon(
                         item.icon,
                         contentDescription = item.title,
-                        tint = MaterialTheme.colorScheme.onPrimary,
+                        tint = MaterialTheme.colorScheme.onBackground,
                         modifier = Modifier
                             .size(32.dp)
                     )

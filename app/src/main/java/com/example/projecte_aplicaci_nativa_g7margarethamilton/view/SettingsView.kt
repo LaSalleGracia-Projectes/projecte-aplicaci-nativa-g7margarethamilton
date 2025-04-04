@@ -118,9 +118,6 @@ fun SettingOption(
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surface,
         ),
-        elevation = CardDefaults.cardElevation(
-            defaultElevation = 2.dp
-        )
     ) {
         Row(
             modifier = Modifier
