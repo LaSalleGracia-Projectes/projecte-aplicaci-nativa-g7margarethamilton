@@ -91,7 +91,7 @@ fun DailyTasksView(navController: NavController) {
                     Icon(
                         imageVector = Icons.Default.Close,
                         contentDescription = "Cerrar",
-                        tint = Color.Black
+                        tint = MaterialTheme.colorScheme.onBackground
                     )
                 }
 
@@ -103,12 +103,12 @@ fun DailyTasksView(navController: NavController) {
                         text = "Tasques del día",
                         fontSize = 24.sp,
                         fontWeight = FontWeight.Bold,
-                        color = Color.Black
+                        color = MaterialTheme.colorScheme.onSecondary
                     )
                     Text(
                         text = currentDate.format(formatter),
                         fontSize = 18.sp,
-                        color = Color.Gray
+                        color = MaterialTheme.colorScheme.onSurface
                     )
                 }
 
@@ -119,7 +119,7 @@ fun DailyTasksView(navController: NavController) {
                         .align(Alignment.TopEnd)
                         .padding(top = 40.dp),
                     colors = ButtonDefaults.buttonColors(
-                        containerColor = Color(0xFF2E3B4E)
+                        containerColor = MaterialTheme.colorScheme.primary
                     )
                 ) {
                     Text("Calendari")
@@ -200,9 +200,8 @@ fun TaskItem(task: Task) {
                         onCheckedChange = { /* TODO: Handle completion */ },
                         modifier = Modifier.align(Alignment.CenterVertically),
                         colors = CheckboxDefaults.colors(
-                            checkedColor = Color(0xFF2E3B4E),
-                            uncheckedColor = Color.Gray,
-
+                            checkedColor = MaterialTheme.colorScheme.onBackground,
+                            uncheckedColor = MaterialTheme.colorScheme.onBackground,
                             )
                     )
                     // Delete icon
@@ -215,7 +214,7 @@ fun TaskItem(task: Task) {
                         Icon(
                             imageVector = Icons.Default.Delete,
                             contentDescription = "Eliminar tarea",
-                            tint = Color.Gray
+                            tint = MaterialTheme.colorScheme.onBackground,
                         )
                     }
                 }

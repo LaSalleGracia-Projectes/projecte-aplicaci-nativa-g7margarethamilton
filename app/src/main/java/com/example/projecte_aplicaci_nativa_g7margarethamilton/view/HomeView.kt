@@ -13,14 +13,18 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowForward
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.navigation.NavController
@@ -49,10 +53,23 @@ fun HomeView(navController: NavController) {
                 text = "What we do today?",
                 fontSize = 28.sp,
                 fontWeight = FontWeight.Bold,
-                color = Color(0xFF2E3B4E)
+                color = MaterialTheme.colorScheme.onSecondary
             )
 
             Spacer(modifier = Modifier.height(40.dp))
+
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                HomeOptionButton(
+                    title = "Tareas del día",
+                    onClick = { navController.navigate(Routes.DailyTasks.route) },
+                    modifier = Modifier.weight(1f)
+                )
+            }
+
+            Spacer(modifier = Modifier.height(16.dp))
 
             // Grid de opciones (2x2)
             Row(
@@ -61,8 +78,8 @@ fun HomeView(navController: NavController) {
             ) {
                 // Botón Agenda
                 HomeOptionButton(
-                    title = "Tareas del día",
-                    onClick = { navController.navigate(Routes.DailyTasks.route) },
+                    title = "Agenda",
+                    onClick = { /*TODO: navigate to Agenda*/ },
                     modifier = Modifier.weight(1f)
                 )
 
@@ -93,19 +110,8 @@ fun HomeView(navController: NavController) {
 
                 // Botón Rutines exercici
                 HomeOptionButton(
-                    title = "Rutines exercici",
+                    title = "Exercici",
                     onClick = { /* TODO: Navigate to Exercise Routines */ },
-                    modifier = Modifier.weight(1f)
-                )
-            }
-            Spacer(modifier = Modifier.height(16.dp))
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                HomeOptionButton(
-                    title = "Agenda",
-                    onClick = {/*TODO: navigate to Agenda*/ },
                     modifier = Modifier.weight(1f)
                 )
             }
@@ -119,31 +125,33 @@ fun HomeOptionButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val colorScheme = MaterialTheme.colorScheme
+
     Box(
         modifier = modifier
             .height(100.dp)
-            .border(1.dp, Color.LightGray)
-            .background(Color(0xFFE3E8F0))
+            .clip(RoundedCornerShape(16.dp))
+            .background(colorScheme.surface)
+            .border(1.dp, colorScheme.onSurface.copy(alpha = 0.1f), RoundedCornerShape(16.dp))
             .clickable(onClick = onClick)
-            .padding(16.dp)
+            .padding(horizontal = 20.dp, vertical = 16.dp)
     ) {
         Text(
             text = title,
-            fontSize = 16.sp,
-            fontWeight = FontWeight.Medium,
-            color = Color(0xFF2E3B4E),
+            fontSize = 18.sp,
+            fontWeight = FontWeight.SemiBold,
+            color = colorScheme.onSecondary,
             modifier = Modifier.align(Alignment.CenterStart)
         )
 
         Icon(
             imageVector = Icons.Default.ArrowForward,
             contentDescription = "Ir a $title",
-            tint = Color(0xFF2E3B4E),
+            tint = MaterialTheme.colorScheme.onBackground,
             modifier = Modifier.align(Alignment.CenterEnd)
         )
     }
 }
-
 
 @Preview(showBackground = true)
 @Composable
