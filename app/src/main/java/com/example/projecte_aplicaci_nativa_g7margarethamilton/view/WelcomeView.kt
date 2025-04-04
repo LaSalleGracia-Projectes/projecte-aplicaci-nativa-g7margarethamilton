@@ -47,7 +47,7 @@ fun WelcomeView(navController: NavController) {
                     text = "Welcome",
                     fontSize = 36.sp,
                     fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.onTertiary,
+                    color = MaterialTheme.colorScheme.onSecondary,
                     textAlign = TextAlign.Center
                 )
 
@@ -56,7 +56,7 @@ fun WelcomeView(navController: NavController) {
                 Text(
                     text = "to",
                     fontSize = 32.sp,
-                    color = MaterialTheme.colorScheme.onTertiary,
+                    color = MaterialTheme.colorScheme.onSecondary,
                     textAlign = TextAlign.Center
                 )
 
@@ -66,7 +66,7 @@ fun WelcomeView(navController: NavController) {
                     text = "Flow2Day!",
                     fontSize = 36.sp,
                     fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.onTertiary,
+                    color = MaterialTheme.colorScheme.onSecondary,
                     textAlign = TextAlign.Center
                 )
 

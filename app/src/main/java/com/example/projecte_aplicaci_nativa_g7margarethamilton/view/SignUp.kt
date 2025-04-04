@@ -79,7 +79,7 @@ fun SignIn(navController: NavController, viewModel: UserViewModel) {
                 text = "Flow2Day!",
                 fontSize = 35.sp,
                 fontWeight = FontWeight.Bold,
-                color =  MaterialTheme.colorScheme.onTertiary,
+                color =  MaterialTheme.colorScheme.onSecondary,
                 modifier = Modifier.padding(top = 120.dp, bottom = 8.dp)
             )
 
@@ -87,7 +87,7 @@ fun SignIn(navController: NavController, viewModel: UserViewModel) {
             Text(
                 text = "Register",
                 fontSize = 18.sp,
-                color =  MaterialTheme.colorScheme.onTertiary,
+                color =  MaterialTheme.colorScheme.onSecondary,
                 modifier = Modifier.padding(bottom = 24.dp)
             )
 
@@ -213,7 +213,7 @@ fun SignIn(navController: NavController, viewModel: UserViewModel) {
             // Or separator
             Text(
                 text = "or",
-                color =  MaterialTheme.colorScheme.onTertiary,
+                color =  MaterialTheme.colorScheme.onSecondary,
                 modifier = Modifier.padding(vertical = 12.dp)
             )
 

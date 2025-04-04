@@ -74,7 +74,7 @@ fun LogIn(navController: NavController, viewModel: UserViewModel) {
                 text = "Flow2Day!",
                 fontSize = 35.sp,
                 fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.onTertiary,
+                color = MaterialTheme.colorScheme.onSecondary,
                 modifier = Modifier.padding(bottom = 8.dp)
             )
 
@@ -82,7 +82,7 @@ fun LogIn(navController: NavController, viewModel: UserViewModel) {
             Text(
                 text = "Login",
                 fontSize = 18.sp,
-                color = MaterialTheme.colorScheme.onTertiary,
+                color = MaterialTheme.colorScheme.onSecondary,
                 modifier = Modifier.padding(bottom = 32.dp)
             )
 
@@ -134,7 +134,7 @@ fun LogIn(navController: NavController, viewModel: UserViewModel) {
             // Forgot password text
             Text(
                 text = "Forgot your password?",
-                color = MaterialTheme.colorScheme.onTertiary,
+                color = MaterialTheme.colorScheme.onSecondary,
                 fontSize = 14.sp,
                 modifier = Modifier
                     .align(Alignment.Start)
@@ -179,7 +179,7 @@ fun LogIn(navController: NavController, viewModel: UserViewModel) {
             // Or separator
             Text(
                 text = "or",
-                color = MaterialTheme.colorScheme.onTertiary,
+                color = MaterialTheme.colorScheme.onSecondary,
                 modifier = Modifier.padding(vertical = 12.dp)
             )
 

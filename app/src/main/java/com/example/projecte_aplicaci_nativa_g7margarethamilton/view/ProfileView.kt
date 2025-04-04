@@ -50,7 +50,7 @@ fun ProfileView(navController: NavController, viewModel: UserViewModel) {
                         text = "Perfil",
                         fontSize = 30.sp,
                         fontWeight = FontWeight.SemiBold,
-                        color = MaterialTheme.colorScheme.onTertiary
+                        color = MaterialTheme.colorScheme.onSecondary
                     )
                 },
                 navigationIcon = {
@@ -140,7 +140,7 @@ fun ProfileView(navController: NavController, viewModel: UserViewModel) {
                                 text = it.nickname,
                                 fontSize = 28.sp,
                                 fontWeight = FontWeight.Bold,
-                                color = MaterialTheme.colorScheme.onTertiary
+                                color = MaterialTheme.colorScheme.onSecondary
                             )
                         }
 
@@ -151,7 +151,7 @@ fun ProfileView(navController: NavController, viewModel: UserViewModel) {
                             text = "\"Apasionada del bienestar | Vida saludable | Equilibrio, energía y felicidad cada día\"",
                             fontSize = 16.sp,
                             fontWeight = FontWeight.Normal,
-                            color = MaterialTheme.colorScheme.onTertiary,
+                            color = MaterialTheme.colorScheme.onSecondary,
                             modifier = Modifier.padding(horizontal = 24.dp)
                         )
                     }
@@ -176,7 +176,7 @@ fun ProfileView(navController: NavController, viewModel: UserViewModel) {
                         InfoRow(
                             title = "Usuari/a des-de:",
                             value = "10/01/2025",
-                            iconTint = MaterialTheme.colorScheme.onTertiary
+                            iconTint = MaterialTheme.colorScheme.onSecondary
                         )
 
                         Divider(
@@ -191,7 +191,7 @@ fun ProfileView(navController: NavController, viewModel: UserViewModel) {
                             InfoRow(
                                 title = "Email:",
                                 value = it.email,
-                                iconTint = MaterialTheme.colorScheme.onTertiary
+                                iconTint = MaterialTheme.colorScheme.onSecondary
                             )
                         }
                     }
@@ -253,7 +253,7 @@ private fun InfoRow(title: String, value: String, iconTint: Color) {
                 text = value,
                 fontSize = 18.sp,
                 fontWeight = FontWeight.Normal,
-                color = MaterialTheme.colorScheme.onTertiary,
+                color = MaterialTheme.colorScheme.onSecondary,
                 modifier = Modifier.padding(top = 4.dp)
             )
         }

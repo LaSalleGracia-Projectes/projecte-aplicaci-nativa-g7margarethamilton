@@ -53,7 +53,7 @@ fun HomeView(navController: NavController) {
                 text = "What we do today?",
                 fontSize = 28.sp,
                 fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.onTertiary
+                color = MaterialTheme.colorScheme.onSecondary
             )
 
             Spacer(modifier = Modifier.height(40.dp))
@@ -140,7 +140,7 @@ fun HomeOptionButton(
             text = title,
             fontSize = 18.sp,
             fontWeight = FontWeight.SemiBold,
-            color = colorScheme.onSurface,
+            color = colorScheme.onSecondary,
             modifier = Modifier.align(Alignment.CenterStart)
         )
 
