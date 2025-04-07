@@ -33,7 +33,7 @@ class ScheduleViewModel(
         CoroutineScope(Dispatchers.IO).launch {
             try {
                 _isLoading.value = true
-                val response = repository.getAllSchedules(token, userId)
+                val response = repository.getAllSchedules(token)
                 
                 withContext(Dispatchers.Main) {
                     if (response.isSuccessful) {
