@@ -75,7 +75,7 @@ fun ProfileView(navController: NavController, viewModel: UserViewModel) {
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.surface
+                    containerColor = MaterialTheme.colorScheme.background
                 )
             )
         },
@@ -183,7 +183,7 @@ fun ProfileView(navController: NavController, viewModel: UserViewModel) {
                             modifier = Modifier
                                 .padding(vertical = 16.dp)
                                 .fillMaxWidth(),
-                            color = Color(0xFFEEEEEE)
+                            color = MaterialTheme.colorScheme.onSurface
                         )
 
                         // Email
@@ -246,7 +246,7 @@ private fun InfoRow(title: String, value: String, iconTint: Color) {
                 text = title,
                 fontSize = 14.sp,
                 fontWeight = FontWeight.Medium,
-                color = MaterialTheme.colorScheme.onSurface,
+                color = MaterialTheme.colorScheme.onSecondary,
             )
 
             Text(

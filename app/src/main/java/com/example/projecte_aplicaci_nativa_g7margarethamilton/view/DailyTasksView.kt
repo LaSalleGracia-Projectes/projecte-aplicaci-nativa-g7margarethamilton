@@ -31,8 +31,7 @@ data class Task(
     val timeEnd: String,
     val title: String,
     val description: String,
-    val isCompleted: Boolean = false,
-    val isGray: Boolean = false
+    val isCompleted: Boolean = false
 )
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -44,25 +43,11 @@ fun DailyTasksView(navController: NavController) {
     var tasks by remember {
         mutableStateOf(
             listOf(
-                Task(
-                    "8:00",
-                    "8:30",
-                    "Estudiar React",
-                    "Repasar hooks y estado global",
-                    false,
-                    true
-                ),
-                Task("9:00", "9:30", "Ejercicio Matutino", "30 minutos de cardio", false, false),
-                Task(
-                    "10:00",
-                    "10:45",
-                    "Reunión de Equipo",
-                    "Planificación sprint semanal",
-                    false,
-                    true
-                ),
-                Task("11:00", "12:00", "Desarrollo Frontend", "Implementar nueva UI", false, false),
-                Task("14:00", "15:30", "Clase de Inglés", "Preparar presentación oral", false, true)
+                Task("8:00", "8:30", "Estudiar React", "Repasar hooks y estado global", false),
+                Task("9:00", "9:30", "Ejercicio Matutino", "30 minutos de cardio", false),
+                Task("10:00", "10:45", "Reunión de Equipo", "Planificación sprint semanal", false),
+                Task("11:00", "12:00", "Desarrollo Frontend", "Implementar nueva UI", false),
+                Task("14:00", "15:30", "Clase de Inglés", "Preparar presentación oral", false)
             )
         )
     }
@@ -73,7 +58,7 @@ fun DailyTasksView(navController: NavController) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .background(Color.White)
+                .background(MaterialTheme.colorScheme.background)
                 .padding(16.dp)
                 .padding(paddingValues)
         ) {
@@ -83,7 +68,6 @@ fun DailyTasksView(navController: NavController) {
                     .fillMaxWidth()
                     .padding(bottom = 16.dp)
             ) {
-                // Close button
                 IconButton(
                     onClick = { navController.navigate(Routes.Home.route) },
                     modifier = Modifier.align(Alignment.TopEnd)
@@ -95,10 +79,7 @@ fun DailyTasksView(navController: NavController) {
                     )
                 }
 
-                // Title and date
-                Column(
-                    modifier = Modifier.align(Alignment.TopStart)
-                ) {
+                Column(modifier = Modifier.align(Alignment.TopStart)) {
                     Text(
                         text = "Tasques del día",
                         fontSize = 24.sp,
@@ -112,7 +93,6 @@ fun DailyTasksView(navController: NavController) {
                     )
                 }
 
-                // Calendar button
                 Button(
                     onClick = { /* TODO: Handle calendar */ },
                     modifier = Modifier
@@ -122,11 +102,13 @@ fun DailyTasksView(navController: NavController) {
                         containerColor = MaterialTheme.colorScheme.primary
                     )
                 ) {
-                    Text("Calendari")
+                    Text(
+                        "Calendari",
+                        color = MaterialTheme.colorScheme.onPrimary
+                    )
                 }
             }
 
-            // Tasks list
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -148,7 +130,6 @@ fun TaskItem(task: Task) {
             .fillMaxWidth()
             .padding(vertical = 4.dp)
     ) {
-        // Time column
         Column(
             modifier = Modifier
                 .width(60.dp)
@@ -158,37 +139,35 @@ fun TaskItem(task: Task) {
             Text(
                 text = task.timeStart,
                 fontSize = 14.sp,
-                color = Color.Gray
+                color = MaterialTheme.colorScheme.onSecondary
             )
             Text(
                 text = task.timeEnd,
                 fontSize = 14.sp,
-                color = Color.Gray
+                color = MaterialTheme.colorScheme.onSecondary
             )
         }
 
-        // Task content
         Box(
             modifier = Modifier
                 .weight(1f)
-                .border(1.dp, Color.LightGray)
-                .background(if (task.isGray) Color(0xFFF5F5F5) else Color.White)
+                .background(MaterialTheme.colorScheme.surface)
                 .padding(12.dp)
         ) {
             Column(
-                modifier = Modifier
-                    .fillMaxSize(),
+                modifier = Modifier.fillMaxSize(),
                 verticalArrangement = Arrangement.Center
             ) {
                 Text(
                     text = task.title,
                     fontSize = 16.sp,
-                    fontWeight = FontWeight.Bold
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.onSecondary
                 )
                 Text(
                     text = task.description,
                     fontSize = 14.sp,
-                    color = Color.Gray
+                    color = MaterialTheme.colorScheme.onSecondary
                 )
                 Row(
                     modifier = Modifier.fillMaxWidth(),
@@ -200,11 +179,10 @@ fun TaskItem(task: Task) {
                         onCheckedChange = { /* TODO: Handle completion */ },
                         modifier = Modifier.align(Alignment.CenterVertically),
                         colors = CheckboxDefaults.colors(
-                            checkedColor = MaterialTheme.colorScheme.onBackground,
+                            checkedColor = MaterialTheme.colorScheme.secondary,
                             uncheckedColor = MaterialTheme.colorScheme.onBackground,
-                            )
+                        )
                     )
-                    // Delete icon
                     IconButton(
                         onClick = { /* TODO: Handle Delete click */ },
                         modifier = Modifier
@@ -214,12 +192,11 @@ fun TaskItem(task: Task) {
                         Icon(
                             imageVector = Icons.Default.Delete,
                             contentDescription = "Eliminar tarea",
-                            tint = MaterialTheme.colorScheme.onBackground,
+                            tint = MaterialTheme.colorScheme.error
                         )
                     }
                 }
             }
-
         }
     }
 }
