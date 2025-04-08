@@ -40,7 +40,7 @@ fun ScheduleView(
 ) {
     val currentDate = LocalDate.now()
     val formatter = DateTimeFormatter.ofPattern("d MMMM", Locale("es"))
-    
+
     val schedules by viewModel.schedules.collectAsState()
     val isLoading by viewModel.isLoading.collectAsState()
     val error by viewModel.error.collectAsState()
@@ -153,18 +153,18 @@ fun ScheduleView(
                         color = Color.Black,
                         modifier = Modifier.padding(16.dp)
                     )
-                // Filtrar las tareas del día actual
-                val todayTasks = schedules.flatMap { schedule ->
-                    schedule.tasks.filter { task ->
-                        // Aquí deberías implementar la lógica para filtrar las tareas del día actual
-                        true // Por ahora mostramos todas las tareas
+                    // Filtrar las tareas del día actual
+                    val todayTasks = schedules.flatMap { schedule ->
+                        schedule.tasks.filter { task ->
+                            // Aquí deberías implementar la lógica para filtrar las tareas del día actual
+                            true // Por ahora mostramos todas las tareas
+                        }
                     }
-                }
 
-                todayTasks.forEach { task ->
-                    TaskItem(task)
-                    Spacer(modifier = Modifier.height(8.dp))
-                }
+                    todayTasks.forEach { task ->
+                        TaskItem(task)
+                        Spacer(modifier = Modifier.height(8.dp))
+                    }
                 }
 
             }
@@ -172,7 +172,10 @@ fun ScheduleView(
     }
 }
 
-fun añadirDatosPrueba(viewModel: ScheduleViewModel, userViewModel: UserViewModel): List<Schedule_task> {
+fun añadirDatosPrueba(
+    viewModel: ScheduleViewModel,
+    userViewModel: UserViewModel
+): List<Schedule_task> {
     val email = userViewModel.currentUser.value?.email.toString()
     viewModel.createNewSchedule(
         "Agenda de prueba",
@@ -208,7 +211,8 @@ fun añadirDatosPrueba(viewModel: ScheduleViewModel, userViewModel: UserViewMode
         )
     }
 
-    return viewModel.schedules.value.firstOrNull { it.id.toString() == scheduleId }?.tasks ?: emptyList()
+    return viewModel.schedules.value.firstOrNull { it.id.toString() == scheduleId }?.tasks
+        ?: emptyList()
 }
 
 @Composable
