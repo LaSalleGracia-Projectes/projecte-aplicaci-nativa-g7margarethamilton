@@ -1,5 +1,6 @@
 package com.example.projecte_aplicaci_nativa_g7margarethamilton.view
 
+import android.annotation.SuppressLint
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
@@ -22,6 +23,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.projecte_aplicaci_nativa_g7margarethamilton.Routes
+import com.example.projecte_aplicaci_nativa_g7margarethamilton.model.moduls.Schedule
 import com.example.projecte_aplicaci_nativa_g7margarethamilton.model.moduls.Schedule_task
 import com.example.projecte_aplicaci_nativa_g7margarethamilton.viewModel.ScheduleViewModel
 import com.example.projecte_aplicaci_nativa_g7margarethamilton.viewModel.UserViewModel
@@ -50,6 +52,7 @@ fun ScheduleView(
     val formatter = DateTimeFormatter.ofPattern("d MMMM", Locale("es"))
 
     val schedules by viewModel.schedules.collectAsState()
+    val currentSchedule by viewModel.currentSchedule.collectAsState()
     val isLoading by viewModel.isLoading.collectAsState()
     val error by viewModel.error.collectAsState()
     val currentUser by userViewModel.currentUser.collectAsState()
@@ -72,7 +75,14 @@ fun ScheduleView(
                 .padding(16.dp)
                 .padding(paddingValues)
         ) {
-            // Header
+            // Dropdown para seleccionar la agenda actual
+            ScheduleDropdown(
+                schedules = schedules,
+                currentSchedule = currentSchedule,
+                onScheduleSelected = { selectedSchedule ->
+                    viewModel.setCurrentSchedule(selectedSchedule)
+                }
+            )            // Header
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -163,10 +173,10 @@ fun ScheduleView(
                     )
                     // Filtrar las tareas del día actual
                     val todayTasks = schedules.flatMap { schedule ->
-                        schedule.tasks.filter { task ->
+                        schedule.tasks?.filter { task ->
                             // Aquí deberías implementar la lógica para filtrar las tareas del día actual
                             true // Por ahora mostramos todas las tareas
-                        }
+                        } ?: emptyList()
                     }
 
                     todayTasks.forEach { task ->
@@ -289,6 +299,50 @@ fun TaskItem(task: Schedule_task) {
                 }
             }
 
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun ScheduleDropdown(
+    schedules: List<Schedule>,
+    currentSchedule: Schedule?,
+    onScheduleSelected: (Schedule) -> Unit
+) {
+    var expanded by remember { mutableStateOf(false) }
+    val selectedText = currentSchedule?.title ?: "Selecciona una agenda"
+
+    ExposedDropdownMenuBox(
+        expanded = expanded,
+        onExpandedChange = { expanded = !expanded }
+    ) {
+        TextField(
+            value = selectedText,
+            onValueChange = {},
+            readOnly = true,
+            label = { Text("Agenda actual") },
+            trailingIcon = {
+                ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded)
+            },
+            modifier = Modifier
+                .fillMaxWidth()
+                .menuAnchor()
+        )
+
+        ExposedDropdownMenu(
+            expanded = expanded,
+            onDismissRequest = { expanded = false }
+        ) {
+            schedules.forEach { schedule ->
+                DropdownMenuItem(
+                    text = { Text(schedule.title) },
+                    onClick = {
+                        expanded = false
+                        onScheduleSelected(schedule)
+                    }
+                )
+            }
         }
     }
 }
