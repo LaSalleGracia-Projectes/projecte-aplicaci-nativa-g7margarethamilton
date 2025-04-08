@@ -16,11 +16,10 @@ data class Schedule_task(
     val id: Int,
     val title: String,
     val content: String,
-    val is_completed: Boolean,
     val priority: Int,
     val start_time: String,
     val end_time: String,
-    val id_calendar: Int,
+    val id_schedule: Int,
     val id_category: Int,
     val created_at: Time
 )
