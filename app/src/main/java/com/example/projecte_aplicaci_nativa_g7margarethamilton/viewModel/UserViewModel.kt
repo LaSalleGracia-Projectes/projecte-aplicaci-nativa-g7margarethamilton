@@ -1,11 +1,14 @@
 package com.example.projecte_aplicaci_nativa_g7margarethamilton.viewModel
 
+import android.content.Context
 import androidx.lifecycle.ViewModel
 import com.example.projecte_aplicaci_nativa_g7margarethamilton.model.Usuari
 import com.example.projecte_aplicaci_nativa_g7margarethamilton.api.ApiRepository
 import com.example.projecte_aplicaci_nativa_g7margarethamilton.api.UserResponse
+import com.example.projecte_aplicaci_nativa_g7margarethamilton.model.GoogleAuthUiClient
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -118,12 +121,12 @@ class UserViewModel : ViewModel() {
         _confirmPasswordError.value = null
     }
 
-    fun register(usuari: Usuari){
+    fun register(usuari: Usuari) {
         CoroutineScope(Dispatchers.IO).launch {
             try {
                 val response = repository.register(usuari)
-                withContext(Dispatchers.Main){
-                    if(response.isSuccessful){
+                withContext(Dispatchers.Main) {
+                    if (response.isSuccessful) {
                         val registerResponse = response.body()
                         _missatgeRegister.value = registerResponse?.message ?: "Usuario registrado exitosamente"
                     } else {
@@ -141,6 +144,7 @@ class UserViewModel : ViewModel() {
             }
         }
     }
+
     fun clearMissatgeRegister() {
         _missatgeRegister.value = ""
     }
@@ -181,8 +185,33 @@ class UserViewModel : ViewModel() {
         _missatgeLogin.value = ""
     }
 
-    fun logout() {
+    fun loginWithGoogle(idToken: String) {
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val response = repository.loginWithGoogle(idToken)
+                withContext(Dispatchers.Main) {
+                    if (response.isSuccessful) {
+                        val loginResponse = response.body()
+                        _token.value = loginResponse?.tokenApp
+                        _currentUser.value = loginResponse?.user
+                        _missatgeLogin.value = loginResponse?.message ?: "Login amb Google exitós"
+                    } else {
+                        _missatgeLogin.value = "Error en iniciar sessió amb Google"
+                    }
+                }
+            } catch (e: Exception) {
+                withContext(Dispatchers.Main) {
+                    _missatgeLogin.value = "Error de connexió: ${e.message}"
+                }
+            }
+        }
+    }
+
+    fun logout(context: Context) {
         _currentUser.value = null
         _token.value = null
+
+        val googleClient = GoogleAuthUiClient(context)
+        googleClient.signOut(context)
     }
 }

@@ -76,4 +76,7 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+
+    //Google OAuth
+    implementation ("com.google.android.gms:play-services-auth:21.0.0")
 }
