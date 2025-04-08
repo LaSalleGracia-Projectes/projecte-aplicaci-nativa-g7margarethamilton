@@ -1,5 +1,6 @@
 package com.example.projecte_aplicaci_nativa_g7margarethamilton.viewModel
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.example.projecte_aplicaci_nativa_g7margarethamilton.api.ApiRepository
 import com.example.projecte_aplicaci_nativa_g7margarethamilton.model.moduls.Schedule
@@ -46,11 +47,15 @@ class ScheduleViewModel(
             } catch (e: Exception) {
                 withContext(Dispatchers.Main) {
                     _error.value = "Error: ${e.message}"
+                    Log.e("ScheduleViewModel", "Error loading schedules", e)
                 }
             } finally {
                 _isLoading.value = false
             }
         }
+    }
+    fun setCurrentSchedule(schedule: Schedule) {
+        _currentSchedule.value = schedule
     }
 
     fun createNewSchedule(title: String, email: String, categoryId: Int) {
