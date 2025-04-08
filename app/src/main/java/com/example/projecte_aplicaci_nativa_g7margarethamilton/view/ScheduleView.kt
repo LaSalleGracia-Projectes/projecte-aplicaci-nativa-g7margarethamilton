@@ -29,6 +29,14 @@ import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.*
 
+data class Task(
+    val timeStart: String,
+    val timeEnd: String,
+    val title: String,
+    val description: String,
+    val isCompleted: Boolean = false
+)
+
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun ScheduleView(
@@ -60,7 +68,7 @@ fun ScheduleView(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .background(Color.White)
+                .background(MaterialTheme.colorScheme.background)
                 .padding(16.dp)
                 .padding(paddingValues)
         ) {
@@ -78,24 +86,21 @@ fun ScheduleView(
                     Icon(
                         imageVector = Icons.Default.Close,
                         contentDescription = "Cerrar",
-                        tint = Color.Black
+                        tint = MaterialTheme.colorScheme.onBackground
                     )
                 }
 
-                // Title and date
-                Column(
-                    modifier = Modifier.align(Alignment.TopStart)
-                ) {
+                Column(modifier = Modifier.align(Alignment.TopStart)) {
                     Text(
                         text = "Tareas del día",
                         fontSize = 24.sp,
                         fontWeight = FontWeight.Bold,
-                        color = Color.Black
+                        color = MaterialTheme.colorScheme.onSecondary
                     )
                     Text(
                         text = currentDate.format(formatter),
                         fontSize = 18.sp,
-                        color = Color.Gray
+                        color = MaterialTheme.colorScheme.onSurface
                     )
                 }
 
@@ -106,10 +111,13 @@ fun ScheduleView(
                         .align(Alignment.TopEnd)
                         .padding(top = 40.dp),
                     colors = ButtonDefaults.buttonColors(
-                        containerColor = Color(0xFF2E3B4E)
+                        containerColor = MaterialTheme.colorScheme.primary
                     )
                 ) {
-                    Text("Calendario")
+                    Text(
+                        "Calendari",
+                        color = MaterialTheme.colorScheme.onPrimary
+                    )
                 }
             }
 
@@ -166,7 +174,6 @@ fun ScheduleView(
                         Spacer(modifier = Modifier.height(8.dp))
                     }
                 }
-
             }
         }
     }
@@ -222,7 +229,6 @@ fun TaskItem(task: Schedule_task) {
             .fillMaxWidth()
             .padding(vertical = 4.dp)
     ) {
-        // Time column
         Column(
             modifier = Modifier
                 .width(60.dp)
@@ -232,21 +238,21 @@ fun TaskItem(task: Schedule_task) {
             Text(
                 text = task.start_time,
                 fontSize = 14.sp,
-                color = Color.Gray
+                color = MaterialTheme.colorScheme.onSecondary
             )
             Text(
                 text = task.end_time,
                 fontSize = 14.sp,
-                color = Color.Gray
+                color = MaterialTheme.colorScheme.onSecondary
             )
         }
 
-        // Task content
         Box(
             modifier = Modifier
                 .weight(1f)
                 .border(1.dp, Color.LightGray)
                 .background(Color.White)
+                .background(MaterialTheme.colorScheme.surface)
                 .padding(12.dp)
         ) {
             Column(
@@ -256,12 +262,13 @@ fun TaskItem(task: Schedule_task) {
                 Text(
                     text = task.title,
                     fontSize = 16.sp,
-                    fontWeight = FontWeight.Bold
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.onSecondary
                 )
                 Text(
                     text = task.content,
                     fontSize = 14.sp,
-                    color = Color.Gray
+                    color = MaterialTheme.colorScheme.onSecondary
                 )
                 Row(
                     modifier = Modifier.fillMaxWidth(),
@@ -276,11 +283,12 @@ fun TaskItem(task: Schedule_task) {
                         Icon(
                             imageVector = Icons.Default.Delete,
                             contentDescription = "Eliminar tarea",
-                            tint = Color.Gray
+                            tint = MaterialTheme.colorScheme.error
                         )
                     }
                 }
             }
+
         }
     }
 }
