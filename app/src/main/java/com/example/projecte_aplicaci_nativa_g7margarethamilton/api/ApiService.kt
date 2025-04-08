@@ -90,7 +90,6 @@ interface ApiService {
 
     companion object{
         private const val BASE_URL = "http://10.0.2.2:3000/api/v1/"
-                                        //localhost se refiere a la maquina simulada, esta direccion es la del host
 
         fun create(): ApiService {
             val client = OkHttpClient.Builder().build()
