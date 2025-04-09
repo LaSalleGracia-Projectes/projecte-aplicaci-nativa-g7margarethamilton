@@ -1,6 +1,5 @@
 package com.example.projecte_aplicaci_nativa_g7margarethamilton.model.moduls
 
-import java.sql.Time
 import java.time.ZonedDateTime
 
 data class Schedule(
