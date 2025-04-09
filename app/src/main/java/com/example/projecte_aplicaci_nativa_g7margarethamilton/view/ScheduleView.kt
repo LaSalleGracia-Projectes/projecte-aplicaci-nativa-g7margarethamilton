@@ -1,16 +1,19 @@
 package com.example.projecte_aplicaci_nativa_g7margarethamilton.view
 
-import android.annotation.SuppressLint
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.KeyboardArrowDown
+import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -39,6 +42,7 @@ data class Task(
     val isCompleted: Boolean = false
 )
 
+@OptIn(ExperimentalMaterial3Api::class)
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun ScheduleView(
@@ -56,7 +60,7 @@ fun ScheduleView(
     val isLoading by viewModel.isLoading.collectAsState()
     val error by viewModel.error.collectAsState()
     val currentUser by userViewModel.currentUser.collectAsState()
-    //añadirDatosPrueba(viewModel, userViewModel)
+//    añadirDatosPrueba(viewModel, userViewModel)
 
     // Cargar los schedules cuando se inicia la vista
     LaunchedEffect(currentUser) {
@@ -66,6 +70,42 @@ fun ScheduleView(
     }
 
     Scaffold(
+        topBar = {
+            CenterAlignedTopAppBar(
+                title = {
+                    Text(
+                        text = "Agenda",
+                        fontSize = 20.sp,
+                        fontWeight = FontWeight.SemiBold,
+                        color = MaterialTheme.colorScheme.onSecondary
+                    )
+                },
+                navigationIcon = {
+                    // Close button
+                    IconButton(
+                        onClick = { navController.navigate(Routes.Home.route) },
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Close,
+                            contentDescription = "Cerrar",
+                            tint = MaterialTheme.colorScheme.onBackground
+                        )
+                    }
+                },
+                actions = {
+                    // Calendar button
+                    IconButton(
+                        onClick = { /* navController.navigate(Routes.Calendar.route)*/ },
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.DateRange,
+                            contentDescription = "Calendario",
+                            tint = MaterialTheme.colorScheme.onBackground
+                        )
+                    }
+                }
+            )
+        },
         bottomBar = { BottomNavBar(navController) }
     ) { paddingValues ->
         Column(
@@ -88,17 +128,7 @@ fun ScheduleView(
                     .fillMaxWidth()
                     .padding(bottom = 16.dp)
             ) {
-                // Close button
-                IconButton(
-                    onClick = { navController.navigate(Routes.Home.route) },
-                    modifier = Modifier.align(Alignment.TopEnd)
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.Close,
-                        contentDescription = "Cerrar",
-                        tint = MaterialTheme.colorScheme.onBackground
-                    )
-                }
+
 
                 Column(modifier = Modifier.align(Alignment.TopStart)) {
                     Text(
@@ -114,21 +144,6 @@ fun ScheduleView(
                     )
                 }
 
-                // Calendar button
-                Button(
-                    onClick = { navController.navigate(Routes.Calendar.route) },
-                    modifier = Modifier
-                        .align(Alignment.TopEnd)
-                        .padding(top = 40.dp),
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = MaterialTheme.colorScheme.primary
-                    )
-                ) {
-                    Text(
-                        "Calendari",
-                        color = MaterialTheme.colorScheme.onPrimary
-                    )
-                }
             }
 
             // Loading state
@@ -303,7 +318,6 @@ fun TaskItem(task: Schedule_task) {
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ScheduleDropdown(
     schedules: List<Schedule>,
@@ -313,26 +327,30 @@ fun ScheduleDropdown(
     var expanded by remember { mutableStateOf(false) }
     val selectedText = currentSchedule?.title ?: "Selecciona una agenda"
 
-    ExposedDropdownMenuBox(
-        expanded = expanded,
-        onExpandedChange = { expanded = !expanded }
-    ) {
-        TextField(
-            value = selectedText,
-            onValueChange = {},
-            readOnly = true,
-            label = { Text("Agenda actual") },
-            trailingIcon = {
-                ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded)
-            },
+    Box(modifier = Modifier.fillMaxWidth()) {
+        Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .menuAnchor()
-        )
+                .clickable { expanded = true }
+                .padding(vertical = 12.dp, horizontal = 16.dp),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(selectedText,
+                fontSize = 20.sp,
+                fontWeight = FontWeight.Bold,
+                color = MaterialTheme.colorScheme.onBackground
+            )
+            Icon(
+                imageVector = if (expanded) Icons.Default.KeyboardArrowUp else Icons.Default.KeyboardArrowDown,
+                contentDescription = "Dropdown Arrow"
+            )
+        }
 
-        ExposedDropdownMenu(
+        DropdownMenu(
             expanded = expanded,
-            onDismissRequest = { expanded = false }
+            onDismissRequest = { expanded = false },
+            modifier = Modifier.fillMaxWidth(0.9f)
         ) {
             schedules.forEach { schedule ->
                 DropdownMenuItem(
