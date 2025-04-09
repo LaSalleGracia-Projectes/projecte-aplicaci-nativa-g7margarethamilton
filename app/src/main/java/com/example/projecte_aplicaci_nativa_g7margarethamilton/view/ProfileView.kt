@@ -38,7 +38,9 @@ fun ProfileView(navController: NavController, viewModel: UserViewModel) {
 
 
     Scaffold(
-        modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
+        modifier = Modifier
+            .nestedScroll(scrollBehavior.nestedScrollConnection)
+            .padding(top = 40.dp),
         topBar = {
             CenterAlignedTopAppBar(
                 title = {
