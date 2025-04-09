@@ -1,7 +1,6 @@
 package com.example.projecte_aplicaci_nativa_g7margarethamilton.view
 
 import android.annotation.SuppressLint
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
@@ -17,11 +16,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -29,15 +27,13 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import coil3.compose.AsyncImage
-import com.example.projecte_aplicaci_nativa_g7margarethamilton.R
 import com.example.projecte_aplicaci_nativa_g7margarethamilton.viewModel.UserViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProfileView(navController: NavController, viewModel: UserViewModel) {
     val currentUser by viewModel.currentUser.collectAsState()
-
-    // Definimos colores modernos para nuestra UI
+    val context = LocalContext.current
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
 
 
@@ -205,8 +201,10 @@ fun ProfileView(navController: NavController, viewModel: UserViewModel) {
                     // Botón cerrar sesión con un estilo más moderno
                     Button(
                         onClick = {
+                            viewModel.logout(context)
+
                             navController.navigate("welcome")
-                            viewModel.logout()
+                            viewModel.logout(context)
                         },
                         modifier = Modifier.padding(top = 8.dp),
                         colors = ButtonDefaults.buttonColors(

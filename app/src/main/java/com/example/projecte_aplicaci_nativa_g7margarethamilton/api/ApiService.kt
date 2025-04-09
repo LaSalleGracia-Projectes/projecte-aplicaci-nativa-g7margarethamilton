@@ -45,6 +45,12 @@ interface ApiService {
         @Body usuario: Usuari
     ): Response<LoginResponse>
 
+    //LOGIN WITH GOOGLE
+    @POST("auth/app/google")
+    suspend fun loginWithGoogle(
+        @Body body: Map<String, String>
+    ): Response<LoginResponse>
+
     //GET ALL SCHEDULES
     @GET("schedule/")
     suspend fun getAllSchedules(
