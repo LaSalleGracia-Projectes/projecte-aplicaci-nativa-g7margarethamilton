@@ -19,7 +19,7 @@ private val LightColorScheme = lightColorScheme(
     secondary = Color(0xFF00C04D), // Buttons, checks, OK
     tertiary = Color(0xFFFFBB00), // Whatever you need
     background = Color(0xFFFFFFFF), // Extra
-    surface = Color(0xFF91CFFD), // Interest text or button text with links
+    surface = Color(0xFFF5F5F5), // Interest text or button text with links
     onPrimary = Color(0xFFFFFFFF), // Extra
     onSecondary = Color(0xFF25313C), // Extra
     onTertiary = Color(0xFF2A3641), // Titles
@@ -48,7 +48,7 @@ private val DarkColorScheme = darkColorScheme(
 @Composable
 fun Projecteaplicacinativag7margarethamiltonTheme(
     //darkTheme: Boolean = isSystemInDarkTheme(),
-    darkTheme: Boolean = true,
+    darkTheme: Boolean = false,
     dynamicColor: Boolean = false,
     content: @Composable () -> Unit
 ) {

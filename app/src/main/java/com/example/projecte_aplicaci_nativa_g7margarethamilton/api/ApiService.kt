@@ -95,7 +95,8 @@ interface ApiService {
     ): Response<Schedule_task>
 
     companion object{
-        private const val BASE_URL = "http://10.0.2.2:3000/api/v1/"
+        //private const val BASE_URL = "http://10.0.2.2:3000/api/v1/"
+        private const val BASE_URL = "http://192.168.195.129:3000/api/v1/"
 
         fun create(): ApiService {
             val client = OkHttpClient.Builder().build()
