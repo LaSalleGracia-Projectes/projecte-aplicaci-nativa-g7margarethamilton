@@ -4,12 +4,16 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.KeyboardArrowDown
+import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -22,6 +26,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.projecte_aplicaci_nativa_g7margarethamilton.Routes
+import com.example.projecte_aplicaci_nativa_g7margarethamilton.model.moduls.Schedule
 import com.example.projecte_aplicaci_nativa_g7margarethamilton.model.moduls.Schedule_task
 import com.example.projecte_aplicaci_nativa_g7margarethamilton.viewModel.ScheduleViewModel
 import com.example.projecte_aplicaci_nativa_g7margarethamilton.viewModel.UserViewModel
@@ -37,6 +42,7 @@ data class Task(
     val isCompleted: Boolean = false
 )
 
+@OptIn(ExperimentalMaterial3Api::class)
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun ScheduleView(
@@ -50,10 +56,11 @@ fun ScheduleView(
     val formatter = DateTimeFormatter.ofPattern("d MMMM", Locale("es"))
 
     val schedules by viewModel.schedules.collectAsState()
+    val currentSchedule by viewModel.currentSchedule.collectAsState()
     val isLoading by viewModel.isLoading.collectAsState()
     val error by viewModel.error.collectAsState()
     val currentUser by userViewModel.currentUser.collectAsState()
-    //añadirDatosPrueba(viewModel, userViewModel)
+//    añadirDatosPrueba(viewModel, userViewModel)
 
     // Cargar los schedules cuando se inicia la vista
     LaunchedEffect(currentUser) {
@@ -63,6 +70,42 @@ fun ScheduleView(
     }
 
     Scaffold(
+        topBar = {
+            CenterAlignedTopAppBar(
+                title = {
+                    Text(
+                        text = "Agenda",
+                        fontSize = 20.sp,
+                        fontWeight = FontWeight.SemiBold,
+                        color = MaterialTheme.colorScheme.onSecondary
+                    )
+                },
+                navigationIcon = {
+                    // Close button
+                    IconButton(
+                        onClick = { navController.navigate(Routes.Home.route) },
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Close,
+                            contentDescription = "Cerrar",
+                            tint = MaterialTheme.colorScheme.onBackground
+                        )
+                    }
+                },
+                actions = {
+                    // Calendar button
+                    IconButton(
+                        onClick = { /* navController.navigate(Routes.Calendar.route)*/ },
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.DateRange,
+                            contentDescription = "Calendario",
+                            tint = MaterialTheme.colorScheme.onBackground
+                        )
+                    }
+                }
+            )
+        },
         bottomBar = { BottomNavBar(navController) }
     ) { paddingValues ->
         Column(
@@ -73,23 +116,20 @@ fun ScheduleView(
                 .padding(top = 40.dp)
                 .padding(paddingValues)
         ) {
-            // Header
+            // Dropdown para seleccionar la agenda actual
+            ScheduleDropdown(
+                schedules = schedules,
+                currentSchedule = currentSchedule,
+                onScheduleSelected = { selectedSchedule ->
+                    viewModel.setCurrentSchedule(selectedSchedule)
+                }
+            )            // Header
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(bottom = 16.dp)
             ) {
-                // Close button
-                IconButton(
-                    onClick = { navController.navigate(Routes.Home.route) },
-                    modifier = Modifier.align(Alignment.TopEnd)
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.Close,
-                        contentDescription = "Cerrar",
-                        tint = MaterialTheme.colorScheme.onBackground
-                    )
-                }
+
 
                 Column(modifier = Modifier.align(Alignment.TopStart)) {
                     Text(
@@ -105,21 +145,6 @@ fun ScheduleView(
                     )
                 }
 
-                // Calendar button
-                Button(
-                    onClick = { navController.navigate(Routes.Calendar.route) },
-                    modifier = Modifier
-                        .align(Alignment.TopEnd)
-                        .padding(top = 40.dp),
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = MaterialTheme.colorScheme.primary
-                    )
-                ) {
-                    Text(
-                        "Calendari",
-                        color = MaterialTheme.colorScheme.onPrimary
-                    )
-                }
             }
 
             // Loading state
@@ -164,10 +189,10 @@ fun ScheduleView(
                     )
                     // Filtrar las tareas del día actual
                     val todayTasks = schedules.flatMap { schedule ->
-                        schedule.tasks.filter { task ->
+                        schedule.tasks?.filter { task ->
                             // Aquí deberías implementar la lógica para filtrar las tareas del día actual
                             true // Por ahora mostramos todas las tareas
-                        }
+                        } ?: emptyList()
                     }
 
                     todayTasks.forEach { task ->
@@ -290,6 +315,53 @@ fun TaskItem(task: Schedule_task) {
                 }
             }
 
+        }
+    }
+}
+
+@Composable
+fun ScheduleDropdown(
+    schedules: List<Schedule>,
+    currentSchedule: Schedule?,
+    onScheduleSelected: (Schedule) -> Unit
+) {
+    var expanded by remember { mutableStateOf(false) }
+    val selectedText = currentSchedule?.title ?: "Selecciona una agenda"
+
+    Box(modifier = Modifier.fillMaxWidth()) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .clickable { expanded = true }
+                .padding(vertical = 12.dp, horizontal = 16.dp),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(selectedText,
+                fontSize = 20.sp,
+                fontWeight = FontWeight.Bold,
+                color = MaterialTheme.colorScheme.onBackground
+            )
+            Icon(
+                imageVector = if (expanded) Icons.Default.KeyboardArrowUp else Icons.Default.KeyboardArrowDown,
+                contentDescription = "Dropdown Arrow"
+            )
+        }
+
+        DropdownMenu(
+            expanded = expanded,
+            onDismissRequest = { expanded = false },
+            modifier = Modifier.fillMaxWidth(0.9f)
+        ) {
+            schedules.forEach { schedule ->
+                DropdownMenuItem(
+                    text = { Text(schedule.title) },
+                    onClick = {
+                        expanded = false
+                        onScheduleSelected(schedule)
+                    }
+                )
+            }
         }
     }
 }
