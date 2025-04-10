@@ -27,6 +27,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import coil3.compose.AsyncImage
+import com.example.projecte_aplicaci_nativa_g7margarethamilton.model.User
 import com.example.projecte_aplicaci_nativa_g7margarethamilton.viewModel.UserViewModel
 import java.time.OffsetDateTime
 import java.time.format.DateTimeFormatter
@@ -238,7 +239,7 @@ fun ProfileView(navController: NavController, viewModel: UserViewModel) {
 
 fun formatDateHumanReadable(dateStr: String): String {
     val dateTime = OffsetDateTime.parse(dateStr)
-    val formatter = DateTimeFormatter.ofPattern("d MMMM 'de' yyyy 'a les' HH:mm", Locale("ca"))
+    val formatter = DateTimeFormatter.ofPattern("dd'/'mm'/'yyyy")
     return dateTime.format(formatter)
 }
 
