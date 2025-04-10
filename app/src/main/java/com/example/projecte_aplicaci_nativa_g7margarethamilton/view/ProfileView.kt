@@ -28,6 +28,9 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import coil3.compose.AsyncImage
 import com.example.projecte_aplicaci_nativa_g7margarethamilton.viewModel.UserViewModel
+import java.time.OffsetDateTime
+import java.time.format.DateTimeFormatter
+import java.util.Locale
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -173,7 +176,7 @@ fun ProfileView(navController: NavController, viewModel: UserViewModel) {
                         // Usuario desde
                         InfoRow(
                             title = "Usuari/a des-de:",
-                            value = "10/01/2025",
+                            value = formatDateHumanReadable(currentUser?.created_at ?: "?"),
                             iconTint = MaterialTheme.colorScheme.onSecondary
                         )
 
@@ -231,6 +234,12 @@ fun ProfileView(navController: NavController, viewModel: UserViewModel) {
             }
         }
     }
+}
+
+fun formatDateHumanReadable(dateStr: String): String {
+    val dateTime = OffsetDateTime.parse(dateStr)
+    val formatter = DateTimeFormatter.ofPattern("d MMMM 'de' yyyy 'a les' HH:mm", Locale("ca"))
+    return dateTime.format(formatter)
 }
 
 @Composable

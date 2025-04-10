@@ -2,13 +2,11 @@ package com.example.projecte_aplicaci_nativa_g7margarethamilton.viewModel
 
 import android.content.Context
 import androidx.lifecycle.ViewModel
-import com.example.projecte_aplicaci_nativa_g7margarethamilton.model.Usuari
+import com.example.projecte_aplicaci_nativa_g7margarethamilton.model.User
 import com.example.projecte_aplicaci_nativa_g7margarethamilton.api.ApiRepository
-import com.example.projecte_aplicaci_nativa_g7margarethamilton.api.UserResponse
 import com.example.projecte_aplicaci_nativa_g7margarethamilton.model.GoogleAuthUiClient
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -41,8 +39,8 @@ class UserViewModel : ViewModel() {
     private val _missatgeLogin = MutableStateFlow("")
     val missatgeLogin: StateFlow<String> = _missatgeLogin
 
-    private val _currentUser = MutableStateFlow<UserResponse?>(null)
-    val currentUser: StateFlow<UserResponse?> = _currentUser
+    private val _currentUser = MutableStateFlow<User?>(null)
+    val currentUser: StateFlow<User?> = _currentUser
 
     private val _token = MutableStateFlow<String?>(null)
     val token: StateFlow<String?> = _token
@@ -121,10 +119,10 @@ class UserViewModel : ViewModel() {
         _confirmPasswordError.value = null
     }
 
-    fun register(usuari: Usuari) {
+    fun register(user: User) {
         CoroutineScope(Dispatchers.IO).launch {
             try {
-                val response = repository.register(usuari)
+                val response = repository.register(user)
                 withContext(Dispatchers.Main) {
                     if (response.isSuccessful) {
                         val registerResponse = response.body()
@@ -150,15 +148,22 @@ class UserViewModel : ViewModel() {
     }
 
     fun login(email: String, password: String) {
-        val usuari = Usuari(
-            nickname = "",  // No necesario para login
+        val user = User(
+            nickname = "",
             email = email,
-            password = password
+            password = password,
+            google_id = null,
+            avatar_url = "",
+            is_admin = false,
+            is_banned = false,
+            web_token = "",
+            app_token = "",
+            created_at = ""
         )
         
         CoroutineScope(Dispatchers.IO).launch {
             try {
-                val response = repository.login(usuari)
+                val response = repository.login(user)
                 withContext(Dispatchers.Main) {
                     if (response.isSuccessful) {
                         val loginResponse = response.body()
