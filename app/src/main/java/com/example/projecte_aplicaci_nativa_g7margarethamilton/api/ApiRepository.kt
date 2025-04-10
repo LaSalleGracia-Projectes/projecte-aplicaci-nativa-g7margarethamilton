@@ -3,6 +3,8 @@ package com.example.projecte_aplicaci_nativa_g7margarethamilton.api
 import com.example.projecte_aplicaci_nativa_g7margarethamilton.model.Usuari
 import com.example.projecte_aplicaci_nativa_g7margarethamilton.model.moduls.Schedule
 import com.example.projecte_aplicaci_nativa_g7margarethamilton.model.moduls.Schedule_task
+import retrofit2.Response
+
 
 class ApiRepository {
     val apiInterface = ApiService.create()
@@ -10,6 +12,9 @@ class ApiRepository {
     //AUTH
     suspend fun register(usuari: Usuari) = apiInterface.register(usuari)
     suspend fun login(usuari: Usuari) = apiInterface.login(usuari)
+    suspend fun loginWithGoogle(idToken: String): Response<LoginResponse> {
+        return ApiService.create().loginWithGoogle(mapOf("id_token" to idToken))
+    }
 
     //SCHEDULE
     suspend fun getAllSchedules(token: String,) =

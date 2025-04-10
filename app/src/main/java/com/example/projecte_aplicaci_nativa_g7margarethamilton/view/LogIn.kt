@@ -1,5 +1,7 @@
 package com.example.projecte_aplicaci_nativa_g7margarethamilton.view
 
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -27,7 +29,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -35,7 +37,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.projecte_aplicaci_nativa_g7margarethamilton.Routes
+import com.example.projecte_aplicaci_nativa_g7margarethamilton.model.GoogleAuthUiClient
 import com.example.projecte_aplicaci_nativa_g7margarethamilton.viewModel.UserViewModel
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.common.api.ApiException
 
 @Composable
 fun LogIn(navController: NavController, viewModel: UserViewModel) {
@@ -44,6 +49,19 @@ fun LogIn(navController: NavController, viewModel: UserViewModel) {
     val emailError by viewModel.emailError.collectAsState()
     val passwordError by viewModel.passwordError.collectAsState()
     val correctFormat by viewModel.correctFormat.collectAsState()
+    val context = LocalContext.current
+
+    val launcher = rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        try {
+            val account = GoogleSignIn.getSignedInAccountFromIntent(result.data).getResult(ApiException::class.java)
+            val idToken = account?.idToken
+            if (idToken != null) {
+                viewModel.loginWithGoogle(idToken)
+            }
+        } catch (e: ApiException) {
+            // Error
+        }
+    }
 
     Box(modifier = Modifier.fillMaxSize()) {
         // Close button
@@ -186,7 +204,8 @@ fun LogIn(navController: NavController, viewModel: UserViewModel) {
             // Google login button
             Button(
                 onClick = {
-                    // TODO: Login app amb Google
+                    val googleAuthUiClient = GoogleAuthUiClient(context)
+                    launcher.launch(googleAuthUiClient.getIntent())
                 },
                 modifier = Modifier
                     .fillMaxWidth()
@@ -195,7 +214,7 @@ fun LogIn(navController: NavController, viewModel: UserViewModel) {
                     containerColor = MaterialTheme.colorScheme.primary
                 ),
                 shape = MaterialTheme.shapes.small,
-                enabled = correctFormat
+                enabled = true
             ) {
                 Text("Login With Google")
             }

@@ -50,6 +50,12 @@ interface ApiService {
         @Body usuario: Usuari
     ): Response<LoginResponse>
 
+    //LOGIN WITH GOOGLE
+    @POST("auth/app/google")
+    suspend fun loginWithGoogle(
+        @Body body: Map<String, String>
+    ): Response<LoginResponse>
+
     //GET ALL SCHEDULES
     @GET("schedule/")
     suspend fun getAllSchedules(
@@ -94,7 +100,8 @@ interface ApiService {
     ): Response<Schedule_task>
 
     companion object{
-        private const val BASE_URL = "http://10.0.2.2:3000/api/v1/"
+        //private const val BASE_URL = "http://10.0.2.2:3000/api/v1/"
+        private const val BASE_URL = "http://192.168.195.129:3000/api/v1/"
 
         @RequiresApi(Build.VERSION_CODES.O)
         fun create(): ApiService {
