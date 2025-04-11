@@ -28,7 +28,6 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
@@ -39,7 +38,7 @@ import androidx.navigation.NavController
 import com.example.projecte_aplicaci_nativa_g7margarethamilton.Routes
 import com.example.projecte_aplicaci_nativa_g7margarethamilton.model.GoogleAuthUiClient
 import com.example.projecte_aplicaci_nativa_g7margarethamilton.viewModel.UserViewModel
-import com.example.projecte_aplicaci_nativa_g7margarethamilton.model.Usuari
+import com.example.projecte_aplicaci_nativa_g7margarethamilton.model.User
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.common.api.ApiException
 
@@ -203,12 +202,19 @@ fun SignIn(navController: NavController, viewModel: UserViewModel) {
             // Register button
             Button(
                 onClick = { 
-                    val usuari = Usuari(
+                    val user = User(
                         nickname = nickname,
                         email = email,
-                        password = password
+                        password = password,
+                        google_id = null,
+                        avatar_url = "",
+                        is_admin = false,
+                        is_banned = false,
+                        web_token = "",
+                        app_token = "",
+                        created_at = ""
                     )
-                    viewModel.register(usuari)
+                    viewModel.register(user)
                 },
                 modifier = Modifier
                     .fillMaxWidth()
