@@ -21,5 +21,6 @@ data class Schedule_task(
     val end_time: String,
     val id_schedule: Int,
     val id_category: Int,
+    val week_day: Int,
     val created_at: ZonedDateTime
 )
