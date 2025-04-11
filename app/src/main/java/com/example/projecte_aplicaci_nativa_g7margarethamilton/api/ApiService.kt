@@ -2,7 +2,7 @@ package com.example.projecte_aplicaci_nativa_g7margarethamilton.api
 import ZonedDateTimeAdapter
 import android.os.Build
 import androidx.annotation.RequiresApi
-import com.example.projecte_aplicaci_nativa_g7margarethamilton.model.Usuari
+import com.example.projecte_aplicaci_nativa_g7margarethamilton.model.User
 import com.example.projecte_aplicaci_nativa_g7margarethamilton.model.moduls.Schedule
 import com.example.projecte_aplicaci_nativa_g7margarethamilton.model.moduls.Schedule_task
 import com.google.gson.GsonBuilder
@@ -26,14 +26,8 @@ data class RegisterResponse(
 
 data class LoginResponse(
     val tokenApp: String,
-    val user: UserResponse,
+    val user: User,
     val message: String
-)
-
-data class UserResponse(
-    val email: String,
-    val nickname: String,
-    val avatar_url: String
 )
 
 interface ApiService {
@@ -41,13 +35,13 @@ interface ApiService {
     //REGISTER
     @POST("auth/register")
     suspend fun register(
-        @Body usuario: Usuari
+        @Body usuario: User
     ): Response<RegisterResponse>
 
     //LOGIN
     @POST("auth/app/login")
     suspend fun login(
-        @Body usuario: Usuari
+        @Body usuario: User
     ): Response<LoginResponse>
 
     //LOGIN WITH GOOGLE
@@ -55,6 +49,12 @@ interface ApiService {
     suspend fun loginWithGoogle(
         @Body body: Map<String, String>
     ): Response<LoginResponse>
+
+    //LOGOUT
+    @POST("auth/app/logout")
+    suspend fun logoutApp(
+        @Body credentials: Map<String, String>
+    ): Response<Map<String, String>>
 
     //GET ALL SCHEDULES
     @GET("schedule/")
@@ -105,8 +105,8 @@ interface ApiService {
     ): Response<List<Schedule_task>>
 
     companion object{
-        //private const val BASE_URL = "http://10.0.2.2:3000/api/v1/"
-        private const val BASE_URL = "http://192.168.195.129:3000/api/v1/"
+        private const val BASE_URL = "http://10.0.2.2:3000/api/v1/"
+        //private const val BASE_URL = "http://192.168.195.129:3000/api/v1/"
 
         @RequiresApi(Build.VERSION_CODES.O)
         fun create(): ApiService {
