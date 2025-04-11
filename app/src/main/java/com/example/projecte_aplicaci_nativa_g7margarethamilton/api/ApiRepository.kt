@@ -13,6 +13,15 @@ class ApiRepository {
     suspend fun loginWithGoogle(idToken: String): Response<LoginResponse> {
         return ApiService.create().loginWithGoogle(mapOf("id_token" to idToken))
     }
+    // LOGOUT
+    suspend fun logoutApp(email: String, password: String?, googleId: String?) =
+        apiInterface.logoutApp(
+            buildMap {
+                put("email", email)
+                password?.let { put("password", it) }
+                googleId?.let { put("google_id", it) }
+            }
+        )
 
     //SCHEDULE
     suspend fun getAllSchedules(token: String,) =

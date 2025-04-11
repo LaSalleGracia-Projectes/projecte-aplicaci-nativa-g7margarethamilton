@@ -50,6 +50,12 @@ interface ApiService {
         @Body body: Map<String, String>
     ): Response<LoginResponse>
 
+    //LOGOUT
+    @POST("auth/app/logout")
+    suspend fun logoutApp(
+        @Body credentials: Map<String, String>
+    ): Response<Map<String, String>>
+
     //GET ALL SCHEDULES
     @GET("schedule/")
     suspend fun getAllSchedules(

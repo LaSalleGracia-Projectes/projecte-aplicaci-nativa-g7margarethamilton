@@ -1,7 +1,9 @@
 package com.example.projecte_aplicaci_nativa_g7margarethamilton.viewModel
 
 import android.content.Context
+import android.util.Log
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.projecte_aplicaci_nativa_g7margarethamilton.model.User
 import com.example.projecte_aplicaci_nativa_g7margarethamilton.api.ApiRepository
 import com.example.projecte_aplicaci_nativa_g7margarethamilton.model.GoogleAuthUiClient
@@ -218,5 +220,47 @@ class UserViewModel : ViewModel() {
 
         val googleClient = GoogleAuthUiClient(context)
         googleClient.signOut(context)
+    }
+
+    fun logoutAll(context: Context) {
+        val user = _currentUser.value
+
+        if (user != null) {
+            CoroutineScope(Dispatchers.IO).launch {
+                try {
+                    val response = repository.logoutApp(
+                        email = user.email,
+                        password = user.password,
+                        googleId = user.google_id
+                    )
+
+                    withContext(Dispatchers.Main) {
+                        if (response.isSuccessful) {
+                            _missatgeLogin.value = "Sessió tancada correctament."
+                        } else {
+                            _missatgeLogin.value = "Error al tancar sessió: ${response.body()?.get("message") ?: response.message()}"
+                        }
+                    }
+                } catch (e: Exception) {
+                    withContext(Dispatchers.Main) {
+                        _missatgeLogin.value = "Error de connexió: ${e.message}"
+                    }
+                } finally {
+                    withContext(Dispatchers.Main) {
+                        _currentUser.value = null
+                        _token.value = null
+
+                        val googleClient = GoogleAuthUiClient(context)
+                        googleClient.signOut(context)
+                    }
+                }
+            }
+        } else {
+            _currentUser.value = null
+            _token.value = null
+
+            val googleClient = GoogleAuthUiClient(context)
+            googleClient.signOut(context)
+        }
     }
 }

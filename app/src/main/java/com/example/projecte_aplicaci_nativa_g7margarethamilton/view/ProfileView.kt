@@ -31,6 +31,7 @@ import com.example.projecte_aplicaci_nativa_g7margarethamilton.model.User
 import com.example.projecte_aplicaci_nativa_g7margarethamilton.viewModel.UserViewModel
 import java.time.OffsetDateTime
 import java.time.format.DateTimeFormatter
+import java.util.Date
 import java.util.Locale
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -145,17 +146,6 @@ fun ProfileView(navController: NavController, viewModel: UserViewModel) {
                                 color = MaterialTheme.colorScheme.onSecondary
                             )
                         }
-
-                        Spacer(modifier = Modifier.height(8.dp))
-
-                        // Descripción con estilo
-                        Text(
-                            text = "\"Apasionada del bienestar | Vida saludable | Equilibrio, energía y felicidad cada día\"",
-                            fontSize = 16.sp,
-                            fontWeight = FontWeight.Normal,
-                            color = MaterialTheme.colorScheme.onSecondary,
-                            modifier = Modifier.padding(horizontal = 24.dp)
-                        )
                     }
                 }
 
@@ -177,7 +167,7 @@ fun ProfileView(navController: NavController, viewModel: UserViewModel) {
                         // Usuario desde
                         InfoRow(
                             title = "Usuari/a des-de:",
-                            value = formatDateHumanReadable(currentUser?.created_at ?: "?"),
+                            value = formatDateHumanReadable(currentUser?.created_at ?: "0001-01-01T00:00:00Z"),
                             iconTint = MaterialTheme.colorScheme.onSecondary
                         )
 
@@ -200,15 +190,13 @@ fun ProfileView(navController: NavController, viewModel: UserViewModel) {
                 }
 
                 // Botones de acciones
-                Row(
+                Column(
                     modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.End
+                    horizontalAlignment = Alignment.End
                 ) {
-                    // Botón cerrar sesión con un estilo más moderno
                     Button(
                         onClick = {
                             viewModel.logout(context)
-
                             navController.navigate("welcome")
                             viewModel.logout(context)
                         },
@@ -221,12 +209,36 @@ fun ProfileView(navController: NavController, viewModel: UserViewModel) {
                     ) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Outlined.ExitToApp,
-                            contentDescription = "Cerrar Sesión",
+                            contentDescription = "Log out",
                             modifier = Modifier.size(20.dp)
                         )
                         Spacer(modifier = Modifier.width(8.dp))
                         Text(
-                            text = "Cerrar Sesión",
+                            text = "Log out",
+                            fontSize = 16.sp,
+                            fontWeight = FontWeight.Medium
+                        )
+                    }
+                    Button(
+                        onClick = {
+                            viewModel.logoutAll(context)
+                            navController.navigate("welcome")
+                        },
+                        modifier = Modifier.padding(top = 8.dp),
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = MaterialTheme.colorScheme.error,
+                        ),
+                        contentPadding = PaddingValues(horizontal = 24.dp, vertical = 12.dp),
+                        shape = RoundedCornerShape(8.dp)
+                    ) {
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Outlined.ExitToApp,
+                            contentDescription = "Logout on all devices",
+                            modifier = Modifier.size(20.dp)
+                        )
+                        Spacer(modifier = Modifier.width(8.dp))
+                        Text(
+                            text = "Logout on all devices",
                             fontSize = 16.sp,
                             fontWeight = FontWeight.Medium
                         )
