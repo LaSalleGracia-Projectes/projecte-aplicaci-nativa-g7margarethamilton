@@ -1,15 +1,15 @@
 package com.example.projecte_aplicaci_nativa_g7margarethamilton.model.moduls
 
-import com.example.projecte_aplicaci_nativa_g7margarethamilton.model.Usuari
+import com.example.projecte_aplicaci_nativa_g7margarethamilton.model.User
 import java.sql.Time
 import java.util.Date
 
 class Agenda(
     idModul: Int,
     nomModul: String,
-    usuari: Usuari,
+    user: User,
     var tasques: List<Tasca> = listOf()
-) : Modul(idModul, nomModul, usuari) {
+) : Modul(idModul, nomModul, user) {
 
     override fun activar() {
         //TODO: Implementación de activar
