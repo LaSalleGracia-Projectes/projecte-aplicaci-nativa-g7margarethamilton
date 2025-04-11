@@ -13,9 +13,10 @@ class ApiRepository {
     val apiInterface = ApiService.create()
 
     //AUTH
-
-    suspend fun register(user: User) = apiInterface.register(user)
-    suspend fun login(user: User) = apiInterface.login(user)
+    @RequiresApi(Build.VERSION_CODES.O)
+    suspend fun register(usuari: User) = apiInterface.register(usuari)
+    @RequiresApi(Build.VERSION_CODES.O)
+    suspend fun login(usuari: User) = apiInterface.login(usuari)
     suspend fun loginWithGoogle(idToken: String): Response<LoginResponse> {
         return ApiService.create().loginWithGoogle(mapOf("id_token" to idToken))
     }
