@@ -113,6 +113,7 @@ fun ScheduleView(
                 .fillMaxSize()
                 .background(MaterialTheme.colorScheme.background)
                 .padding(16.dp)
+                .padding(top = 40.dp)
                 .padding(paddingValues)
         ) {
             // Dropdown para seleccionar la agenda actual

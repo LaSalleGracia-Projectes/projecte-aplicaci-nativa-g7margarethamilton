@@ -5,6 +5,8 @@ import androidx.annotation.RequiresApi
 import com.example.projecte_aplicaci_nativa_g7margarethamilton.model.Usuari
 import com.example.projecte_aplicaci_nativa_g7margarethamilton.model.moduls.Schedule
 import com.example.projecte_aplicaci_nativa_g7margarethamilton.model.moduls.Schedule_task
+import retrofit2.Response
+
 
 class ApiRepository {
     @RequiresApi(Build.VERSION_CODES.O)
@@ -15,6 +17,9 @@ class ApiRepository {
     suspend fun register(usuari: Usuari) = apiInterface.register(usuari)
     @RequiresApi(Build.VERSION_CODES.O)
     suspend fun login(usuari: Usuari) = apiInterface.login(usuari)
+    suspend fun loginWithGoogle(idToken: String): Response<LoginResponse> {
+        return ApiService.create().loginWithGoogle(mapOf("id_token" to idToken))
+    }
 
     //SCHEDULE
     @RequiresApi(Build.VERSION_CODES.O)
