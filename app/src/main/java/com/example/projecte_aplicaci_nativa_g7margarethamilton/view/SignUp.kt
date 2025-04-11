@@ -1,6 +1,8 @@
 package com.example.projecte_aplicaci_nativa_g7margarethamilton.view
 
 import Terms
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -26,7 +28,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -34,8 +36,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.projecte_aplicaci_nativa_g7margarethamilton.Routes
+import com.example.projecte_aplicaci_nativa_g7margarethamilton.model.GoogleAuthUiClient
 import com.example.projecte_aplicaci_nativa_g7margarethamilton.viewModel.UserViewModel
-import com.example.projecte_aplicaci_nativa_g7margarethamilton.model.Usuari
+import com.example.projecte_aplicaci_nativa_g7margarethamilton.model.User
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.common.api.ApiException
 
 @Composable
 fun SignIn(navController: NavController, viewModel: UserViewModel) {
@@ -50,6 +55,20 @@ fun SignIn(navController: NavController, viewModel: UserViewModel) {
     val confirmPasswordError by viewModel.confirmPasswordError.collectAsState()
     val correctFormat by viewModel.correctFormat.collectAsState()
     val missatgeRegister by viewModel.missatgeRegister.collectAsState()
+    val context = LocalContext.current
+
+    val launcher = rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        try {
+            val account = GoogleSignIn.getSignedInAccountFromIntent(result.data)
+                .getResult(ApiException::class.java)
+            val idToken = account?.idToken
+            if (idToken != null) {
+                viewModel.loginWithGoogle(idToken)
+            }
+        } catch (e: ApiException) {
+            // Error al fer login amb Google
+        }
+    }
 
     Box(modifier = Modifier.fillMaxSize()) {
         // Close button
@@ -79,7 +98,7 @@ fun SignIn(navController: NavController, viewModel: UserViewModel) {
                 text = "Flow2Day!",
                 fontSize = 35.sp,
                 fontWeight = FontWeight.Bold,
-                color = Color(0xFF2E3B4E),
+                color =  MaterialTheme.colorScheme.onSecondary,
                 modifier = Modifier.padding(top = 120.dp, bottom = 8.dp)
             )
 
@@ -87,7 +106,7 @@ fun SignIn(navController: NavController, viewModel: UserViewModel) {
             Text(
                 text = "Register",
                 fontSize = 18.sp,
-                color = Color(0xFF2E3B4E),
+                color =  MaterialTheme.colorScheme.onSecondary,
                 modifier = Modifier.padding(bottom = 24.dp)
             )
 
@@ -105,8 +124,8 @@ fun SignIn(navController: NavController, viewModel: UserViewModel) {
                     .padding(bottom = 12.dp),
                 singleLine = true,
                 colors = OutlinedTextFieldDefaults.colors(
-                    unfocusedBorderColor = Color.LightGray,
-                    focusedBorderColor = Color.Gray
+                    unfocusedBorderColor = MaterialTheme.colorScheme.onSurface,
+                    focusedBorderColor = MaterialTheme.colorScheme.onBackground
                 ),
                 isError = nicknameError != null,
                 supportingText = { nicknameError?.let { Text(it) } },
@@ -127,8 +146,8 @@ fun SignIn(navController: NavController, viewModel: UserViewModel) {
                 singleLine = true,
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
                 colors = OutlinedTextFieldDefaults.colors(
-                    unfocusedBorderColor = Color.LightGray,
-                    focusedBorderColor = Color.Gray
+                    unfocusedBorderColor = MaterialTheme.colorScheme.onSurface,
+                    focusedBorderColor = MaterialTheme.colorScheme.onBackground
                 ),
                 isError = emailError != null,
                 supportingText = { emailError?.let { Text(it) } },
@@ -150,8 +169,8 @@ fun SignIn(navController: NavController, viewModel: UserViewModel) {
                 visualTransformation = PasswordVisualTransformation(),
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
                 colors = OutlinedTextFieldDefaults.colors(
-                    unfocusedBorderColor = Color.LightGray,
-                    focusedBorderColor = Color.Gray
+                    unfocusedBorderColor = MaterialTheme.colorScheme.onSurface,
+                    focusedBorderColor = MaterialTheme.colorScheme.onBackground
                 ),
                 isError = passwordError != null,
                 supportingText = { passwordError?.let { Text(it) } },
@@ -173,8 +192,8 @@ fun SignIn(navController: NavController, viewModel: UserViewModel) {
                 visualTransformation = PasswordVisualTransformation(),
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
                 colors = OutlinedTextFieldDefaults.colors(
-                    unfocusedBorderColor = Color.LightGray,
-                    focusedBorderColor = Color.Gray
+                    unfocusedBorderColor = MaterialTheme.colorScheme.onSurface,
+                    focusedBorderColor = MaterialTheme.colorScheme.onBackground
                 ),
                 isError = confirmPasswordError != null,
                 supportingText = { confirmPasswordError?.let { Text(it) } },
@@ -183,18 +202,25 @@ fun SignIn(navController: NavController, viewModel: UserViewModel) {
             // Register button
             Button(
                 onClick = { 
-                    val usuari = Usuari(
+                    val user = User(
                         nickname = nickname,
                         email = email,
-                        password = password
+                        password = password,
+                        google_id = null,
+                        avatar_url = "",
+                        is_admin = false,
+                        is_banned = false,
+                        web_token = "",
+                        app_token = "",
+                        created_at = ""
                     )
-                    viewModel.register(usuari)
+                    viewModel.register(user)
                 },
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(50.dp),
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = Color(0xFF2E3B4E)
+                    containerColor = MaterialTheme.colorScheme.primary
                 ),
                 shape = MaterialTheme.shapes.small,
                 enabled = correctFormat
@@ -205,7 +231,7 @@ fun SignIn(navController: NavController, viewModel: UserViewModel) {
             if (missatgeRegister.isNotEmpty()) {
                 Text(
                     text = missatgeRegister,
-                    color = if (missatgeRegister == "Usuari registrat") Color.Green else Color.Red,
+                    color = if (missatgeRegister == "Usuari registrat") MaterialTheme.colorScheme.secondary else MaterialTheme.colorScheme.error,
                     modifier = Modifier.padding(vertical = 8.dp)
                 )
             }
@@ -213,25 +239,24 @@ fun SignIn(navController: NavController, viewModel: UserViewModel) {
             // Or separator
             Text(
                 text = "or",
-                color = Color.Gray,
+                color =  MaterialTheme.colorScheme.onSecondary,
                 modifier = Modifier.padding(vertical = 12.dp)
             )
 
             // Google register button
             Button(
                 onClick = {
-                    // TODO: Register amb Google
-                    // TODO: Validate register
-                    // TODO: Login app amb Google
+                    val googleAuthUiClient = GoogleAuthUiClient(context)
+                    launcher.launch(googleAuthUiClient.getIntent())
                 },
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(50.dp),
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = Color(0xFF7D8A99)
+                    containerColor = MaterialTheme.colorScheme.primary
                 ),
                 shape = MaterialTheme.shapes.small,
-                enabled = false
+                enabled = true
             ) {
                 Text("Register With Google")
             }

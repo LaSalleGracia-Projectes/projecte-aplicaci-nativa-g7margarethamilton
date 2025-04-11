@@ -1,9 +1,12 @@
 package com.example.projecte_aplicaci_nativa_g7margarethamilton.viewModel
 
+import android.content.Context
+import android.util.Log
 import androidx.lifecycle.ViewModel
-import com.example.projecte_aplicaci_nativa_g7margarethamilton.model.Usuari
+import androidx.lifecycle.viewModelScope
+import com.example.projecte_aplicaci_nativa_g7margarethamilton.model.User
 import com.example.projecte_aplicaci_nativa_g7margarethamilton.api.ApiRepository
-import com.example.projecte_aplicaci_nativa_g7margarethamilton.api.UserResponse
+import com.example.projecte_aplicaci_nativa_g7margarethamilton.model.GoogleAuthUiClient
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -38,8 +41,8 @@ class UserViewModel : ViewModel() {
     private val _missatgeLogin = MutableStateFlow("")
     val missatgeLogin: StateFlow<String> = _missatgeLogin
 
-    private val _currentUser = MutableStateFlow<UserResponse?>(null)
-    val currentUser: StateFlow<UserResponse?> = _currentUser
+    private val _currentUser = MutableStateFlow<User?>(null)
+    val currentUser: StateFlow<User?> = _currentUser
 
     private val _token = MutableStateFlow<String?>(null)
     val token: StateFlow<String?> = _token
@@ -118,12 +121,12 @@ class UserViewModel : ViewModel() {
         _confirmPasswordError.value = null
     }
 
-    fun register(usuari: Usuari){
+    fun register(user: User) {
         CoroutineScope(Dispatchers.IO).launch {
             try {
-                val response = repository.register(usuari)
-                withContext(Dispatchers.Main){
-                    if(response.isSuccessful){
+                val response = repository.register(user)
+                withContext(Dispatchers.Main) {
+                    if (response.isSuccessful) {
                         val registerResponse = response.body()
                         _missatgeRegister.value = registerResponse?.message ?: "Usuario registrado exitosamente"
                     } else {
@@ -141,20 +144,28 @@ class UserViewModel : ViewModel() {
             }
         }
     }
+
     fun clearMissatgeRegister() {
         _missatgeRegister.value = ""
     }
 
     fun login(email: String, password: String) {
-        val usuari = Usuari(
-            nickname = "",  // No necesario para login
+        val user = User(
+            nickname = "",
             email = email,
-            password = password
+            password = password,
+            google_id = null,
+            avatar_url = "",
+            is_admin = false,
+            is_banned = false,
+            web_token = "",
+            app_token = "",
+            created_at = ""
         )
         
         CoroutineScope(Dispatchers.IO).launch {
             try {
-                val response = repository.login(usuari)
+                val response = repository.login(user)
                 withContext(Dispatchers.Main) {
                     if (response.isSuccessful) {
                         val loginResponse = response.body()
@@ -181,8 +192,75 @@ class UserViewModel : ViewModel() {
         _missatgeLogin.value = ""
     }
 
-    fun logout() {
+    fun loginWithGoogle(idToken: String) {
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val response = repository.loginWithGoogle(idToken)
+                withContext(Dispatchers.Main) {
+                    if (response.isSuccessful) {
+                        val loginResponse = response.body()
+                        _token.value = loginResponse?.tokenApp
+                        _currentUser.value = loginResponse?.user
+                        _missatgeLogin.value = loginResponse?.message ?: "Login amb Google exitós"
+                    } else {
+                        _missatgeLogin.value = "Error en iniciar sessió amb Google"
+                    }
+                }
+            } catch (e: Exception) {
+                withContext(Dispatchers.Main) {
+                    _missatgeLogin.value = "Error de connexió: ${e.message}"
+                }
+            }
+        }
+    }
+
+    fun logout(context: Context) {
         _currentUser.value = null
         _token.value = null
+
+        val googleClient = GoogleAuthUiClient(context)
+        googleClient.signOut(context)
+    }
+
+    fun logoutAll(context: Context) {
+        val user = _currentUser.value
+
+        if (user != null) {
+            CoroutineScope(Dispatchers.IO).launch {
+                try {
+                    val response = repository.logoutApp(
+                        email = user.email,
+                        password = user.password,
+                        googleId = user.google_id
+                    )
+
+                    withContext(Dispatchers.Main) {
+                        if (response.isSuccessful) {
+                            _missatgeLogin.value = "Sessió tancada correctament."
+                        } else {
+                            _missatgeLogin.value = "Error al tancar sessió: ${response.body()?.get("message") ?: response.message()}"
+                        }
+                    }
+                } catch (e: Exception) {
+                    withContext(Dispatchers.Main) {
+                        _missatgeLogin.value = "Error de connexió: ${e.message}"
+                    }
+                } finally {
+                    withContext(Dispatchers.Main) {
+                        _currentUser.value = null
+                        _token.value = null
+
+                        val googleClient = GoogleAuthUiClient(context)
+                        googleClient.signOut(context)
+                    }
+                }
+            }
+        } else {
+            _currentUser.value = null
+            _token.value = null
+
+            val googleClient = GoogleAuthUiClient(context)
+            googleClient.signOut(context)
+        }
     }
 }

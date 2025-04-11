@@ -38,9 +38,6 @@ fun Terms() {
         )
         Text(
             text = "Terminis i Condicions",
-            style = MaterialTheme.typography.bodySmall.copy(
-                color = MaterialTheme.colorScheme.primary
-            ),
             modifier = Modifier.clickable { showTermsModal = true }
         )
     }
