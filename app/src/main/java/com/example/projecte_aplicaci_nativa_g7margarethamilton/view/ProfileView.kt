@@ -56,16 +56,6 @@ fun ProfileView(navController: NavController, viewModel: UserViewModel) {
                         color = MaterialTheme.colorScheme.onSecondary
                     )
                 },
-                navigationIcon = {
-                    //FIX: la flecha lleva a la pantalla de welcome
-                    IconButton(onClick = { /*navController.popBackStack()*/ }) {
-                        Icon(
-                            imageVector = Icons.Default.ArrowBack,
-                            contentDescription = "Volver",
-                            tint = MaterialTheme.colorScheme.onBackground
-                        )
-                    }
-                },
                 actions = {
                     IconButton(
                         onClick = { /* TODO: Navigate to edit profile */ }
