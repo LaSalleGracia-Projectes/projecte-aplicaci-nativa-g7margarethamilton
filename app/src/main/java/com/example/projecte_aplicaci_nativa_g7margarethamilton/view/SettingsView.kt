@@ -91,7 +91,7 @@ fun SettingsView(navController: NavController) {
             SettingOption(
                 title = "Contacta",
                 icon = Icons.Default.Email,
-                onClick = { /* TODO: Navigate to Contact */ }
+                onClick = { navController.navigate(Routes.ContactUs.route) }
             )
             
             SettingOption(
