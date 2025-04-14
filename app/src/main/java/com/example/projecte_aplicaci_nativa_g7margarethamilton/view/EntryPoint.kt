@@ -9,6 +9,7 @@ import androidx.navigation.compose.composable
 import com.example.projecte_aplicaci_nativa_g7margarethamilton.Routes
 import com.example.projecte_aplicaci_nativa_g7margarethamilton.view.settings.AboutUsView
 import com.example.projecte_aplicaci_nativa_g7margarethamilton.view.settings.ContactUsView
+import com.example.projecte_aplicaci_nativa_g7margarethamilton.view.settings.EditProfileView
 import com.example.projecte_aplicaci_nativa_g7margarethamilton.viewModel.UserViewModel
 
 
@@ -33,5 +34,8 @@ fun EntryPoint(navController: NavHostController, viewModel: UserViewModel){
         composable(Routes.ContactUs.route){ ContactUsView(navController) }
         composable(Routes.Calendar.route) { CalendarView(navController) }
         composable(Routes.ProfileSettings.route) { ProfileSettingsView(navController) }
+        composable(Routes.EditProfile.route) { EditProfileView(navController, viewModel) }
     }
 }
+
+

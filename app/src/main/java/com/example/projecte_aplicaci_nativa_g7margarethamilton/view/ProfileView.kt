@@ -27,6 +27,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import coil3.compose.AsyncImage
+import com.example.projecte_aplicaci_nativa_g7margarethamilton.Routes
 import com.example.projecte_aplicaci_nativa_g7margarethamilton.model.User
 import com.example.projecte_aplicaci_nativa_g7margarethamilton.viewModel.UserViewModel
 import java.time.OffsetDateTime
@@ -58,7 +59,7 @@ fun ProfileView(navController: NavController, viewModel: UserViewModel) {
                 },
                 actions = {
                     IconButton(
-                        onClick = { /* TODO: Navigate to edit profile */ }
+                        onClick = { navController.navigate(Routes.EditProfile.route) },
                     ) {
                         Icon(
                             imageVector = Icons.Default.Edit,
