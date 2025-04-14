@@ -91,13 +91,13 @@ fun SettingsView(navController: NavController) {
             SettingOption(
                 title = "Contacta",
                 icon = Icons.Default.Email,
-                onClick = { /* TODO: Navigate to Contact */ }
+                onClick = { navController.navigate(Routes.ContactUs.route) }
             )
             
             SettingOption(
                 title = "Config. Perfil",
                 icon = Icons.Default.Settings,
-                onClick = { /* TODO: Navigate to Profile Config */ }
+                onClick = { navController.navigate(Routes.ProfileSettings.route) }
             )
         }
     }

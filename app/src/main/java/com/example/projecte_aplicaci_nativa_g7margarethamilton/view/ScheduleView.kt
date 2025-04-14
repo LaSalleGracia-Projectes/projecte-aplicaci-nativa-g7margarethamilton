@@ -361,7 +361,7 @@ fun ScheduleDropdown(
 }
 
 @RequiresApi(Build.VERSION_CODES.O)
-fun formatDateHumanReadable(dateStr: String): String {
+fun formatTimeDateHumanReadable(dateStr: String): String {
     val dateTime = OffsetDateTime.parse(dateStr)
     val formatter = DateTimeFormatter.ofPattern("HH'/'MM")
     return dateTime.format(formatter)
