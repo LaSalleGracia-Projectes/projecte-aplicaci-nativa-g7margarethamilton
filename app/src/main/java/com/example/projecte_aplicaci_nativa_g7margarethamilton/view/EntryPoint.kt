@@ -32,5 +32,6 @@ fun EntryPoint(navController: NavHostController, viewModel: UserViewModel){
         composable(Routes.AboutUs.route){ AboutUsView(navController)  }
         composable(Routes.ContactUs.route){ ContactUsView(navController) }
         composable(Routes.Calendar.route) { CalendarView(navController) }
+        composable(Routes.ProfileSettings.route) { ProfileSettingsView(navController) }
     }
 }

@@ -97,7 +97,7 @@ fun SettingsView(navController: NavController) {
             SettingOption(
                 title = "Config. Perfil",
                 icon = Icons.Default.Settings,
-                onClick = { /* TODO: Navigate to Profile Config */ }
+                onClick = { navController.navigate(Routes.ProfileSettings.route) }
             )
         }
     }
