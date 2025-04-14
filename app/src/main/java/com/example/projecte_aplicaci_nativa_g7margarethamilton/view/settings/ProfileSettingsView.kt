@@ -67,7 +67,6 @@ fun ProfileSettingsView(navController: NavController){
                 .fillMaxSize()
                 .padding(paddingValues)
         ) {
-            // Aquí puedes agregar el contenido de tu vista de calendario
             Text(text = "TODO")
         }
     }
