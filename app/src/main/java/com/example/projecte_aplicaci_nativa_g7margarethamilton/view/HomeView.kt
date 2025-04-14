@@ -100,7 +100,7 @@ fun HomeView(navController: NavController) {
                 // Botón Lista compra
                 HomeOptionButton(
                     title = "Lista compra",
-                    onClick = { /* TODO: Navigate to Shopping List */ },
+                    onClick = { navController.navigate(Routes.ShoppingList.route) },
                     modifier = Modifier.weight(1f)
                 )
 
@@ -109,7 +109,7 @@ fun HomeView(navController: NavController) {
                 // Botón Rutines exercici
                 HomeOptionButton(
                     title = "Exercici",
-                    onClick = { /* TODO: Navigate to Exercise Routines */ },
+                    onClick = { navController.navigate(Routes.Exercises.route) },
                     modifier = Modifier.weight(1f)
                 )
             }
