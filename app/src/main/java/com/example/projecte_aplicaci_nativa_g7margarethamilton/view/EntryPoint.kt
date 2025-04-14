@@ -24,12 +24,13 @@ fun EntryPoint(navController: NavHostController, viewModel: UserViewModel){
         composable(Routes.Login.route) { LogIn(navController, viewModel) }
         composable(Routes.Register.route) { SignIn(navController, viewModel)  }
         
-        // Nuevas rutas
+
         composable(Routes.Home.route) { HomeView(navController) }
         composable(Routes.Settings.route) { SettingsView(navController) }
         composable(Routes.Profile.route) { ProfileView(navController, viewModel) }
-        composable(Routes.DailyTasks.route) { ScheduleView(navController, viewModel) }
+        composable(Routes.Schedule.route) { ScheduleView(navController, viewModel) }
         composable(Routes.AboutUs.route){ AboutUsView(navController)  }
         composable(Routes.ContactUs.route){ ContactUsView(navController) }
+        composable(Routes.Calendar.route) { CalendarView(navController) }
     }
 }

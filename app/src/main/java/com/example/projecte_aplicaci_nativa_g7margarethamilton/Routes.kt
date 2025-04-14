@@ -11,7 +11,7 @@ sealed class Routes(val route: String) {
     object Settings : Routes("settings")
     object Profile : Routes("profile")
 
-    object DailyTasks : Routes("daily_tasks")
+    object Schedule : Routes("schedule")
     object Calendar : Routes("calendar")
     object AboutUs : Routes("about_us")
     object ContactUs : Routes("contact_us")
