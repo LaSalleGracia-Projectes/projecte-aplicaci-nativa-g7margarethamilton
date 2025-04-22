@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.*
@@ -32,7 +33,6 @@ import com.example.projecte_aplicaci_nativa_g7margarethamilton.R
 @Composable
 fun AboutUsView(navController: NavController) {
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
-    val backgroundColor = Color(0xFFF8F8F8)
 
     val images = listOf(
         R.drawable.profile_avatar_placeholder_large,
@@ -49,7 +49,9 @@ fun AboutUsView(navController: NavController) {
     )
 
     Scaffold(
-        modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
+        modifier = Modifier
+            .nestedScroll(scrollBehavior.nestedScrollConnection)
+            .padding(top = 40.dp),
         topBar = {
             CenterAlignedTopAppBar(
                 title = {
@@ -57,7 +59,7 @@ fun AboutUsView(navController: NavController) {
                         text = "Sobre nosotros",
                         fontSize = 30.sp,
                         fontWeight = FontWeight.SemiBold,
-                        color = Color.Black
+                        color = MaterialTheme.colorScheme.onSecondary
                     )
                 },
                 navigationIcon = {
@@ -65,52 +67,60 @@ fun AboutUsView(navController: NavController) {
                         Icon(
                             imageVector = Icons.Default.ArrowBack,
                             contentDescription = "Volver",
-                            tint = Color.Black
+                            tint = MaterialTheme.colorScheme.onBackground
                         )
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = backgroundColor,
-                    titleContentColor = Color.Black
+                    containerColor = MaterialTheme.colorScheme.background
                 ),
                 scrollBehavior = scrollBehavior
             )
         },
-        containerColor = backgroundColor
     ) { paddingValues ->
-        Column(
+        Box(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
-                .padding(16.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
+                .background(MaterialTheme.colorScheme.background)
         ) {
-            Spacer(modifier = Modifier.height(8.dp))
-
-            CarruselImagenes(images = images, texts = texts)
-
-            Spacer(modifier = Modifier.height(24.dp))
-            Column {
-                Text(
-                    text = "Flow2Day!",
-                    fontSize = 30.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = Color(0xFF2E3B4E),
-                    textAlign = TextAlign.Start,
-                    modifier = Modifier.padding(horizontal = 16.dp)
-                )
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(16.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
                 Spacer(modifier = Modifier.height(8.dp))
-                Text(
-                    text = "Nuestra aplicación Flow2Day está diseñada para ayudarte a gestionar tu tiempo de manera eficiente y efectiva. Con una interfaz intuitiva y herramientas poderosas, te ayudamos a mantenerte organizado y enfocado en tus objetivos.",
-                    fontSize = 18.sp,
-                    color = Color(0xFF2E3B4E),
-                    textAlign = TextAlign.Start,
-                    modifier = Modifier
-                        .padding(horizontal = 16.dp)
-                        .align(Alignment.Start)
-                )
+
+                CarruselImagenes(images = images, texts = texts)
+
+                Spacer(modifier = Modifier.height(24.dp))
+
+                Column {
+                    Text(
+                        text = "Flow2Day!",
+                        fontSize = 30.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = MaterialTheme.colorScheme.onBackground,
+                        textAlign = TextAlign.Start,
+                        modifier = Modifier.padding(horizontal = 16.dp)
+                    )
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Text(
+                        text = "Nuestra aplicación Flow2Day está diseñada para ayudarte a gestionar tu tiempo de manera eficiente y efectiva. Con una interfaz intuitiva y herramientas poderosas, te ayudamos a mantenerte organizado y enfocado en tus objetivos.",
+                        fontSize = 18.sp,
+                        color = MaterialTheme.colorScheme.onBackground,
+                        textAlign = TextAlign.Start,
+                        modifier = Modifier
+                            .padding(horizontal = 16.dp)
+                            .align(Alignment.Start)
+                    )
+
+                }
+
 
             }
+
         }
     }
 }
@@ -162,7 +172,7 @@ fun CarruselImagenes(images: List<Int>, texts: List<String>) {
         Text(
             text = texts[currentPage],
             fontSize = 16.sp,
-            color = Color(0xFF2E3B4E),
+            color = MaterialTheme.colorScheme.onBackground,
             textAlign = TextAlign.Center,
             modifier = Modifier.padding(horizontal = 16.dp)
         )

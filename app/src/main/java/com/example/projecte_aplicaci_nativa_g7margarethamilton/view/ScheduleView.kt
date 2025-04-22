@@ -1,6 +1,7 @@
 package com.example.projecte_aplicaci_nativa_g7margarethamilton.view
 
 import android.os.Build
+import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -30,17 +31,13 @@ import com.example.projecte_aplicaci_nativa_g7margarethamilton.model.moduls.Sche
 import com.example.projecte_aplicaci_nativa_g7margarethamilton.model.moduls.Schedule_task
 import com.example.projecte_aplicaci_nativa_g7margarethamilton.viewModel.ScheduleViewModel
 import com.example.projecte_aplicaci_nativa_g7margarethamilton.viewModel.UserViewModel
+import kotlinx.coroutines.flow.filter
 import java.time.LocalDate
+import java.time.OffsetDateTime
 import java.time.format.DateTimeFormatter
 import java.util.*
 
-data class Task(
-    val timeStart: String,
-    val timeEnd: String,
-    val title: String,
-    val description: String,
-    val isCompleted: Boolean = false
-)
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @RequiresApi(Build.VERSION_CODES.O)
@@ -60,13 +57,16 @@ fun ScheduleView(
     val isLoading by viewModel.isLoading.collectAsState()
     val error by viewModel.error.collectAsState()
     val currentUser by userViewModel.currentUser.collectAsState()
-//    añadirDatosPrueba(viewModel, userViewModel)
+    val currentTasks by viewModel.currentScheduleTasks.collectAsState()
 
-    // Cargar los schedules cuando se inicia la vista
+
+    //añadirDatosPrueba(viewModel, userViewModel)
+
     LaunchedEffect(currentUser) {
         currentUser?.email?.let { email ->
+            Log.d("ScheduleView", "Loading schedules for user: $email")
             viewModel.loadSchedules(email)
-        }
+        } ?: Log.d("ScheduleView", "Cannot load schedules: user email is null")
     }
 
     Scaffold(
@@ -172,30 +172,15 @@ fun ScheduleView(
                     .fillMaxWidth()
                     .verticalScroll(rememberScrollState())
             ) {
-                if (schedules.isEmpty()) {
+                if (currentTasks.isEmpty()) {
                     Text(
-                        text = "No tienes tareas programadas para hoy.",
+                        text = "No hay tareas programadas para esta agenda.",
                         fontSize = 16.sp,
-                        color = Color.Gray,
+                        color = MaterialTheme.colorScheme.onSecondary,
                         modifier = Modifier.padding(16.dp)
                     )
                 } else {
-                    Text(
-                        text = "Tareas programadas:",
-                        fontSize = 18.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = Color.Black,
-                        modifier = Modifier.padding(16.dp)
-                    )
-                    // Filtrar las tareas del día actual
-                    val todayTasks = schedules.flatMap { schedule ->
-                        schedule.tasks?.filter { task ->
-                            // Aquí deberías implementar la lógica para filtrar las tareas del día actual
-                            true // Por ahora mostramos todas las tareas
-                        } ?: emptyList()
-                    }
-
-                    todayTasks.forEach { task ->
+                    currentTasks.forEach { task ->
                         TaskItem(task)
                         Spacer(modifier = Modifier.height(8.dp))
                     }
@@ -205,49 +190,50 @@ fun ScheduleView(
     }
 }
 
-fun añadirDatosPrueba(
-    viewModel: ScheduleViewModel,
-    userViewModel: UserViewModel
-): List<Schedule_task> {
-    val email = userViewModel.currentUser.value?.email.toString()
-    viewModel.createNewSchedule(
-        "Agenda de prueba",
-        email,
-        1
-    )
+//fun añadirDatosPrueba(
+//    viewModel: ScheduleViewModel,
+//    userViewModel: UserViewModel
+//): List<Schedule_task> {
+//    val email = userViewModel.currentUser.value?.email.toString()
+//    viewModel.createNewSchedule(
+//        "Agenda de prueba",
+//        email,
+//        1
+//    )
+//
+//    // Esperar un momento para que se cree la agenda
+//    Thread.sleep(1000)
+//
+//    val scheduleId = viewModel.schedules.value.firstOrNull { it.email == email }?.id.toString()
+//
+//    if (scheduleId.isNotEmpty()) {
+//        viewModel.addTaskToSchedule(
+//            scheduleId,
+//            "Tarea de prueba 1",
+//            "Contenido de la tarea de prueba 1",
+//            "08:00",
+//            "09:00",
+//            1,
+//            1,
+//            email
+//        )
+//        viewModel.addTaskToSchedule(
+//            scheduleId,
+//            "Tarea de prueba 2",
+//            "Contenido de la tarea de prueba 2",
+//            "10:00",
+//            "11:00",
+//            2,
+//            1,
+//            email
+//        )
+//    }
+//
+//    return viewModel.schedules.value.firstOrNull { it.id.toString() == scheduleId }?.tasks
+//        ?: emptyList()
+//}
 
-    // Esperar un momento para que se cree la agenda
-    Thread.sleep(1000)
-
-    val scheduleId = viewModel.schedules.value.firstOrNull { it.email == email }?.id.toString()
-
-    if (scheduleId.isNotEmpty()) {
-        viewModel.addTaskToSchedule(
-            scheduleId,
-            "Tarea de prueba 1",
-            "Contenido de la tarea de prueba 1",
-            "08:00",
-            "09:00",
-            1,
-            1,
-            email
-        )
-        viewModel.addTaskToSchedule(
-            scheduleId,
-            "Tarea de prueba 2",
-            "Contenido de la tarea de prueba 2",
-            "10:00",
-            "11:00",
-            2,
-            1,
-            email
-        )
-    }
-
-    return viewModel.schedules.value.firstOrNull { it.id.toString() == scheduleId }?.tasks
-        ?: emptyList()
-}
-
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun TaskItem(task: Schedule_task) {
     Row(
@@ -262,12 +248,19 @@ fun TaskItem(task: Schedule_task) {
             horizontalAlignment = Alignment.End
         ) {
             Text(
-                text = task.start_time,
+                text = formatDateHumanReadable(task.start_time),
                 fontSize = 14.sp,
                 color = MaterialTheme.colorScheme.onSecondary
             )
+            HorizontalDivider(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 4.dp)
+                    .height(1.dp),
+                color = MaterialTheme.colorScheme.onSecondary
+            )
             Text(
-                text = task.end_time,
+                text = formatDateHumanReadable(task.end_time) ,
                 fontSize = 14.sp,
                 color = MaterialTheme.colorScheme.onSecondary
             )
@@ -337,7 +330,8 @@ fun ScheduleDropdown(
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Text(selectedText,
+            Text(
+                selectedText,
                 fontSize = 20.sp,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.onBackground
@@ -367,6 +361,12 @@ fun ScheduleDropdown(
 }
 
 @RequiresApi(Build.VERSION_CODES.O)
+fun formatTimeDateHumanReadable(dateStr: String): String {
+    val dateTime = OffsetDateTime.parse(dateStr)
+    val formatter = DateTimeFormatter.ofPattern("HH'/'MM")
+    return dateTime.format(formatter)
+}
+@RequiresApi(Build.VERSION_CODES.O)
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun TaskPreview() {
@@ -375,3 +375,4 @@ fun TaskPreview() {
     val userViewModel = androidx.lifecycle.viewmodel.compose.viewModel<UserViewModel>()
     ScheduleView(navController, userViewModel)
 }
+

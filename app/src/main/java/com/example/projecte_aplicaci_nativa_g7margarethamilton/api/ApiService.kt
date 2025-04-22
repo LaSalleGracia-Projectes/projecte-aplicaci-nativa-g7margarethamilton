@@ -99,6 +99,11 @@ interface ApiService {
         @Body request: CreateTaskRequest
     ): Response<Schedule_task>
 
+    @GET("schedule-task")
+    suspend fun getAllTasks(
+        @Header("Authorization") token: String,
+    ): Response<List<Schedule_task>>
+
     companion object{
         private const val BASE_URL = "http://10.0.2.2:3000/api/v1/"
         //private const val BASE_URL = "http://192.168.195.129:3000/api/v1/"
