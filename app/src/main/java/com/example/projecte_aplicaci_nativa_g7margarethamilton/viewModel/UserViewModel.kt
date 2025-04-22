@@ -49,6 +49,15 @@ class UserViewModel : ViewModel() {
 
     val repository = ApiRepository()
 
+    val nicknameField  = MutableStateFlow("")
+    val avatarUrlField = MutableStateFlow("")
+
+    private val _updateMsg   = MutableStateFlow<String?>(null)
+    val updateMsg: StateFlow<String?> = _updateMsg.asStateFlow()
+
+    private val _updateError = MutableStateFlow<String?>(null)
+    val updateError: StateFlow<String?> = _updateError.asStateFlow()
+
     fun validateNickname(nickname: String): Boolean {
         if (nickname.length < 2) {
             _nicknameError.value = "El nombre debe tener al menos 2 caracteres"
@@ -262,5 +271,53 @@ class UserViewModel : ViewModel() {
             val googleClient = GoogleAuthUiClient(context)
             googleClient.signOut(context)
         }
+    }
+
+    fun loadSession(token: String, user: User) {
+        _token.value       = token
+        _currentUser.value = user
+
+        // Pre‐carreguem els camps amb els valors existents
+        nicknameField.value  = user.nickname
+        avatarUrlField.value = user.avatar_url ?: ""
+    }
+
+    fun updateProfile() {
+        val t    = token.value ?: return
+        val user = currentUser.value ?: return
+
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                val resp = repository.updateUser(
+                    token     = t,
+                    email     = user.email,
+                    nickname  = nicknameField.value,
+                    avatarUrl = avatarUrlField.value,
+                    // mantenim els flags tal com estan
+                    isAdmin   = user.is_admin,
+                    isBanned  = user.is_banned
+                )
+
+                withContext(Dispatchers.Main) {
+                    if (resp.isSuccessful) {
+                        // actualitzem l’usuari en memòria i enviem missatge OK
+                        val updated = resp.body()!!.user
+                        _currentUser.value = updated
+                        _updateMsg.value    = resp.body()!!.message
+                    } else {
+                        _updateError.value  = "Error ${resp.code()} actualitzant perfil"
+                    }
+                }
+            } catch (e: Exception) {
+                withContext(Dispatchers.Main) {
+                    _updateError.value = "Connexió fallida: ${e.localizedMessage}"
+                }
+            }
+        }
+    }
+
+    fun clearUpdateState() {
+        _updateMsg.value   = null
+        _updateError.value = null
     }
 }

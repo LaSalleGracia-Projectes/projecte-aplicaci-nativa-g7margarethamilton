@@ -2,8 +2,6 @@ package com.example.projecte_aplicaci_nativa_g7margarethamilton.api
 
 import android.os.Build
 import androidx.annotation.RequiresApi
-import com.example.projecte_aplicaci_nativa_g7margarethamilton.model.moduls.Schedule
-import com.example.projecte_aplicaci_nativa_g7margarethamilton.model.moduls.Schedule_task
 import com.example.projecte_aplicaci_nativa_g7margarethamilton.model.User
 import retrofit2.Response
 
@@ -28,6 +26,34 @@ class ApiRepository {
                 password?.let { put("password", it) }
                 googleId?.let { put("google_id", it) }
             }
+        )
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    suspend fun getUser(token: String, email: String) =
+        apiInterface.getUser(
+            "Bearer $token",
+            email
+        )
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    suspend fun updateUser(
+        token: String,
+        email: String,
+        nickname: String?,
+        avatarUrl: String?,
+        isAdmin: Boolean,
+        isBanned: Boolean
+    ) = apiInterface.updateUser(
+        "Bearer $token",
+        email,
+        UpdateUserRequest(nickname, avatarUrl, isAdmin, isBanned)
+    )
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    suspend fun deleteUser(token: String, email: String) =
+        apiInterface.deleteUser(
+            "Bearer $token",
+            email
         )
 
     //SCHEDULE
@@ -78,4 +104,11 @@ class ApiRepository {
     @RequiresApi(Build.VERSION_CODES.O)
     suspend fun getAllTasks(token: String) =
         apiInterface.getAllTasks("Bearer $token")
+
+    data class UpdateUserRequest(
+        val nickname: String?,
+        val avatar_url: String?,
+        val is_admin: Boolean,
+        val is_banned: Boolean
+    )
 }

@@ -56,6 +56,34 @@ interface ApiService {
         @Body credentials: Map<String, String>
     ): Response<Map<String, String>>
 
+    /**
+     * GET dades d’un usuari per email
+     */
+    @GET("user/{email}")
+    suspend fun getUser(
+        @Header("Authorization") token: String,
+        @Path("email") email: String
+    ): Response<User>
+
+    /**
+     * PUT actualitzar usuari
+     */
+    @PUT("user/{email}")
+    suspend fun updateUser(
+        @Header("Authorization") token: String,
+        @Path("email") email: String,
+        @Body request: ApiRepository.UpdateUserRequest
+    ): Response<UpdateUserResponse>
+
+    /**
+     * DELETE usuari
+     */
+    @DELETE("user/{email}")
+    suspend fun deleteUser(
+        @Header("Authorization") token: String,
+        @Path("email") email: String
+    ): Response<DeleteUserResponse>
+
     //GET ALL SCHEDULES
     @GET("schedule/")
     suspend fun getAllSchedules(
@@ -148,4 +176,20 @@ data class CreateTaskRequest(
     val end_time: String,
     val id_shedule: Int,
     val id_category: Int
+)
+
+data class UpdateUserRequest(
+    val nickname: String?,
+    val avatar_url: String?,
+    val is_admin: Boolean,
+    val is_banned: Boolean
+)
+
+data class UpdateUserResponse(
+    val message: String,
+    val user: User
+)
+
+data class DeleteUserResponse(
+    val message: String
 )
