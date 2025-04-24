@@ -357,7 +357,7 @@ fun TaskItem(task: Schedule_task) {
             horizontalAlignment = Alignment.End
         ) {
             Text(
-                text = task.start_time,
+                text = task.start_time.substring(0, 5),
                 fontSize = 14.sp,
                 color = MaterialTheme.colorScheme.onSecondary
             )
@@ -369,7 +369,7 @@ fun TaskItem(task: Schedule_task) {
                 color = MaterialTheme.colorScheme.onSecondary
             )
             Text(
-                text = task.end_time,
+                text = task.end_time.substring(0, 5),
                 fontSize = 14.sp,
                 color = MaterialTheme.colorScheme.onSecondary
             )
