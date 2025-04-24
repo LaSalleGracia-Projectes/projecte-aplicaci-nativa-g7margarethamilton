@@ -76,6 +76,9 @@ class ApiRepository {
         CreateTaskRequest(userId = userId, title =  title, content =  content, priority =  priority, start_time =  startTime, end_time =  endTime, week_day =  week_day, id_schedule =  scheduleId, id_category =  categoryId)
     )
 
+    suspend fun deleteTask(token: String, id: String) =
+        apiInterface.deleteTask("Bearer $token", id)
+
     @RequiresApi(Build.VERSION_CODES.O)
     suspend fun getAllTasks(token: String) =
         apiInterface.getAllTasks("Bearer $token")
