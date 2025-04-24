@@ -374,7 +374,7 @@ class UserViewModel : ViewModel() {
                     email                   = email,
                     themeMode               = themeMode,
                     langCode                = langCode,
-                    allowNotification       = allowNotifications,
+                    allowNotifications       = allowNotifications,
                     mergeScheduleCalendar   = mergeScheduleCalendar
                 )
                 withContext(Dispatchers.Main) {

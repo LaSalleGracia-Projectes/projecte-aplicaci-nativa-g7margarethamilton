@@ -5,6 +5,7 @@ import androidx.annotation.RequiresApi
 import com.example.projecte_aplicaci_nativa_g7margarethamilton.model.User
 import com.example.projecte_aplicaci_nativa_g7margarethamilton.model.moduls.Schedule
 import com.example.projecte_aplicaci_nativa_g7margarethamilton.model.moduls.Schedule_task
+import com.example.projecte_aplicaci_nativa_g7margarethamilton.model.moduls.UserSettings
 import com.google.gson.GsonBuilder
 import okhttp3.OkHttpClient
 import retrofit2.Response
@@ -83,6 +84,28 @@ interface ApiService {
         @Header("Authorization") token: String,
         @Path("email") email: String
     ): Response<DeleteUserResponse>
+
+    // GET /api/v1/setting/:email
+    @GET("setting/{email}")
+    suspend fun getSettings(
+        @Header("Authorization") token: String,
+        @Path("email") email: String
+    ): Response<UserSettings>
+
+    // PUT /api/v1/setting/:email
+    @PUT("setting/{email}")
+    suspend fun updateSettings(
+        @Header("Authorization") token: String,
+        @Path("email") email: String,
+        @Body request: ApiRepository.UpdateSettingsRequest
+    ): Response<UserSettings>
+
+    // DELETE /api/v1/setting/:email
+    @DELETE("setting/{email}")
+    suspend fun deleteSettings(
+        @Header("Authorization") token: String,
+        @Path("email") email: String
+    ): Response<Unit>
 
     //GET ALL SCHEDULES
     @GET("schedule/")

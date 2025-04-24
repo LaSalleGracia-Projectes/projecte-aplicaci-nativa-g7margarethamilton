@@ -3,6 +3,7 @@ package com.example.projecte_aplicaci_nativa_g7margarethamilton.api
 import android.os.Build
 import androidx.annotation.RequiresApi
 import com.example.projecte_aplicaci_nativa_g7margarethamilton.model.User
+import com.example.projecte_aplicaci_nativa_g7margarethamilton.model.moduls.UserSettings
 import retrofit2.Response
 
 
@@ -55,6 +56,34 @@ class ApiRepository {
             "Bearer $token",
             email
         )
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    suspend fun getSettings(token: String, email: String): Response<UserSettings> =
+        apiInterface.getSettings("Bearer $token", email)
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    suspend fun updateSettings(
+        token: String,
+        email: String,
+        themeMode: Boolean,
+        langCode: String,
+        allowNotifications: Boolean,
+        mergeScheduleCalendar: Boolean
+    ): Response<UserSettings> =
+        apiInterface.updateSettings(
+            "Bearer $token",
+            email,
+            UpdateSettingsRequest(
+                theme_mode = themeMode,
+                lang_code = langCode,
+                allow_notifications = allowNotifications,
+                merge_schedule_calendar = mergeScheduleCalendar
+            )
+        )
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    suspend fun deleteSettings(token: String, email: String): Response<Unit> =
+        apiInterface.deleteSettings("Bearer $token", email)
 
     //SCHEDULE
     @RequiresApi(Build.VERSION_CODES.O)
@@ -110,5 +139,12 @@ class ApiRepository {
         val avatar_url: String?,
         val is_admin: Boolean,
         val is_banned: Boolean
+    )
+
+    data class UpdateSettingsRequest(
+        val theme_mode: Boolean,
+        val lang_code: String,
+        val allow_notifications: Boolean,
+        val merge_schedule_calendar: Boolean
     )
 }
