@@ -40,7 +40,7 @@ fun ProfileSettingsView(navController: NavController){
             CenterAlignedTopAppBar(
                 title = {
                     Text(
-                        text = "Configuración de perfil",
+                        text = "Advanced Settings",
                         fontSize = 30.sp,
                         fontWeight = FontWeight.SemiBold,
                         color = MaterialTheme.colorScheme.onSecondary,

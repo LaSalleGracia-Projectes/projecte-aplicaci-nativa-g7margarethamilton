@@ -14,6 +14,8 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import com.example.projecte_aplicaci_nativa_g7margarethamilton.model.moduls.UserSettings
+import java.sql.Time
 
 class UserViewModel : ViewModel() {
     private val _nicknameError = MutableStateFlow<String?>(null)
@@ -57,6 +59,15 @@ class UserViewModel : ViewModel() {
 
     private val _updateError = MutableStateFlow<String?>(null)
     val updateError: StateFlow<String?> = _updateError.asStateFlow()
+
+    private val _userSettings = MutableStateFlow<UserSettings?>(null)
+    val userSettings = _userSettings.asStateFlow()
+
+    private val _isLoadingSettings = MutableStateFlow(false)
+    val isLoadingSettings = _isLoadingSettings.asStateFlow()
+
+    private val _settingsError = MutableStateFlow<String?>(null)
+    val settingsError = _settingsError.asStateFlow()
 
     fun validateNickname(nickname: String): Boolean {
         if (nickname.length < 2) {
@@ -319,5 +330,74 @@ class UserViewModel : ViewModel() {
     fun clearUpdateState() {
         _updateMsg.value   = null
         _updateError.value = null
+    }
+
+    fun loadSettings(email: String) {
+        val t = token.value ?: return
+        viewModelScope.launch(Dispatchers.IO) {
+            _isLoadingSettings.value = true
+            try {
+                val resp = repository.getSettings(t, email)
+                withContext(Dispatchers.Main) {
+                    if (resp.isSuccessful) {
+                        _userSettings.value = resp.body()
+                        _settingsError.value = null
+                    } else {
+                        _settingsError.value = "Error ${resp.code()}: ${resp.message()}"
+                    }
+                }
+            } catch (e: Exception) {
+                withContext(Dispatchers.Main) {
+                    _settingsError.value = "Connexió fallida: ${e.localizedMessage}"
+                }
+            } finally {
+                withContext(Dispatchers.Main) {
+                    _isLoadingSettings.value = false
+                }
+            }
+        }
+    }
+
+    fun updateSettings(
+        themeMode: Boolean,
+        langCode: String,
+        allowNotifications: Boolean,
+        mergeScheduleCalendar: Boolean
+    ) {
+        val t = token.value ?: return
+        val email = currentUser.value?.email ?: return
+        viewModelScope.launch(Dispatchers.IO) {
+            _isLoadingSettings.value = true
+            try {
+                val resp = repository.updateSettings(
+                    token                   = t,
+                    email                   = email,
+                    themeMode               = themeMode,
+                    langCode                = langCode,
+                    allowNotification       = allowNotifications,
+                    mergeScheduleCalendar   = mergeScheduleCalendar
+                )
+                withContext(Dispatchers.Main) {
+                    if (resp.isSuccessful) {
+                        _userSettings.value = resp.body()
+                        _settingsError.value = null
+                    } else {
+                        _settingsError.value = "Error ${resp.code()}: ${resp.message()}"
+                    }
+                }
+            } catch (e: Exception) {
+                withContext(Dispatchers.Main) {
+                    _settingsError.value = "Connexió fallida: ${e.localizedMessage}"
+                }
+            } finally {
+                withContext(Dispatchers.Main) {
+                    _isLoadingSettings.value = false
+                }
+            }
+        }
+    }
+
+    fun clearSettingsError() {
+        _settingsError.value = null
     }
 }

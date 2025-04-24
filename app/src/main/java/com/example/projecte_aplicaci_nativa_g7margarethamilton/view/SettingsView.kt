@@ -47,7 +47,7 @@ fun SettingsView(navController: NavController) {
             CenterAlignedTopAppBar(
                 title = {
                     Text(
-                        text = "Ajustes",
+                        text = "Settings",
                         fontSize = 30.sp,
                         fontWeight = FontWeight.SemiBold,
                         color = MaterialTheme.colorScheme.onSecondary,
@@ -74,7 +74,7 @@ fun SettingsView(navController: NavController) {
             Spacer(modifier = Modifier.height(8.dp))
             
             SettingOption(
-                title = "Terms and conditions",
+                title = "Terms & Conditions",
                 icon = Article,
                 onClick = { showTermsModal = true }
             )
@@ -95,7 +95,7 @@ fun SettingsView(navController: NavController) {
             )
             
             SettingOption(
-                title = "Advanced settings",
+                title = "Advanced Settings",
                 icon = Icons.Default.Settings,
                 onClick = { navController.navigate(Routes.ProfileSettings.route) }
             )
