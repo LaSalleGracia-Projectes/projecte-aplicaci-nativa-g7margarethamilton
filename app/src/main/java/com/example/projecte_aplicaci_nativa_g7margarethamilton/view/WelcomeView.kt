@@ -1,4 +1,4 @@
-package com.example.projecte_aplicaci_nativa_g7margarethamilton.View
+package com.example.projecte_aplicaci_nativa_g7margarethamilton.view
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
@@ -20,7 +19,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -49,7 +47,7 @@ fun WelcomeView(navController: NavController) {
                     text = "Welcome",
                     fontSize = 36.sp,
                     fontWeight = FontWeight.Bold,
-                    color = Color(0xFF2E3B4E),
+                    color = MaterialTheme.colorScheme.onSecondary,
                     textAlign = TextAlign.Center
                 )
 
@@ -58,7 +56,7 @@ fun WelcomeView(navController: NavController) {
                 Text(
                     text = "to",
                     fontSize = 32.sp,
-                    color = Color(0xFF2E3B4E),
+                    color = MaterialTheme.colorScheme.onSecondary,
                     textAlign = TextAlign.Center
                 )
 
@@ -68,7 +66,7 @@ fun WelcomeView(navController: NavController) {
                     text = "Flow2Day!",
                     fontSize = 36.sp,
                     fontWeight = FontWeight.Bold,
-                    color = Color(0xFF2E3B4E),
+                    color = MaterialTheme.colorScheme.onSecondary,
                     textAlign = TextAlign.Center
                 )
 
@@ -81,33 +79,34 @@ fun WelcomeView(navController: NavController) {
                         .fillMaxWidth()
                         .height(56.dp),
                     colors = ButtonDefaults.buttonColors(
-                        containerColor = Color(0xFF2E3B4E)
+                        containerColor = MaterialTheme.colorScheme.primary
                     ),
                     shape = MaterialTheme.shapes.small
                 ) {
                     Text(
                         text = "Login",
-                        fontSize = 16.sp
+                        fontSize = 16.sp,
+                        color = MaterialTheme.colorScheme.onPrimary,
                     )
                 }
 
                 Spacer(modifier = Modifier.height(16.dp))
 
                 // Register Button
-                OutlinedButton(
+                Button(
                     onClick = {navController.navigate(Routes.Register.route)},
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(56.dp),
-                    colors = ButtonDefaults.outlinedButtonColors(
-                        containerColor = Color(0xFF738290),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = MaterialTheme.colorScheme.primary
                     ),
                     shape = MaterialTheme.shapes.small
                 ) {
                     Text(
                         text = "Register",
                         fontSize = 16.sp,
-                        color = Color.White
+                        color = MaterialTheme.colorScheme.onPrimary,
                     )
                 }
             }

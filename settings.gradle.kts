@@ -21,4 +21,5 @@ dependencyResolutionManagement {
 
 rootProject.name = "projecte-aplicaci-nativa-g7margarethamilton"
 include(":app")
+
  
