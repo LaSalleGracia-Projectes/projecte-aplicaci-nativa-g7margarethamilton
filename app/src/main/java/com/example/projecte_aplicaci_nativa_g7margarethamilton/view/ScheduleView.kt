@@ -10,6 +10,8 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.ArrowForward
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.filled.Delete
@@ -20,6 +22,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -49,8 +52,9 @@ fun ScheduleView(
         ScheduleViewModel(userViewModel)
     }
 ) {
-    val currentDate = LocalDate.now()
+    val currentDate = remember { mutableStateOf(LocalDate.now()) }
     val formatter = DateTimeFormatter.ofPattern("d MMMM", Locale("es"))
+    val weekFormatter = DateTimeFormatter.ofPattern("EEEE", Locale("es"))
 
     val schedules by viewModel.schedules.collectAsState()
     val currentSchedule by viewModel.currentSchedule.collectAsState()
@@ -58,7 +62,28 @@ fun ScheduleView(
     val error by viewModel.error.collectAsState()
     val currentUser by userViewModel.currentUser.collectAsState()
     val currentTasks by viewModel.currentScheduleTasks.collectAsState()
+    val filteredTasks by viewModel.filteredTasksByDay.collectAsState()
+    val showAddTaskDialog = remember { mutableStateOf(false) }
+    val calendar = Calendar.getInstance()
+    val week_day = remember { mutableIntStateOf(calendar.get(Calendar.DAY_OF_WEEK)) }
+    var diaSemanaString = when (week_day.intValue) {
+        1 -> "Domingo"
+        2 -> "Lunes"
+        3 -> "Martes"
+        4 -> "Miércoles"
+        5 -> "Jueves"
+        6 -> "Viernes"
+        7 -> "Sábado"
+        else -> ""
+    }
+    val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
 
+
+
+    // Filtrar tareas cuando cambia el día de la semana
+    LaunchedEffect(week_day.intValue) {
+        viewModel.filterTasksByDay(week_day.intValue)
+    }
 
     //añadirDatosPrueba(viewModel, userViewModel)
 
@@ -70,6 +95,10 @@ fun ScheduleView(
     }
 
     Scaffold(
+        modifier = Modifier
+            .nestedScroll(scrollBehavior.nestedScrollConnection),
+            //.padding(40.dp),
+
         topBar = {
             CenterAlignedTopAppBar(
                 title = {
@@ -123,28 +152,48 @@ fun ScheduleView(
                 onScheduleSelected = { selectedSchedule ->
                     viewModel.setCurrentSchedule(selectedSchedule)
                 }
-            )            // Header
-            Box(
+            )
+
+            // Navegación de días
+            Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(bottom = 16.dp)
+                    .padding(vertical = 16.dp),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
             ) {
-
-
-                Column(modifier = Modifier.align(Alignment.TopStart)) {
-                    Text(
-                        text = "Tareas del día",
-                        fontSize = 24.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = MaterialTheme.colorScheme.onSecondary
-                    )
-                    Text(
-                        text = currentDate.format(formatter),
-                        fontSize = 18.sp,
-                        color = MaterialTheme.colorScheme.onSurface
+                IconButton(
+                    onClick = {
+                        //currentDate.value = currentDate.value.minusDays(1)
+                        week_day.intValue = if (week_day.intValue == 1) 7 else week_day.intValue - 1
+                    }
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.ArrowBack,
+                        contentDescription = "Día anterior"
                     )
                 }
 
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    Text(
+                        text = diaSemanaString,
+                        fontSize = 20.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = MaterialTheme.colorScheme.onSecondary
+                    )
+                }
+
+                IconButton(
+                    onClick = {
+                        //currentDate.value = currentDate.value.plusDays(1)
+                        week_day.intValue = if (week_day.intValue == 7) 1 else week_day.intValue + 1
+                    }
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.ArrowForward,
+                        contentDescription = "Día siguiente"
+                    )
+                }
             }
 
             // Loading state
@@ -170,23 +219,83 @@ fun ScheduleView(
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
+                    .weight(1f)
                     .verticalScroll(rememberScrollState())
             ) {
-                if (currentTasks.isEmpty()) {
+                if (filteredTasks.isEmpty()) {
                     Text(
-                        text = "No hay tareas programadas para esta agenda.",
+                        text = "No hay tareas programadas para este día.",
                         fontSize = 16.sp,
                         color = MaterialTheme.colorScheme.onSecondary,
                         modifier = Modifier.padding(16.dp)
                     )
                 } else {
-                    currentTasks.forEach { task ->
+                    filteredTasks.forEach { task ->
                         TaskItem(task)
                         Spacer(modifier = Modifier.height(8.dp))
                     }
                 }
+//                if (currentTasks.isEmpty()) {
+//                    Text(
+//                        text = "No hay tareas programadas.",
+//                        fontSize = 16.sp,
+//                        color = MaterialTheme.colorScheme.onSecondary,
+//                        modifier = Modifier.padding(16.dp)
+//                    )
+//                } else{
+//                    Text(
+//                        text = "Mostrando ${currentTasks.size} tareas (${filteredTasks.size} para día actual)",
+//                        fontSize = 16.sp,
+//                        color = MaterialTheme.colorScheme.onSecondary,
+//                        modifier = Modifier.padding(16.dp)
+//                    )
+//                    currentTasks.forEach { task ->
+//                        Text(
+//                            text = "Tarea: ${task.title} - Día: ${task.week_day}",
+//                            fontSize = 14.sp,
+//                            color = MaterialTheme.colorScheme.onSecondary,
+//                            modifier = Modifier.padding(8.dp)
+//                        )
+//                        TaskItem(task)
+//                        Spacer(modifier = Modifier.height(8.dp))
+//                    }
+//                }
+            }
+
+            // Botón para añadir tarea
+            Button(
+                onClick = { showAddTaskDialog.value = true },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 16.dp)
+            ) {
+                Text("Añadir Tarea")
             }
         }
+    }
+
+    // Dialog para añadir tarea
+    if (showAddTaskDialog.value) {
+        AddTaskDialog(
+            onDismiss = { showAddTaskDialog.value = false },
+            onConfirm = { title, content, startTime, endTime, week_day, categoryId ->
+                currentUser?.email?.let { email ->
+                    currentSchedule?.id?.let { scheduleId ->
+                        viewModel.addTaskToSchedule(
+                            scheduleId = scheduleId.toString(),
+                            title = title,
+                            content = content,
+                            startTime = startTime,
+                            endTime = endTime,
+                            week_day = week_day,
+                            categoryId = categoryId,
+                            email = email
+                        )
+                    }
+                }
+                showAddTaskDialog.value = false
+            }
+        )
     }
 }
 
@@ -248,7 +357,7 @@ fun TaskItem(task: Schedule_task) {
             horizontalAlignment = Alignment.End
         ) {
             Text(
-                text = formatDateHumanReadable(task.start_time),
+                text = task.start_time,
                 fontSize = 14.sp,
                 color = MaterialTheme.colorScheme.onSecondary
             )
@@ -260,7 +369,7 @@ fun TaskItem(task: Schedule_task) {
                 color = MaterialTheme.colorScheme.onSecondary
             )
             Text(
-                text = formatDateHumanReadable(task.end_time) ,
+                text = task.end_time,
                 fontSize = 14.sp,
                 color = MaterialTheme.colorScheme.onSecondary
             )
@@ -321,7 +430,9 @@ fun ScheduleDropdown(
     var expanded by remember { mutableStateOf(false) }
     val selectedText = currentSchedule?.title ?: "Selecciona una agenda"
 
-    Box(modifier = Modifier.fillMaxWidth()) {
+    Box(modifier = Modifier
+        .fillMaxWidth()
+        .padding(bottom = 16.dp)) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -360,12 +471,13 @@ fun ScheduleDropdown(
     }
 }
 
-@RequiresApi(Build.VERSION_CODES.O)
-fun formatDateHumanReadable(dateStr: String): String {
-    val dateTime = OffsetDateTime.parse(dateStr)
-    val formatter = DateTimeFormatter.ofPattern("HH'/'MM")
-    return dateTime.format(formatter)
-}
+//@RequiresApi(Build.VERSION_CODES.O)
+//fun formatDateHumanReadable(dateStr: String): String {
+//    val dateTime = OffsetDateTime.parse(dateStr)
+//    val formatter = DateTimeFormatter.ofPattern("HH'/'MM")
+//    return dateTime.format(formatter)
+//}
+
 @RequiresApi(Build.VERSION_CODES.O)
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
@@ -374,5 +486,71 @@ fun TaskPreview() {
     val navController = rememberNavController()
     val userViewModel = androidx.lifecycle.viewmodel.compose.viewModel<UserViewModel>()
     ScheduleView(navController, userViewModel)
+}
+
+@Composable
+fun AddTaskDialog(
+    onDismiss: () -> Unit,
+    onConfirm: (String, String, String, String, Int, Int) -> Unit
+) {
+    var title by remember { mutableStateOf("") }
+    var content by remember { mutableStateOf("") }
+    var startTime by remember { mutableStateOf("") }
+    var endTime by remember { mutableStateOf("") }
+    var categoryId by remember { mutableStateOf(1) }
+    val calendar = Calendar.getInstance()
+    // Calendar.DAY_OF_WEEK comienza con domingo=1, lunes=2, etc.
+    // Para obtener 0-6 (donde 0 es domingo), resta 1
+    val week_day = calendar.get(Calendar.DAY_OF_WEEK)
+
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text("Nueva Tarea") },
+        text = {
+            Column {
+                OutlinedTextField(
+                    value = title,
+                    onValueChange = { title = it },
+                    label = { Text("Título") },
+                    modifier = Modifier.fillMaxWidth()
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+                OutlinedTextField(
+                    value = content,
+                    onValueChange = { content = it },
+                    label = { Text("Contenido") },
+                    modifier = Modifier.fillMaxWidth()
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+                OutlinedTextField(
+                    value = startTime,
+                    onValueChange = { startTime = it },
+                    label = { Text("Hora de inicio (HH:mm)") },
+                    modifier = Modifier.fillMaxWidth()
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+                OutlinedTextField(
+                    value = endTime,
+                    onValueChange = { endTime = it },
+                    label = { Text("Hora de fin (HH:mm)") },
+                    modifier = Modifier.fillMaxWidth()
+                )
+            }
+        },
+        confirmButton = {
+            TextButton(
+                onClick = {
+                    onConfirm(title, content, startTime, endTime, week_day, categoryId)
+                }
+            ) {
+                Text("Añadir")
+            }
+        },
+        dismissButton = {
+            TextButton(onClick = onDismiss) {
+                Text("Cancelar")
+            }
+        }
+    )
 }
 
