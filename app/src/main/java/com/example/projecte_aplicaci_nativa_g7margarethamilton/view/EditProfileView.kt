@@ -3,7 +3,9 @@ package com.example.projecte_aplicaci_nativa_g7margarethamilton.view
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
@@ -13,11 +15,14 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
@@ -29,9 +34,17 @@ import com.example.projecte_aplicaci_nativa_g7margarethamilton.viewModel.UserVie
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun EditProfileView(navController: NavHostController, viewModel: UserViewModel) {
+fun EditProfileView(
+    navController: NavHostController,
+    viewModel: UserViewModel
+) {
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
 
+    // Estats dels camps i missatges
+    val nickname    by viewModel.nicknameField.collectAsState()
+    val avatarUrl   by viewModel.avatarUrlField.collectAsState()
+    val updateMsg   by viewModel.updateMsg.collectAsState()
+    val updateError by viewModel.updateError.collectAsState()
 
     Scaffold(
         modifier = Modifier
@@ -44,13 +57,11 @@ fun EditProfileView(navController: NavHostController, viewModel: UserViewModel) 
                         text = "Editar perfil",
                         fontSize = 30.sp,
                         fontWeight = FontWeight.SemiBold,
-                        color = MaterialTheme.colorScheme.onSecondary,
+                        color = MaterialTheme.colorScheme.onSecondary
                     )
                 },
                 navigationIcon = {
-                    IconButton(
-                        onClick = { navController.popBackStack() }
-                    ) {
+                    IconButton(onClick = { navController.popBackStack() }) {
                         Icon(
                             imageVector = Icons.Default.Close,
                             contentDescription = "Cancelar",
@@ -59,9 +70,7 @@ fun EditProfileView(navController: NavHostController, viewModel: UserViewModel) 
                     }
                 },
                 actions = {
-                    IconButton(
-                        onClick = { /*TODO: Handle cancel action */ }
-                    ) {
+                    IconButton(onClick = { viewModel.updateProfile() }) {
                         Icon(
                             imageVector = Icons.Default.Check,
                             contentDescription = "Confirmar",
@@ -70,7 +79,7 @@ fun EditProfileView(navController: NavHostController, viewModel: UserViewModel) 
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.background,
+                    containerColor = MaterialTheme.colorScheme.background
                 ),
                 scrollBehavior = scrollBehavior
             )
@@ -87,8 +96,39 @@ fun EditProfileView(navController: NavHostController, viewModel: UserViewModel) 
                     .fillMaxSize()
                     .padding(16.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
-            ){
-                Text("TODO")
+            ) {
+                OutlinedTextField(
+                    value = nickname,
+                    onValueChange = { viewModel.nicknameField.value = it },
+                    label = { Text("Nickname") },
+                    modifier = Modifier.fillMaxWidth()
+                )
+
+                Spacer(modifier = Modifier.padding(vertical = 8.dp))
+
+                OutlinedTextField(
+                    value = avatarUrl,
+                    onValueChange = { viewModel.avatarUrlField.value = it },
+                    label = { Text("Avatar URL") },
+                    modifier = Modifier.fillMaxWidth()
+                )
+
+                Spacer(modifier = Modifier.padding(vertical = 16.dp))
+
+                updateMsg?.let {
+                    Text(
+                        text = it,
+                        color = MaterialTheme.colorScheme.primary,
+                        fontWeight = FontWeight.Medium
+                    )
+                }
+                updateError?.let {
+                    Text(
+                        text = it,
+                        color = MaterialTheme.colorScheme.error,
+                        fontWeight = FontWeight.Medium
+                    )
+                }
             }
         }
     }

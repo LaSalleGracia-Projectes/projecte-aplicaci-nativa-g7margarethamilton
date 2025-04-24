@@ -74,7 +74,7 @@ fun SettingsView(navController: NavController) {
             Spacer(modifier = Modifier.height(8.dp))
             
             SettingOption(
-                title = "Terminis i condicions",
+                title = "Terms and conditions",
                 icon = Article,
                 onClick = { showTermsModal = true }
             )
@@ -83,19 +83,19 @@ fun SettingsView(navController: NavController) {
             }
             
             SettingOption(
-                title = "Sobre nosaltres",
+                title = "About Us",
                 icon = Icons.Default.Info,
                 onClick = { navController.navigate(Routes.AboutUs.route) }
             )
             
             SettingOption(
-                title = "Contacta",
+                title = "Contact",
                 icon = Icons.Default.Email,
                 onClick = { navController.navigate(Routes.ContactUs.route) }
             )
             
             SettingOption(
-                title = "Config. Perfil",
+                title = "Advanced settings",
                 icon = Icons.Default.Settings,
                 onClick = { navController.navigate(Routes.ProfileSettings.route) }
             )

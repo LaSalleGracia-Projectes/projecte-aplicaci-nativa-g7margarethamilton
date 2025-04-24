@@ -242,7 +242,7 @@ fun ProfileView(navController: NavController, viewModel: UserViewModel) {
 
 fun formatDateHumanReadable(dateStr: String): String {
     val dateTime = OffsetDateTime.parse(dateStr)
-    val formatter = DateTimeFormatter.ofPattern("dd'/'mm'/'yyyy")
+    val formatter = DateTimeFormatter.ofPattern("dd'/'MM'/'yyyy")
     return dateTime.format(formatter)
 }
 
