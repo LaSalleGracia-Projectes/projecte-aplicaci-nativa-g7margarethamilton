@@ -52,16 +52,12 @@ fun ScheduleView(
         ScheduleViewModel(userViewModel)
     }
 ) {
-    val currentDate = remember { mutableStateOf(LocalDate.now()) }
-    val formatter = DateTimeFormatter.ofPattern("d MMMM", Locale("es"))
-    val weekFormatter = DateTimeFormatter.ofPattern("EEEE", Locale("es"))
 
     val schedules by viewModel.schedules.collectAsState()
     val currentSchedule by viewModel.currentSchedule.collectAsState()
     val isLoading by viewModel.isLoading.collectAsState()
     val error by viewModel.error.collectAsState()
     val currentUser by userViewModel.currentUser.collectAsState()
-    val currentTasks by viewModel.currentScheduleTasks.collectAsState()
     val filteredTasks by viewModel.filteredTasksByDay.collectAsState()
     val showAddTaskDialog = remember { mutableStateOf(false) }
     val calendar = Calendar.getInstance()
@@ -164,7 +160,6 @@ fun ScheduleView(
             ) {
                 IconButton(
                     onClick = {
-                        //currentDate.value = currentDate.value.minusDays(1)
                         week_day.intValue = if (week_day.intValue == 1) 7 else week_day.intValue - 1
                     }
                 ) {
@@ -185,7 +180,6 @@ fun ScheduleView(
 
                 IconButton(
                     onClick = {
-                        //currentDate.value = currentDate.value.plusDays(1)
                         week_day.intValue = if (week_day.intValue == 7) 1 else week_day.intValue + 1
                     }
                 ) {
@@ -235,31 +229,7 @@ fun ScheduleView(
                         Spacer(modifier = Modifier.height(8.dp))
                     }
                 }
-//                if (currentTasks.isEmpty()) {
-//                    Text(
-//                        text = "No hay tareas programadas.",
-//                        fontSize = 16.sp,
-//                        color = MaterialTheme.colorScheme.onSecondary,
-//                        modifier = Modifier.padding(16.dp)
-//                    )
-//                } else{
-//                    Text(
-//                        text = "Mostrando ${currentTasks.size} tareas (${filteredTasks.size} para día actual)",
-//                        fontSize = 16.sp,
-//                        color = MaterialTheme.colorScheme.onSecondary,
-//                        modifier = Modifier.padding(16.dp)
-//                    )
-//                    currentTasks.forEach { task ->
-//                        Text(
-//                            text = "Tarea: ${task.title} - Día: ${task.week_day}",
-//                            fontSize = 14.sp,
-//                            color = MaterialTheme.colorScheme.onSecondary,
-//                            modifier = Modifier.padding(8.dp)
-//                        )
-//                        TaskItem(task)
-//                        Spacer(modifier = Modifier.height(8.dp))
-//                    }
-//                }
+
             }
 
             // Botón para añadir tarea
@@ -471,13 +441,6 @@ fun ScheduleDropdown(
     }
 }
 
-//@RequiresApi(Build.VERSION_CODES.O)
-//fun formatDateHumanReadable(dateStr: String): String {
-//    val dateTime = OffsetDateTime.parse(dateStr)
-//    val formatter = DateTimeFormatter.ofPattern("HH'/'MM")
-//    return dateTime.format(formatter)
-//}
-
 @RequiresApi(Build.VERSION_CODES.O)
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
@@ -499,8 +462,6 @@ fun AddTaskDialog(
     var endTime by remember { mutableStateOf("") }
     var categoryId by remember { mutableStateOf(1) }
     val calendar = Calendar.getInstance()
-    // Calendar.DAY_OF_WEEK comienza con domingo=1, lunes=2, etc.
-    // Para obtener 0-6 (donde 0 es domingo), resta 1
     val week_day = calendar.get(Calendar.DAY_OF_WEEK)
 
     AlertDialog(
