@@ -1,7 +1,6 @@
 package com.example.projecte_aplicaci_nativa_g7margarethamilton.view
 
 import android.annotation.SuppressLint
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
@@ -17,11 +16,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -29,28 +27,26 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import coil3.compose.AsyncImage
-import com.example.projecte_aplicaci_nativa_g7margarethamilton.R
+import com.example.projecte_aplicaci_nativa_g7margarethamilton.Routes
+import com.example.projecte_aplicaci_nativa_g7margarethamilton.model.User
 import com.example.projecte_aplicaci_nativa_g7margarethamilton.viewModel.UserViewModel
+import java.time.OffsetDateTime
+import java.time.format.DateTimeFormatter
+import java.util.Date
+import java.util.Locale
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProfileView(navController: NavController, viewModel: UserViewModel) {
     val currentUser by viewModel.currentUser.collectAsState()
-
-    // Definimos colores modernos para nuestra UI
-    val primaryColor = Color(0xFF6D7D8B)
-    val secondaryColor = Color(0xFF03DAC6)
-    val gradientBackground = Brush.verticalGradient(
-        colors = listOf(
-            Color(0xFFF5F5F5),
-            Color(0xFFE0E0E0)
-        )
-    )
+    val context = LocalContext.current
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
 
 
     Scaffold(
-        modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
+        modifier = Modifier
+            .nestedScroll(scrollBehavior.nestedScrollConnection)
+            .padding(top = 40.dp),
         topBar = {
             CenterAlignedTopAppBar(
                 title = {
@@ -58,32 +54,22 @@ fun ProfileView(navController: NavController, viewModel: UserViewModel) {
                         text = "Perfil",
                         fontSize = 30.sp,
                         fontWeight = FontWeight.SemiBold,
-                        color = Color.Black
+                        color = MaterialTheme.colorScheme.onSecondary
                     )
-                },
-                navigationIcon = {
-                    //FIX: la flecha lleva a la pantalla de welcome
-                    IconButton(onClick = { /*navController.popBackStack()*/ }) {
-                        Icon(
-                            imageVector = Icons.Default.ArrowBack,
-                            contentDescription = "Volver",
-                            tint = Color.White
-                        )
-                    }
                 },
                 actions = {
                     IconButton(
-                        onClick = { /* TODO: Navigate to edit profile */ }
+                        onClick = { navController.navigate(Routes.EditProfile.route) },
                     ) {
                         Icon(
                             imageVector = Icons.Default.Edit,
                             contentDescription = "Editar perfil",
-                            tint = Color.Black
+                            tint = MaterialTheme.colorScheme.onBackground
                         )
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
-                    titleContentColor = Color.Black
+                    containerColor = MaterialTheme.colorScheme.background
                 )
             )
         },
@@ -93,7 +79,7 @@ fun ProfileView(navController: NavController, viewModel: UserViewModel) {
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
-                .background(Color(0xFFF8F8F8))
+                .background(MaterialTheme.colorScheme.background)
         ) {
             Column(
                 modifier = Modifier
@@ -107,10 +93,7 @@ fun ProfileView(navController: NavController, viewModel: UserViewModel) {
                         .fillMaxWidth()
                         .padding(bottom = 16.dp),
                     colors = CardDefaults.cardColors(
-                        containerColor = Color.White
-                    ),
-                    elevation = CardDefaults.cardElevation(
-                        defaultElevation = 4.dp
+                        containerColor = MaterialTheme.colorScheme.surface
                     ),
                     shape = RoundedCornerShape(16.dp)
                 ) {
@@ -129,10 +112,6 @@ fun ProfileView(navController: NavController, viewModel: UserViewModel) {
                                 modifier = Modifier
                                     .size(120.dp)
                                     .clip(CircleShape)
-                                    .background(
-                                        Brush.radialGradient(
-                                            colors = listOf(primaryColor, secondaryColor)
-                                        ))
                                     .padding(4.dp),
                                 contentAlignment = Alignment.Center  // Añadimos contentAlignment aquí
                             ) {
@@ -155,20 +134,9 @@ fun ProfileView(navController: NavController, viewModel: UserViewModel) {
                                 text = it.nickname,
                                 fontSize = 28.sp,
                                 fontWeight = FontWeight.Bold,
-                                color = Color.Black
+                                color = MaterialTheme.colorScheme.onSecondary
                             )
                         }
-
-                        Spacer(modifier = Modifier.height(8.dp))
-
-                        // Descripción con estilo
-                        Text(
-                            text = "\"Apasionada del bienestar | Vida saludable | Equilibrio, energía y felicidad cada día\"",
-                            fontSize = 16.sp,
-                            fontWeight = FontWeight.Normal,
-                            color = Color.Gray,
-                            modifier = Modifier.padding(horizontal = 24.dp)
-                        )
                     }
                 }
 
@@ -178,30 +146,27 @@ fun ProfileView(navController: NavController, viewModel: UserViewModel) {
                         .fillMaxWidth()
                         .padding(bottom = 16.dp),
                     colors = CardDefaults.cardColors(
-                        containerColor = Color.White
-                    ),
-                    elevation = CardDefaults.cardElevation(
-                        defaultElevation = 2.dp
+                        containerColor = MaterialTheme.colorScheme.surface
                     ),
                     shape = RoundedCornerShape(16.dp)
                 ) {
                     Column(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(24.dp)
+                            .padding(24.dp),
                     ) {
                         // Usuario desde
                         InfoRow(
                             title = "Usuari/a des-de:",
-                            value = "10/01/2025",
-                            iconTint = primaryColor
+                            value = formatDateHumanReadable(currentUser?.created_at ?: "0001-01-01T00:00:00Z"),
+                            iconTint = MaterialTheme.colorScheme.onSecondary
                         )
 
                         Divider(
                             modifier = Modifier
                                 .padding(vertical = 16.dp)
                                 .fillMaxWidth(),
-                            color = Color(0xFFEEEEEE)
+                            color = MaterialTheme.colorScheme.onSurface
                         )
 
                         // Email
@@ -209,38 +174,62 @@ fun ProfileView(navController: NavController, viewModel: UserViewModel) {
                             InfoRow(
                                 title = "Email:",
                                 value = it.email,
-                                iconTint = primaryColor
+                                iconTint = MaterialTheme.colorScheme.onSecondary
                             )
                         }
                     }
                 }
 
                 // Botones de acciones
-                Row(
+                Column(
                     modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.End
+                    horizontalAlignment = Alignment.End
                 ) {
-                    // Botón cerrar sesión con un estilo más moderno
                     Button(
                         onClick = {
+                            viewModel.logout(context)
                             navController.navigate("welcome")
-                            viewModel.logout()
+                            viewModel.logout(context)
                         },
                         modifier = Modifier.padding(top = 8.dp),
                         colors = ButtonDefaults.buttonColors(
-                            containerColor = Color.Red
+                            containerColor = MaterialTheme.colorScheme.error,
                         ),
                         contentPadding = PaddingValues(horizontal = 24.dp, vertical = 12.dp),
                         shape = RoundedCornerShape(8.dp)
                     ) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Outlined.ExitToApp,
-                            contentDescription = "Cerrar Sesión",
+                            contentDescription = "Log out",
                             modifier = Modifier.size(20.dp)
                         )
                         Spacer(modifier = Modifier.width(8.dp))
                         Text(
-                            text = "Cerrar Sesión",
+                            text = "Log out",
+                            fontSize = 16.sp,
+                            fontWeight = FontWeight.Medium
+                        )
+                    }
+                    Button(
+                        onClick = {
+                            viewModel.logoutAll(context)
+                            navController.navigate("welcome")
+                        },
+                        modifier = Modifier.padding(top = 8.dp),
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = MaterialTheme.colorScheme.error,
+                        ),
+                        contentPadding = PaddingValues(horizontal = 24.dp, vertical = 12.dp),
+                        shape = RoundedCornerShape(8.dp)
+                    ) {
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Outlined.ExitToApp,
+                            contentDescription = "Logout on all devices",
+                            modifier = Modifier.size(20.dp)
+                        )
+                        Spacer(modifier = Modifier.width(8.dp))
+                        Text(
+                            text = "Logout on all devices",
                             fontSize = 16.sp,
                             fontWeight = FontWeight.Medium
                         )
@@ -251,11 +240,17 @@ fun ProfileView(navController: NavController, viewModel: UserViewModel) {
     }
 }
 
+fun formatDateHumanReadable(dateStr: String): String {
+    val dateTime = OffsetDateTime.parse(dateStr)
+    val formatter = DateTimeFormatter.ofPattern("dd'/'MM'/'yyyy")
+    return dateTime.format(formatter)
+}
+
 @Composable
 private fun InfoRow(title: String, value: String, iconTint: Color) {
     Row(
         modifier = Modifier.fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.CenterVertically,
     ) {
         Column(
             modifier = Modifier.weight(1f)
@@ -264,14 +259,14 @@ private fun InfoRow(title: String, value: String, iconTint: Color) {
                 text = title,
                 fontSize = 14.sp,
                 fontWeight = FontWeight.Medium,
-                color = Color.Gray
+                color = MaterialTheme.colorScheme.onSecondary,
             )
 
             Text(
                 text = value,
                 fontSize = 18.sp,
                 fontWeight = FontWeight.Normal,
-                color = Color.Black,
+                color = MaterialTheme.colorScheme.onSecondary,
                 modifier = Modifier.padding(top = 4.dp)
             )
         }

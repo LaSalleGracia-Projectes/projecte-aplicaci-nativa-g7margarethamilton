@@ -1,7 +1,6 @@
 package com.example.projecte_aplicaci_nativa_g7margarethamilton.view
 
 import TermsModal
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -31,7 +30,6 @@ import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.StrokeJoin
 import androidx.compose.ui.graphics.vector.path
-import androidx.compose.ui.unit.dp
 import com.example.projecte_aplicaci_nativa_g7margarethamilton.Routes
 
 
@@ -39,11 +37,12 @@ import com.example.projecte_aplicaci_nativa_g7margarethamilton.Routes
 @Composable
 fun SettingsView(navController: NavController) {
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
-    val backgroundColor = Color(0xFFF8F8F8)
     var showTermsModal by remember { mutableStateOf(false) }
 
     Scaffold(
-        modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
+        modifier = Modifier
+            .nestedScroll(scrollBehavior.nestedScrollConnection)
+            .padding(top = 40.dp),
         topBar = {
             CenterAlignedTopAppBar(
                 title = {
@@ -51,18 +50,18 @@ fun SettingsView(navController: NavController) {
                         text = "Ajustes",
                         fontSize = 30.sp,
                         fontWeight = FontWeight.SemiBold,
-                        color = Color.Black
+                        color = MaterialTheme.colorScheme.onSecondary,
                     )
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = backgroundColor,
-                    titleContentColor = Color.Black
+                    containerColor = MaterialTheme.colorScheme.background,
+                    titleContentColor = MaterialTheme.colorScheme.onSecondary,
                 ),
                 scrollBehavior = scrollBehavior
             )
         },
         bottomBar = { BottomNavBar(navController) },
-        containerColor = backgroundColor
+        containerColor = MaterialTheme.colorScheme.background,
     ) { paddingValues ->
         Column(
             modifier = Modifier
@@ -75,7 +74,7 @@ fun SettingsView(navController: NavController) {
             Spacer(modifier = Modifier.height(8.dp))
             
             SettingOption(
-                title = "Terminis i condicions",
+                title = "Terms and conditions",
                 icon = Article,
                 onClick = { showTermsModal = true }
             )
@@ -84,21 +83,21 @@ fun SettingsView(navController: NavController) {
             }
             
             SettingOption(
-                title = "Sobre nosaltres",
+                title = "About Us",
                 icon = Icons.Default.Info,
                 onClick = { navController.navigate(Routes.AboutUs.route) }
             )
             
             SettingOption(
-                title = "Contacta",
+                title = "Contact",
                 icon = Icons.Default.Email,
-                onClick = { /* TODO: Navigate to Contact */ }
+                onClick = { navController.navigate(Routes.ContactUs.route) }
             )
             
             SettingOption(
-                title = "Config. Perfil",
+                title = "Advanced settings",
                 icon = Icons.Default.Settings,
-                onClick = { /* TODO: Navigate to Profile Config */ }
+                onClick = { navController.navigate(Routes.ProfileSettings.route) }
             )
         }
     }
@@ -117,11 +116,8 @@ fun SettingOption(
             .clip(RoundedCornerShape(12.dp))
             .clickable(onClick = onClick),
         colors = CardDefaults.cardColors(
-            containerColor = Color.White
+            containerColor = MaterialTheme.colorScheme.surface,
         ),
-        elevation = CardDefaults.cardElevation(
-            defaultElevation = 2.dp
-        )
     ) {
         Row(
             modifier = Modifier
@@ -138,7 +134,7 @@ fun SettingOption(
                 Icon(
                     imageVector = icon,
                     contentDescription = null,
-                    tint = Color(0xFF2E3B4E),
+                    tint = MaterialTheme.colorScheme.onBackground,
                     modifier = Modifier.size(24.dp)
                 )
                 Spacer(modifier = Modifier.width(16.dp))
@@ -146,13 +142,13 @@ fun SettingOption(
                     text = title,
                     fontSize = 20.sp,
                     fontWeight = FontWeight.Medium,
-                    color = Color(0xFF2E3B4E)
+                    color = MaterialTheme.colorScheme.onSecondary,
                 )
             }
             Icon(
                 imageVector = Icons.AutoMirrored.Filled.ArrowForward,
                 contentDescription = "Ir a $title",
-                tint = Color(0xFF2E3B4E),
+                tint = MaterialTheme.colorScheme.onBackground,
                 modifier = Modifier.size(20.dp)
             )
         }

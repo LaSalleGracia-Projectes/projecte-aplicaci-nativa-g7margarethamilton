@@ -11,7 +11,7 @@ android {
 
     defaultConfig {
         applicationId = "com.example.projecte_aplicaci_nativa_g7margarethamilton"
-        minSdk = 24
+        minSdk = 26
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
@@ -76,4 +76,7 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+
+    //Google OAuth
+    implementation ("com.google.android.gms:play-services-auth:21.0.0")
 }
