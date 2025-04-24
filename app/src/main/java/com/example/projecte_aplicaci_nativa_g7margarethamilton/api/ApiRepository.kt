@@ -68,11 +68,12 @@ class ApiRepository {
         priority: Int,
         startTime: String,
         endTime: String,
+        week_day: Int,
         scheduleId: Int,
         categoryId: Int
     ) = apiInterface.createTask(
         "Bearer $token",
-        CreateTaskRequest(userId, title, content, priority, startTime, endTime, scheduleId, categoryId)
+        CreateTaskRequest(userId = userId, title =  title, content =  content, priority =  priority, start_time =  startTime, end_time =  endTime, week_day =  week_day, id_schedule =  scheduleId, id_category =  categoryId)
     )
 
     @RequiresApi(Build.VERSION_CODES.O)

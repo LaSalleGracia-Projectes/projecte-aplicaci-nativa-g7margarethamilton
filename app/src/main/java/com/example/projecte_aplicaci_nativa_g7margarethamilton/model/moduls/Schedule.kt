@@ -19,8 +19,8 @@ data class Schedule_task(
     val priority: Int,
     val start_time: String,
     val end_time: String,
+    val week_day: Int,
     val id_schedule: Int,
     val id_category: Int,
-    val week_day: Int,
     val created_at: ZonedDateTime
 )

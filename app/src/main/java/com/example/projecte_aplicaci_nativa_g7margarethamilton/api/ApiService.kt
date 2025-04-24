@@ -146,6 +146,7 @@ data class CreateTaskRequest(
     val priority: Int,
     val start_time: String,
     val end_time: String,
-    val id_shedule: Int,
-    val id_category: Int
+    val id_schedule: Int,
+    val id_category: Int,
+    val week_day: Int,
 )
