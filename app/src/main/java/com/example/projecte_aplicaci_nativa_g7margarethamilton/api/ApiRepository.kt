@@ -56,6 +56,31 @@ class ApiRepository {
             email
         )
 
+    @RequiresApi(Build.VERSION_CODES.O)
+    suspend fun getUserSettings(
+        token: String,
+        email: String
+    ) = apiInterface.getUserSettings("Bearer $token", email)
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    suspend fun updateUserSettings(
+        token: String,
+        email: String,
+        themeMode: Boolean,
+        langCode: String,
+        allowNotification: Boolean,
+        mergeScheduleCalendar: Boolean
+    ) = apiInterface.updateUserSettings(
+        "Bearer $token",
+        email,
+        UpdateSettingsRequest(
+            themeMode,
+            langCode,
+            allowNotification,
+            mergeScheduleCalendar
+        )
+    )
+
     //SCHEDULE
     @RequiresApi(Build.VERSION_CODES.O)
     suspend fun getAllSchedules(token: String,) =
@@ -66,14 +91,14 @@ class ApiRepository {
         apiInterface.getSchedule("Bearer $token", id)
 
     @RequiresApi(Build.VERSION_CODES.O)
-    suspend fun createSchedule(token: String, userId: String, title: String, isFavorite: Boolean, categoryId: Int) = 
+    suspend fun createSchedule(token: String, userId: String, title: String, isFavorite: Boolean, categoryId: Int) =
         apiInterface.createSchedule(
             "Bearer $token",
             CreateScheduleRequest(userId, title, isFavorite, categoryId)
         )
 
     @RequiresApi(Build.VERSION_CODES.O)
-    suspend fun updateSchedule(token: String, id: String, userId: String, title: String, isFavorite: Boolean, categoryId: Int) = 
+    suspend fun updateSchedule(token: String, id: String, userId: String, title: String, isFavorite: Boolean, categoryId: Int) =
         apiInterface.updateSchedule(
             "Bearer $token",
             id,
@@ -81,7 +106,7 @@ class ApiRepository {
         )
 
     @RequiresApi(Build.VERSION_CODES.O)
-    suspend fun deleteSchedule(token: String, id: String, userId: String) = 
+    suspend fun deleteSchedule(token: String, id: String, userId: String) =
         apiInterface.deleteSchedule("Bearer $token", id)
 
     //TASK
