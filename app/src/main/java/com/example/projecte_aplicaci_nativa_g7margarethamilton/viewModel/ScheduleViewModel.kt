@@ -14,13 +14,14 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.time.LocalDate
 
 class ScheduleViewModel(
     private val userViewModel: UserViewModel
 ) : ViewModel() {
     private val repository = ApiRepository()
     
-    private val _schedules = MutableStateFlow<List<Schedule>>(emptyList())
+    private val _schedules = MutableStateFlow<List<Schedule>>(emptyList<Schedule>())
     val schedules: StateFlow<List<Schedule>> = _schedules
 
     private val _userTasks = MutableStateFlow<List<Schedule_task>>(emptyList())
@@ -40,6 +41,18 @@ class ScheduleViewModel(
     private val _currentScheduleTasks = MutableStateFlow<List<Schedule_task>>(emptyList())
     val currentScheduleTasks: StateFlow<List<Schedule_task>> = _currentScheduleTasks
 
+    // Nuevo StateFlow para las tareas filtradas por día
+    private val _filteredTasksByDay = MutableStateFlow<List<Schedule_task>>(emptyList())
+    val filteredTasksByDay: StateFlow<List<Schedule_task>> = _filteredTasksByDay
+
+    // Función para filtrar tareas por día de la semana
+    fun filterTasksByDay(dayOfWeek: Int) {
+        val currentTasks = _currentScheduleTasks.value
+        _filteredTasksByDay.value = currentTasks.filter { task ->
+            task.week_day == dayOfWeek
+        }.sortedBy { it.start_time }
+    }
+
     @RequiresApi(Build.VERSION_CODES.O)
     fun loadSchedules(userId: String) {
         val token = userViewModel.token.value
@@ -56,19 +69,23 @@ class ScheduleViewModel(
 
                 withContext(Dispatchers.Main) {
                     if (response.isSuccessful) {
-                        val schedulesList = response.body() ?: emptyList()
-                        Log.d("ScheduleViewModel", "Received ${schedulesList.size} schedules from API")
-
-                        // Log details of each schedule
-                        schedulesList.forEachIndexed { index, schedule ->
-                            Log.d("ScheduleViewModel", "Schedule $index: '${schedule.title}', ID: ${schedule.id}, Tasks: ${schedule.tasks?.size ?: 0}")
+                        val schedulesList = response.body()
+                        if (schedulesList != null) {
+                            Log.d("ScheduleViewModel", "Received ${schedulesList.size} schedules from API")
                         }
 
-                        _schedules.value = schedulesList
+                        // Log details of each schedule
+//                        schedulesList.forEachIndexed { index, schedule ->
+//                            Log.d("ScheduleViewModel", "Schedule $index: '${schedule.title}', ID: ${schedule.id}, Tasks: ${schedule.tasks?.size ?: 0}")
+//                        }
+
+                        if (schedulesList != null) {
+                            _schedules.value = schedulesList
+                        }
 
                         // Set first schedule as current if available and none is selected
-                        if (_currentSchedule.value == null && schedulesList.isNotEmpty()) {
-                            setCurrentSchedule(schedulesList.first())
+                        if (_currentSchedule.value == null && schedulesList?.isNotEmpty() == true) {
+                            schedulesList?.let { setCurrentSchedule(it.first()) }
                             Log.d("ScheduleViewModel", "Auto-selected first schedule: '${schedulesList.first().title}'")
                         }
 
@@ -181,14 +198,14 @@ class ScheduleViewModel(
 
                 withContext(Dispatchers.Main) {
                     if (response.isSuccessful) {
-                        val tasksList = response.body() ?: emptyList()
-                        _userTasks.value = tasksList
-                        Log.d("ScheduleViewModel", "Received ${tasksList.size} tasks from API")
+                        val tasksList = response.body()
+                        _userTasks.value = tasksList ?: emptyList()
+                        Log.d("ScheduleViewModel", "Received ${tasksList?.size} tasks from API")
 
                         // Log some task details
-                        tasksList.groupBy { it.id_schedule }.forEach { (scheduleId, tasks) ->
-                            Log.d("ScheduleViewModel", "Schedule ID $scheduleId has ${tasks.size} tasks")
-                        }
+//                        tasksList.groupBy { it.id_schedule }.forEach { (scheduleId, tasks) ->
+//                            Log.d("ScheduleViewModel", "Schedule ID $scheduleId has ${tasks.size} tasks")
+//                        }
 
                         // Actualizar las tareas filtradas después de cargar todas las tareas
                         updateCurrentScheduleTasks()
@@ -217,7 +234,7 @@ class ScheduleViewModel(
         content: String,
         startTime: String,
         endTime: String,
-        priority: Int = 1,
+        week_day: Int,
         categoryId: Int,
         email: String
     ) {
@@ -231,9 +248,10 @@ class ScheduleViewModel(
                     userId = email,
                     title = title,
                     content = content,
-                    priority = priority,
+                    priority = 1,
                     startTime = startTime,
                     endTime = endTime,
+                    week_day = week_day,
                     scheduleId = scheduleId.toInt(),
                     categoryId = categoryId
                 )
