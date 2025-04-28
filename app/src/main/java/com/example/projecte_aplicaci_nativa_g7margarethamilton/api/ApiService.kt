@@ -7,6 +7,7 @@ import com.example.projecte_aplicaci_nativa_g7margarethamilton.model.moduls.Sche
 import com.example.projecte_aplicaci_nativa_g7margarethamilton.model.moduls.Schedule_task
 import com.google.gson.GsonBuilder
 import okhttp3.OkHttpClient
+import okhttp3.ResponseBody
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -110,7 +111,7 @@ interface ApiService {
     suspend fun deleteTask(
         @Header("Authorization") token: String,
         @Path("id") id: String
-    ): Response<Unit>
+    ): Response<ResponseBody>
 
     companion object{
         private const val BASE_URL = "http://10.0.2.2:3000/api/v1/"
