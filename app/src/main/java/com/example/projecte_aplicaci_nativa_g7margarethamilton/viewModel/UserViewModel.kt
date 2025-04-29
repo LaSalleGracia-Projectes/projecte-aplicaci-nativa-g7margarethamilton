@@ -181,7 +181,7 @@ class UserViewModel : ViewModel() {
             app_token = "",
             created_at = ""
         )
-        
+
         CoroutineScope(Dispatchers.IO).launch {
             try {
                 val response = repository.login(user)
@@ -191,6 +191,7 @@ class UserViewModel : ViewModel() {
                         _token.value = loginResponse?.tokenApp
                         _currentUser.value = loginResponse?.user
                         _missatgeLogin.value = loginResponse?.message ?: "Inicio de sesión exitoso"
+                        loadSettings()
                     } else {
                         when (response.code()) {
                             401 -> _missatgeLogin.value = "Credenciales incorrectas"
@@ -221,6 +222,7 @@ class UserViewModel : ViewModel() {
                         _token.value = loginResponse?.tokenApp
                         _currentUser.value = loginResponse?.user
                         _missatgeLogin.value = loginResponse?.message ?: "Login amb Google exitós"
+                        loadSettings()
                     } else {
                         _missatgeLogin.value = "Error en iniciar sessió amb Google"
                     }
