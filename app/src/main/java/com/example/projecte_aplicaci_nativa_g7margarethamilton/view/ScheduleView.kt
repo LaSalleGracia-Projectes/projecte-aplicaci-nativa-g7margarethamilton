@@ -228,6 +228,8 @@ fun ScheduleView(
                             task = task,
                             onDelete = {
                                 viewModel.deleteScheduleTask(task.id.toString())
+                                // Recargar tareas tras crear una
+                                viewModel.filterTasksByDay(week_day.intValue)
                             }
                         )
                         Spacer(modifier = Modifier.height(8.dp))
@@ -265,6 +267,8 @@ fun ScheduleView(
                             categoryId = categoryId,
                             email = email
                         )
+                        // Recargar tareas tras crear una
+                        viewModel.filterTasksByDay(week_day.intValue)
                     }
                 }
                 showAddTaskDialog.value = false

@@ -47,10 +47,21 @@ class ScheduleViewModel(
 
     // Función para filtrar tareas por día de la semana
     fun filterTasksByDay(dayOfWeek: Int) {
-        val currentTasks = _currentScheduleTasks.value
-        _filteredTasksByDay.value = currentTasks.filter { task ->
-            task.week_day == dayOfWeek
+        Log.d("ScheduleViewModel", "Filtering tasks for day: $dayOfWeek")
+        
+        // Obtener el ID del schedule actual
+        val currentScheduleId = _currentSchedule.value?.id
+        
+        Log.d("ScheduleViewModel", "Current Schedule ID: $currentScheduleId")
+        Log.d("ScheduleViewModel", "Total tasks: ${_userTasks.value.size}")
+        
+        // Filtrar tareas por día de la semana y schedule actual
+        val filteredTasks = _userTasks.value.filter { task ->
+            task.week_day == dayOfWeek && task.id_schedule == currentScheduleId
         }.sortedBy { it.start_time }
+        
+        Log.d("ScheduleViewModel", "Filtered tasks for day $dayOfWeek: ${filteredTasks.size}")
+        _filteredTasksByDay.value = filteredTasks
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -130,6 +141,8 @@ class ScheduleViewModel(
     // Nueva función para actualizar las tareas del schedule actual
     private fun updateCurrentScheduleTasks() {
         val currentScheduleId = _currentSchedule.value?.id
+        val currentDay = _filteredTasksByDay.value.firstOrNull()?.week_day
+        
         if (currentScheduleId != null) {
             // Primero intentamos obtener las tareas del objeto Schedule
             val tasksFromSchedule = _currentSchedule.value?.tasks
@@ -143,8 +156,14 @@ class ScheduleViewModel(
                 _currentScheduleTasks.value = filteredTasks
                 Log.d("ScheduleViewModel", "Using filtered tasks from userTasks: ${filteredTasks.size}")
             }
+
+            // Si hay un día seleccionado, actualizar las tareas filtradas
+            currentDay?.let { day ->
+                updateFilteredTasks(day)
+            }
         } else {
             _currentScheduleTasks.value = emptyList()
+            _filteredTasksByDay.value = emptyList()
         }
     }
 
@@ -185,6 +204,9 @@ class ScheduleViewModel(
     @RequiresApi(Build.VERSION_CODES.O)
     fun getAllTasks() {
         val token = userViewModel.token.value ?: return
+        
+        // Guardar el día actual seleccionado antes de recargar
+        val currentDay = _filteredTasksByDay.value.firstOrNull()?.week_day
 
         CoroutineScope(Dispatchers.IO).launch {
             try {
@@ -198,13 +220,13 @@ class ScheduleViewModel(
                         _userTasks.value = tasksList ?: emptyList()
                         Log.d("ScheduleViewModel", "Received ${tasksList?.size} tasks from API")
 
-                        // Log some task details
-//                        tasksList.groupBy { it.id_schedule }.forEach { (scheduleId, tasks) ->
-//                            Log.d("ScheduleViewModel", "Schedule ID $scheduleId has ${tasks.size} tasks")
-//                        }
-
-                        // Actualizar las tareas filtradas después de cargar todas las tareas
+                        // Actualizar las tareas del schedule actual
                         updateCurrentScheduleTasks()
+                        
+                        // Si teníamos un día seleccionado, actualizar las tareas filtradas
+                        currentDay?.let { day ->
+                            updateFilteredTasks(day)
+                        }
 
                         _error.value = null
                     } else {
@@ -254,8 +276,15 @@ class ScheduleViewModel(
                 
                 withContext(Dispatchers.Main) {
                     if (response.isSuccessful) {
-                        // Recargar los schedules para obtener la tarea nueva
-                        loadSchedules(email)
+                        // Recargar todas las tareas después de crear una nueva
+                        getAllTasks()
+                        
+                        // Esperar un momento para asegurar que las tareas se han cargado
+                        kotlinx.coroutines.delay(100)
+                        
+                        // Actualizar las tareas filtradas con el día seleccionado
+                        updateFilteredTasks(week_day)
+                        
                         _error.value = null
                     } else {
                         _error.value = "Error al añadir la tarea: ${response.message()}"
@@ -273,6 +302,10 @@ class ScheduleViewModel(
 
     fun deleteScheduleTask(taskId: String) {
         val token = userViewModel.token.value ?: return
+        
+        // Obtener el día actual de las tareas filtradas antes de eliminar
+        val currentFilteredDay = _filteredTasksByDay.value.firstOrNull()?.week_day ?: 0
+
         CoroutineScope(Dispatchers.IO).launch {
             try {
                 _isLoading.value = true
@@ -281,10 +314,14 @@ class ScheduleViewModel(
                 withContext(Dispatchers.Main) {
                     // Consideramos exitosa la eliminación si el código es 200 o 404
                     if (response.isSuccessful || response.code() == 404) {
-                        // Actualizar las tareas del schedule actual
-                        updateCurrentScheduleTasks()
-                        // Actualizar las tareas filtradas por día
-                        filterTasksByDay(_currentSchedule.value?.id?.let { it } ?: 0)
+                        // Eliminar la tarea del estado local
+                        val updatedTasks = _userTasks.value.toMutableList()
+                        updatedTasks.removeAll { it.id.toString() == taskId }
+                        _userTasks.value = updatedTasks
+
+                        // Actualizar las tareas filtradas
+                        updateFilteredTasks(currentFilteredDay)
+
                         _error.value = null
                     } else {
                         _error.value = "Error al eliminar la tarea: ${response.message()}"
@@ -298,5 +335,24 @@ class ScheduleViewModel(
                 _isLoading.value = false
             }
         }
+    }
+
+    // Nueva función para actualizar las tareas filtradas
+    private fun updateFilteredTasks(dayOfWeek: Int) {
+        Log.d("ScheduleViewModel", "Updating filtered tasks for day: $dayOfWeek")
+        
+        // Obtener el ID del schedule actual
+        val currentScheduleId = _currentSchedule.value?.id
+        
+        Log.d("ScheduleViewModel", "Current Schedule ID: $currentScheduleId")
+        Log.d("ScheduleViewModel", "Total tasks: ${_userTasks.value.size}")
+        
+        // Filtrar tareas por día de la semana y schedule actual
+        val filteredTasks = _userTasks.value.filter { task ->
+            task.week_day == dayOfWeek && task.id_schedule == currentScheduleId
+        }.sortedBy { it.start_time }
+        
+        Log.d("ScheduleViewModel", "Filtered tasks for day $dayOfWeek: ${filteredTasks.size}")
+        _filteredTasksByDay.value = filteredTasks
     }
 } 
