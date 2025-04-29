@@ -1,3 +1,4 @@
+// File: view/settings/ProfileSettingsView.kt
 package com.example.projecte_aplicaci_nativa_g7margarethamilton.view.settings
 
 import androidx.compose.foundation.background
@@ -5,20 +6,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Check
-import androidx.compose.material3.CenterAlignedTopAppBar
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBarDefaults
-import androidx.compose.material3.rememberTopAppBarState
-import androidx.compose.material3.Switch
-import androidx.compose.material3.ExposedDropdownMenuBox
-import androidx.compose.material3.ExposedDropdownMenuDefaults
-import androidx.compose.material3.DropdownMenuItem
-import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -39,9 +27,7 @@ fun ProfileSettingsView(
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
 
     // Carreguem settings un cop en iniciar la vista
-    LaunchedEffect(Unit) {
-        viewModel.loadSettings()
-    }
+    LaunchedEffect(Unit) { viewModel.loadSettings() }
 
     // Estats locals per al dropdown d'idioma
     var expandedLanguage by remember { mutableStateOf(false) }
@@ -109,7 +95,7 @@ fun ProfileSettingsView(
             }
             Spacer(modifier = Modifier.height(8.dp))
 
-            // Dropdown de idioma
+            // Dropdown d'idioma
             ExposedDropdownMenuBox(
                 expanded = expandedLanguage,
                 onExpandedChange = { expandedLanguage = !expandedLanguage },
