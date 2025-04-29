@@ -23,6 +23,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowForward
 import androidx.compose.material.icons.filled.Close
@@ -99,7 +100,7 @@ fun ScheduleView(
     LaunchedEffect(currentUser) {
         currentUser?.email?.let { email ->
             Log.d("ScheduleView", "Loading schedules for user: $email")
-            viewModel.loadSchedules(email)
+            viewModel.loadSchedules()
         } ?: Log.d("ScheduleView", "Cannot load schedules: user email is null")
     }
 
@@ -160,6 +161,16 @@ fun ScheduleView(
                 currentSchedule = currentSchedule,
                 onScheduleSelected = { selectedSchedule ->
                     viewModel.setCurrentSchedule(selectedSchedule)
+                },
+                onCreateSchedule = { title, categoryId ->
+                    currentUser?.email?.let { email ->
+                        viewModel.createNewSchedule(title, email, categoryId)
+                    }
+                },
+                onDelete = {
+                    currentSchedule?.id?.let { scheduleId ->
+                        viewModel.deleteSchedule(scheduleId.toString())
+                    }
                 }
             )
 
@@ -184,10 +195,11 @@ fun ScheduleView(
 
                 Column(
                     modifier = Modifier
-                        .clickable{
+                        .clickable {
                             week_day.intValue = currentDay
                         },
-                    horizontalAlignment = Alignment.CenterHorizontally) {
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
                     Text(
                         text = diaSemanaString,
                         fontSize = 20.sp,
@@ -305,13 +317,12 @@ fun ScheduleView(
 }
 
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun TaskItem(task: Schedule_task, onDelete: () -> Unit) {
     var expanded by remember { mutableStateOf(false) }
     val backgroundColor = MaterialTheme.colorScheme.surface
     val contentColor = MaterialTheme.colorScheme.onSurface
-    
+
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -381,7 +392,7 @@ fun TaskItem(task: Schedule_task, onDelete: () -> Unit) {
                     color = contentColor,
                     fontWeight = FontWeight.SemiBold
                 )
-                
+
                 AnimatedVisibility(
                     visible = expanded,
                     enter = expandVertically() + fadeIn(),
@@ -421,10 +432,13 @@ fun TaskItem(task: Schedule_task, onDelete: () -> Unit) {
 fun ScheduleDropdown(
     schedules: List<Schedule>,
     currentSchedule: Schedule?,
-    onScheduleSelected: (Schedule) -> Unit
+    onScheduleSelected: (Schedule) -> Unit,
+    onCreateSchedule: (String, Int) -> Unit,
+    onDelete: () -> Unit
 ) {
     var expanded by remember { mutableStateOf(false) }
-    val selectedText = currentSchedule?.title ?: "Selecciona una agenda"
+    var showCreateDialog by remember { mutableStateOf(false) }
+    val selectedText = currentSchedule?.title ?: "Ninguna agenda seleccionada"
 
     Box(
         modifier = Modifier
@@ -456,17 +470,150 @@ fun ScheduleDropdown(
             onDismissRequest = { expanded = false },
             modifier = Modifier.fillMaxWidth(0.9f)
         ) {
+            // Opción para crear nueva agenda
+            DropdownMenuItem(
+                text = {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Add,
+                            contentDescription = "Crear nueva agenda",
+                            tint = MaterialTheme.colorScheme.primary
+                        )
+                        Text(
+                            "Crear nueva agenda",
+                            color = MaterialTheme.colorScheme.primary,
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
+                },
+                onClick = {
+                    expanded = false
+                    showCreateDialog = true
+                }
+            )
+
+            // Separador
+            HorizontalDivider(
+                modifier = Modifier.padding(vertical = 4.dp),
+                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.12f)
+            )
+
+            // Lista de agendas existentes
             schedules.forEach { schedule ->
+
                 DropdownMenuItem(
-                    text = { Text(schedule.title) },
+                    text = {
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Text(schedule.title)
+                            IconButton(
+                                onClick = {
+                                    expanded = false
+                                    onDelete()
+                                }
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Default.Delete,
+                                    contentDescription = "Eliminar agenda",
+                                    tint = MaterialTheme.colorScheme.error
+                                )
+                            }
+                        }
+                    },
                     onClick = {
                         expanded = false
                         onScheduleSelected(schedule)
                     }
                 )
+
+
             }
         }
+
+        if (showCreateDialog) {
+            CreateScheduleDialog(
+                onDismiss = { showCreateDialog = false },
+                onConfirm = { title, categoryId ->
+                    onCreateSchedule(title, categoryId)
+                    showCreateDialog = false
+                }
+            )
+        }
     }
+}
+
+@Composable
+fun CreateScheduleDialog(
+    onDismiss: () -> Unit,
+    onConfirm: (String, Int) -> Unit
+) {
+    var title by remember { mutableStateOf("") }
+    var categoryId by remember { mutableStateOf(1) } // Valor por defecto
+    var titleError by remember { mutableStateOf(false) }
+
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = {
+            Text(
+                "Nueva Agenda",
+                style = MaterialTheme.typography.titleLarge
+            )
+        },
+        text = {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 8.dp),
+                verticalArrangement = Arrangement.spacedBy(16.dp)
+            ) {
+                OutlinedTextField(
+                    value = title,
+                    onValueChange = {
+                        title = it
+                        titleError = it.isBlank()
+                    },
+                    label = { Text("Título de la agenda") },
+                    modifier = Modifier.fillMaxWidth(),
+                    isError = titleError,
+                    supportingText = {
+                        if (titleError) {
+                            Text(
+                                text = "El título no puede estar vacío",
+                                color = MaterialTheme.colorScheme.error
+                            )
+                        }
+                    }
+                )
+
+                // Aquí podrías añadir más campos si son necesarios
+                // Por ejemplo, un selector de categoría
+            }
+        },
+        confirmButton = {
+            TextButton(
+                onClick = {
+                    if (title.isNotBlank()) {
+                        onConfirm(title, categoryId)
+                    } else {
+                        titleError = true
+                    }
+                }
+            ) {
+                Text("Crear")
+            }
+        },
+        dismissButton = {
+            TextButton(onClick = onDismiss) {
+                Text("Cancelar")
+            }
+        }
+    )
 }
 
 @Preview(showBackground = true, showSystemUi = true)

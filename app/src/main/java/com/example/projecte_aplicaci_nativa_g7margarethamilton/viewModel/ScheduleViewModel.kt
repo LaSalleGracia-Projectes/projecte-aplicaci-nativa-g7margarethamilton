@@ -12,6 +12,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.last
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.time.LocalDate
@@ -116,8 +117,7 @@ class ScheduleViewModel(
      * Carga todos los horarios del usuario.
      * @param userId ID del usuario
      */
-    @RequiresApi(Build.VERSION_CODES.O)
-    fun loadSchedules(userId: String) {
+    fun loadSchedules() {
         val token = userViewModel.token.value ?: return
         Log.w("ScheduleViewModel", "Cannot load schedules: token is null")
 
@@ -237,7 +237,6 @@ class ScheduleViewModel(
     /**
      * Obtiene todas las tareas del usuario.
      */
-    @RequiresApi(Build.VERSION_CODES.O)
     fun getAllTasks() {
         val token = userViewModel.token.value ?: return
         
@@ -250,37 +249,98 @@ class ScheduleViewModel(
         )
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
-    fun createNewSchedule(title: String, email: String, categoryId: Int) {
+//    fun createNewSchedule(title: String, email: String, categoryId: Int) {
+//        val token = userViewModel.token.value ?: return
+//
+//        CoroutineScope(Dispatchers.IO).launch {
+//            try {
+//                _isLoading.value = true
+//                val response = repository.createSchedule(
+//                    token = token,
+//                    userId = email,
+//                    title = title,
+//                    isFavorite = false,
+//                    categoryId = categoryId
+//                )
+//
+//                withContext(Dispatchers.Main) {
+//                    if (response.isSuccessful) {
+//                        // Recargar los schedules para obtener el nuevo
+//                        loadSchedules()
+//                        //setCurrentSchedule(response.body()!!)
+//                        _error.value = null
+//                    } else {
+//                        _error.value = "Error al crear la agenda: ${response.message()}"
+//                    }
+//                }
+//            } catch (e: Exception) {
+//                withContext(Dispatchers.Main) {
+//                    _error.value = "Error: ${e.message}"
+//                }
+//            } finally {
+//                _isLoading.value = false
+//            }
+//        }
+//    }
+    fun createNewSchedule(
+        title: String,
+        email: String,
+        categoryId: Int
+    ) {
         val token = userViewModel.token.value ?: return
-        
-        CoroutineScope(Dispatchers.IO).launch {
-            try {
-                _isLoading.value = true
-                val response = repository.createSchedule(
+
+        executeApiCall(
+            apiCall = {
+                repository.createSchedule(
                     token = token,
                     userId = email,
                     title = title,
                     isFavorite = false,
                     categoryId = categoryId
                 )
-                
-                withContext(Dispatchers.Main) {
-                    if (response.isSuccessful) {
-                        // Recargar los schedules para obtener el nuevo
-                        loadSchedules(email)
-                        _error.value = null
-                    } else {
-                        _error.value = "Error al crear la agenda: ${response.message()}"
+            },
+            onSuccess = {
+                loadSchedules()
+                executeApiCall(
+                    apiCall = { repository.getAllSchedules(token) },
+                    onSuccess = { schedulesList ->
+                        _schedules.value = schedulesList
+                        setCurrentSchedule(schedulesList.first())
                     }
-                }
-            } catch (e: Exception) {
-                withContext(Dispatchers.Main) {
-                    _error.value = "Error: ${e.message}"
-                }
-            } finally {
-                _isLoading.value = false
+                )
+
+
             }
-        }
+        )
+    }
+
+    /**
+     * Elimina un horario y selecciona el último disponible.
+     * @param scheduleId ID del horario a eliminar
+     */
+    fun deleteSchedule(scheduleId: String) {
+        val token = userViewModel.token.value ?: return
+
+        executeApiCall(
+            apiCall = { repository.deleteSchedule(token, scheduleId) },
+            onSuccess = {
+                // Recargar los horarios
+                executeApiCall(
+                    apiCall = { repository.getAllSchedules(token) },
+                    onSuccess = { schedulesList ->
+                        _schedules.value = schedulesList
+                        // Si hay horarios disponibles, seleccionar el último
+                        if (schedulesList.isNotEmpty()) {
+                            setCurrentSchedule(schedulesList.last())
+                        } else {
+                            // Si no hay horarios, limpiar el horario actual
+                            _currentSchedule.value = null
+                            _currentScheduleTasks.value = emptyList()
+                            _filteredTasksByDay.value = emptyList()
+                        }
+                    }
+                )
+            }
+        )
     }
 } 
