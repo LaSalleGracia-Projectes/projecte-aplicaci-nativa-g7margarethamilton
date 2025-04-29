@@ -27,6 +27,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.projecte_aplicaci_nativa_g7margarethamilton.Routes
@@ -41,9 +42,7 @@ import java.time.format.DateTimeFormatter
 import java.util.*
 
 
-
 @OptIn(ExperimentalMaterial3Api::class)
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun ScheduleView(
     navController: NavController,
@@ -75,11 +74,11 @@ fun ScheduleView(
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
 
 
-
     // Filtrar tareas cuando cambia el día de la semana
     LaunchedEffect(week_day.intValue) {
         viewModel.filterTasksByDay(week_day.intValue)
     }
+
 
     //añadirDatosPrueba(viewModel, userViewModel)
 
@@ -93,7 +92,7 @@ fun ScheduleView(
     Scaffold(
         modifier = Modifier
             .nestedScroll(scrollBehavior.nestedScrollConnection),
-            //.padding(40.dp),
+        //.padding(40.dp),
 
         topBar = {
             CenterAlignedTopAppBar(
@@ -225,7 +224,12 @@ fun ScheduleView(
                     )
                 } else {
                     filteredTasks.forEach { task ->
-                        TaskItem(task)
+                        TaskItem(
+                            task = task,
+                            onDelete = {
+                                viewModel.deleteScheduleTask(task.id.toString())
+                            }
+                        )
                         Spacer(modifier = Modifier.height(8.dp))
                     }
                 }
@@ -248,7 +252,7 @@ fun ScheduleView(
     if (showAddTaskDialog.value) {
         AddTaskDialog(
             onDismiss = { showAddTaskDialog.value = false },
-            onConfirm = { title, content, startTime, endTime, week_day, categoryId ->
+            onConfirm = { title, content, startTime, endTime, categoryId ->
                 currentUser?.email?.let { email ->
                     currentSchedule?.id?.let { scheduleId ->
                         viewModel.addTaskToSchedule(
@@ -257,7 +261,7 @@ fun ScheduleView(
                             content = content,
                             startTime = startTime,
                             endTime = endTime,
-                            week_day = week_day,
+                            week_day = week_day.intValue,
                             categoryId = categoryId,
                             email = email
                         )
@@ -269,52 +273,10 @@ fun ScheduleView(
     }
 }
 
-//fun añadirDatosPrueba(
-//    viewModel: ScheduleViewModel,
-//    userViewModel: UserViewModel
-//): List<Schedule_task> {
-//    val email = userViewModel.currentUser.value?.email.toString()
-//    viewModel.createNewSchedule(
-//        "Agenda de prueba",
-//        email,
-//        1
-//    )
-//
-//    // Esperar un momento para que se cree la agenda
-//    Thread.sleep(1000)
-//
-//    val scheduleId = viewModel.schedules.value.firstOrNull { it.email == email }?.id.toString()
-//
-//    if (scheduleId.isNotEmpty()) {
-//        viewModel.addTaskToSchedule(
-//            scheduleId,
-//            "Tarea de prueba 1",
-//            "Contenido de la tarea de prueba 1",
-//            "08:00",
-//            "09:00",
-//            1,
-//            1,
-//            email
-//        )
-//        viewModel.addTaskToSchedule(
-//            scheduleId,
-//            "Tarea de prueba 2",
-//            "Contenido de la tarea de prueba 2",
-//            "10:00",
-//            "11:00",
-//            2,
-//            1,
-//            email
-//        )
-//    }
-//
-//    return viewModel.schedules.value.firstOrNull { it.id.toString() == scheduleId }?.tasks
-//        ?: emptyList()
-//}
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun TaskItem(task: Schedule_task) {
+fun TaskItem(task: Schedule_task, onDelete: () -> Unit) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -357,25 +319,19 @@ fun TaskItem(task: Schedule_task) {
                 modifier = Modifier.fillMaxSize(),
                 verticalArrangement = Arrangement.Center
             ) {
-                Text(
-                    text = task.title,
-                    fontSize = 16.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.onSecondary
-                )
-                Text(
-                    text = task.content,
-                    fontSize = 14.sp,
-                    color = MaterialTheme.colorScheme.onSecondary
-                )
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-
+                    Text(
+                        text = task.title,
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = MaterialTheme.colorScheme.onSecondary
+                    )
                     IconButton(
-                        onClick = { /* TODO: Implementar eliminación */ },
+                        onClick = onDelete,
                         modifier = Modifier.size(24.dp)
                     ) {
                         Icon(
@@ -385,8 +341,13 @@ fun TaskItem(task: Schedule_task) {
                         )
                     }
                 }
-            }
+                Text(
+                    text = task.content,
+                    fontSize = 14.sp,
+                    color = MaterialTheme.colorScheme.onSecondary
+                )
 
+            }
         }
     }
 }
@@ -400,9 +361,11 @@ fun ScheduleDropdown(
     var expanded by remember { mutableStateOf(false) }
     val selectedText = currentSchedule?.title ?: "Selecciona una agenda"
 
-    Box(modifier = Modifier
-        .fillMaxWidth()
-        .padding(bottom = 16.dp)) {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(bottom = 16.dp)
+    ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -441,7 +404,6 @@ fun ScheduleDropdown(
     }
 }
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun TaskPreview() {
@@ -454,54 +416,129 @@ fun TaskPreview() {
 @Composable
 fun AddTaskDialog(
     onDismiss: () -> Unit,
-    onConfirm: (String, String, String, String, Int, Int) -> Unit
+    onConfirm: (String, String, String, String, Int) -> Unit
 ) {
+    // Estado para campos del formulario
     var title by remember { mutableStateOf("") }
     var content by remember { mutableStateOf("") }
     var startTime by remember { mutableStateOf("") }
     var endTime by remember { mutableStateOf("") }
     var categoryId by remember { mutableStateOf(1) }
-    val calendar = Calendar.getInstance()
-    val week_day = calendar.get(Calendar.DAY_OF_WEEK)
+
+    // Estado para validación de errores
+    var titleError by remember { mutableStateOf(false) }
+    var contentError by remember { mutableStateOf(false) }
+    var startTimeError by remember { mutableStateOf(false) }
+    var endTimeError by remember { mutableStateOf(false) }
+
+    // Regex para validar formato de hora
+    val timeFormatRegex = Regex("^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$")
+
+    // Función para validar todos los campos
+    fun validateInputs(): Boolean {
+        titleError = title.isBlank()
+        contentError = content.isBlank()
+        startTimeError = startTime.isBlank() || !startTime.matches(timeFormatRegex)
+        endTimeError = endTime.isBlank() || !endTime.matches(timeFormatRegex)
+
+        return !titleError && !contentError && !startTimeError && !endTimeError
+    }
 
     AlertDialog(
         onDismissRequest = onDismiss,
         title = { Text("Nueva Tarea") },
         text = {
-            Column {
+            Column(
+                modifier = Modifier.fillMaxWidth(),
+                verticalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                // Campo de título
                 OutlinedTextField(
                     value = title,
-                    onValueChange = { title = it },
+                    onValueChange = {
+                        title = it
+                        titleError = it.isBlank()
+                    },
                     label = { Text("Título") },
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth(),
+                    isError = titleError,
+                    supportingText = {
+                        if (titleError) {
+                            Text(
+                                text = "El título no puede estar vacío",
+                                color = MaterialTheme.colorScheme.error
+                            )
+                        }
+                    }
                 )
-                Spacer(modifier = Modifier.height(8.dp))
+
+                // Campo de contenido
                 OutlinedTextField(
                     value = content,
-                    onValueChange = { content = it },
+                    onValueChange = {
+                        content = it
+                        contentError = it.isBlank()
+                    },
                     label = { Text("Contenido") },
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth(),
+                    isError = contentError,
+                    supportingText = {
+                        if (contentError) {
+                            Text(
+                                text = "El contenido no puede estar vacío",
+                                color = MaterialTheme.colorScheme.error
+                            )
+                        }
+                    }
                 )
-                Spacer(modifier = Modifier.height(8.dp))
+
+                // Campo de hora de inicio
                 OutlinedTextField(
                     value = startTime,
-                    onValueChange = { startTime = it },
+                    onValueChange = {
+                        startTime = it
+                        startTimeError = it.isBlank() || !it.matches(timeFormatRegex)
+                    },
                     label = { Text("Hora de inicio (HH:mm)") },
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth(),
+                    isError = startTimeError,
+                    supportingText = {
+                        if (startTimeError) {
+                            Text(
+                                text = "Formato de hora inválido (HH:mm)",
+                                color = MaterialTheme.colorScheme.error
+                            )
+                        }
+                    }
                 )
-                Spacer(modifier = Modifier.height(8.dp))
+
+                // Campo de hora de fin
                 OutlinedTextField(
                     value = endTime,
-                    onValueChange = { endTime = it },
+                    onValueChange = {
+                        endTime = it
+                        endTimeError = it.isBlank() || !it.matches(timeFormatRegex)
+                    },
                     label = { Text("Hora de fin (HH:mm)") },
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth(),
+                    isError = endTimeError,
+                    supportingText = {
+                        if (endTimeError) {
+                            Text(
+                                text = "Formato de hora inválido (HH:mm)",
+                                color = MaterialTheme.colorScheme.error
+                            )
+                        }
+                    }
                 )
             }
         },
         confirmButton = {
             TextButton(
                 onClick = {
-                    onConfirm(title, content, startTime, endTime, week_day, categoryId)
+                    if (validateInputs()) {
+                        onConfirm(title, content, startTime, endTime, categoryId)
+                    }
                 }
             ) {
                 Text("Añadir")
