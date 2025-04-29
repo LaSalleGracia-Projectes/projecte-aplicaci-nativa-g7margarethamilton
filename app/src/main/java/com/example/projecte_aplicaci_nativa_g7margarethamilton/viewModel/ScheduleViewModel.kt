@@ -74,10 +74,6 @@ class ScheduleViewModel(
                             Log.d("ScheduleViewModel", "Received ${schedulesList.size} schedules from API")
                         }
 
-                        // Log details of each schedule
-//                        schedulesList.forEachIndexed { index, schedule ->
-//                            Log.d("ScheduleViewModel", "Schedule $index: '${schedule.title}', ID: ${schedule.id}, Tasks: ${schedule.tasks?.size ?: 0}")
-//                        }
 
                         if (schedulesList != null) {
                             _schedules.value = schedulesList
@@ -275,5 +271,32 @@ class ScheduleViewModel(
         }
     }
 
+    fun deleteScheduleTask(taskId: String) {
+        val token = userViewModel.token.value ?: return
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                _isLoading.value = true
+                val response = repository.deleteTask(token, taskId)
 
+                withContext(Dispatchers.Main) {
+                    // Consideramos exitosa la eliminación si el código es 200 o 404
+                    if (response.isSuccessful || response.code() == 404) {
+                        // Actualizar las tareas del schedule actual
+                        updateCurrentScheduleTasks()
+                        // Actualizar las tareas filtradas por día
+                        filterTasksByDay(_currentSchedule.value?.id?.let { it } ?: 0)
+                        _error.value = null
+                    } else {
+                        _error.value = "Error al eliminar la tarea: ${response.message()}"
+                    }
+                }
+            } catch (e: Exception) {
+                withContext(Dispatchers.Main) {
+                    _error.value = "Error: ${e.message}"
+                }
+            } finally {
+                _isLoading.value = false
+            }
+        }
+    }
 } 
