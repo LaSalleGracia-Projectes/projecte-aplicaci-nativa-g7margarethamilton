@@ -591,8 +591,7 @@ fun CreateScheduleDialog(
                     }
                 )
 
-                // Aquí podrías añadir más campos si son necesarios
-                // Por ejemplo, un selector de categoría
+
             }
         },
         confirmButton = {
@@ -764,25 +763,5 @@ fun AddTaskDialog(
     )
 }
 
-//@RequiresApi(Build.VERSION_CODES.O)
-//@Preview(showBackground = true)
-//@Composable
-//fun TaskItemPreview() {
-//    val sampleTask = Schedule_task(
-//        id = 1,
-//        title = "Reunión de equipo",
-//        content = "Discutir los avances del proyecto y planificar próximos pasos",
-//        priority = 1,
-//        start_time = "09:00",
-//        end_time = "10:30",
-//        week_day = 2,
-//        id_schedule = 1,
-//        id_category = 1
-//    )
-//
-//    TaskItem(
-//        task = sampleTask,
-//        onDelete = {}
-//    )
-//}
+
 
