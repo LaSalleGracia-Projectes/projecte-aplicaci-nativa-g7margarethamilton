@@ -5,6 +5,7 @@ import androidx.annotation.RequiresApi
 import com.example.projecte_aplicaci_nativa_g7margarethamilton.model.User
 import com.example.projecte_aplicaci_nativa_g7margarethamilton.model.moduls.Schedule
 import com.example.projecte_aplicaci_nativa_g7margarethamilton.model.moduls.Schedule_task
+import com.example.projecte_aplicaci_nativa_g7margarethamilton.model.moduls.UserSettings
 import com.google.gson.GsonBuilder
 import okhttp3.OkHttpClient
 import okhttp3.ResponseBody
@@ -56,6 +57,47 @@ interface ApiService {
     suspend fun logoutApp(
         @Body credentials: Map<String, String>
     ): Response<Map<String, String>>
+
+    /**
+     * GET dades d’un usuari per email
+     */
+    @GET("user/{email}")
+    suspend fun getUser(
+        @Header("Authorization") token: String,
+        @Path("email") email: String
+    ): Response<User>
+
+    /**
+     * PUT actualitzar usuari
+     */
+    @PUT("user/{email}")
+    suspend fun updateUser(
+        @Header("Authorization") token: String,
+        @Path("email") email: String,
+        @Body request: ApiRepository.UpdateUserRequest
+    ): Response<UpdateUserResponse>
+
+    /**
+     * DELETE usuari
+     */
+    @DELETE("user/{email}")
+    suspend fun deleteUser(
+        @Header("Authorization") token: String,
+        @Path("email") email: String
+    ): Response<DeleteUserResponse>
+
+    @GET("setting/{email}")
+    suspend fun getUserSettings(
+        @Header("Authorization") token: String,
+        @Path("email") email: String
+    ): Response<UserSettings>
+
+    @PUT("setting/{email}")
+    suspend fun updateUserSettings(
+        @Header("Authorization") token: String,
+        @Path("email") email: String,
+        @Body request: UpdateSettingsRequest
+    ): Response<UpdateSettingsResponse>
 
     //GET ALL SCHEDULES
     @GET("schedule/")
@@ -158,4 +200,34 @@ data class CreateTaskRequest(
     val id_schedule: Int,
     val id_category: Int,
     val week_day: Int,
+
+)
+
+data class UpdateUserRequest(
+    val nickname: String?,
+    val avatar_url: String?,
+    val is_admin: Boolean,
+    val is_banned: Boolean
+)
+
+data class UpdateUserResponse(
+    val message: String,
+    val user: User
+)
+
+data class DeleteUserResponse(
+    val message: String
+)
+
+data class UpdateSettingsRequest(
+    val theme_mode: Boolean,
+    val lang_code: String,
+    val allow_notification: Boolean,
+    val merge_schedule_calendar: Boolean
+)
+
+// Response de l'API de settings
+data class UpdateSettingsResponse(
+    val message: String,
+    val settings: UserSettings
 )

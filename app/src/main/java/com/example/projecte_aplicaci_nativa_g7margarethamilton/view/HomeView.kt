@@ -24,8 +24,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.navigation.NavController
 import androidx.compose.ui.tooling.preview.Preview
@@ -64,7 +62,7 @@ fun HomeView(navController: NavController) {
             ) {
                 HomeOptionButton(
                     title = "Tareas del día",
-                    onClick = { navController.navigate(Routes.DailyTasks.route) },
+                    onClick = { navController.navigate(Routes.Schedule.route) },
                     modifier = Modifier.weight(1f)
                 )
             }
@@ -88,7 +86,7 @@ fun HomeView(navController: NavController) {
                 // Botón Calendari
                 HomeOptionButton(
                     title = "Calendari",
-                    onClick = { /* TODO: Navigate to Calendar */ },
+                    onClick = { navController.navigate(Routes.Calendar.route) },
                     modifier = Modifier.weight(1f)
                 )
             }
@@ -102,7 +100,7 @@ fun HomeView(navController: NavController) {
                 // Botón Lista compra
                 HomeOptionButton(
                     title = "Lista compra",
-                    onClick = { /* TODO: Navigate to Shopping List */ },
+                    onClick = { navController.navigate(Routes.ShoppingList.route) },
                     modifier = Modifier.weight(1f)
                 )
 
@@ -111,7 +109,7 @@ fun HomeView(navController: NavController) {
                 // Botón Rutines exercici
                 HomeOptionButton(
                     title = "Exercici",
-                    onClick = { /* TODO: Navigate to Exercise Routines */ },
+                    onClick = { navController.navigate(Routes.Exercises.route) },
                     modifier = Modifier.weight(1f)
                 )
             }

@@ -48,7 +48,9 @@ fun ContactUsView(navController: NavController) {
     val backgroundColor = Color(0xFFF8F8F8)
 
     Scaffold(
-        modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
+        modifier = Modifier
+            .nestedScroll(scrollBehavior.nestedScrollConnection)
+            .padding(top = 40.dp),
         topBar = {
             CenterAlignedTopAppBar(
                 title = {
@@ -56,7 +58,7 @@ fun ContactUsView(navController: NavController) {
                         text = "Contáctanos",
                         fontSize = 30.sp,
                         fontWeight = FontWeight.SemiBold,
-                        color = Color.Black
+                        color = MaterialTheme.colorScheme.onSecondary
                     )
                 },
                 navigationIcon = {
@@ -64,37 +66,39 @@ fun ContactUsView(navController: NavController) {
                         Icon(
                             imageVector = Icons.Default.ArrowBack,
                             contentDescription = "Volver",
-                            tint = Color.Black
-                        )
+                            tint = MaterialTheme.colorScheme.onBackground                        )
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = backgroundColor,
-                    titleContentColor = Color.Black
+                    containerColor = MaterialTheme.colorScheme.background
                 ),
                 scrollBehavior = scrollBehavior
             )
         },
     ) { paddingValues ->
-
-        Column(
+        Box(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
+                .background(MaterialTheme.colorScheme.background)
+        ){
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
                 .padding(16.dp)
         ) {
             Text(
                 text = "¿Tienes algún problema?",
                 fontSize = 24.sp,
                 fontWeight = FontWeight.SemiBold,
-                color = Color.Black,
+                color = MaterialTheme.colorScheme.onSecondary,
                 modifier = Modifier.padding(16.dp)
             )
             Spacer(modifier = Modifier.padding(8.dp))
             Text(
                 text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque sollicitudin lacus nec lectus auctor, eu mattis lectus ultricies. Integer aliquam ligula nibh, vel imperdiet nisl dignissim et. Morbi varius ultricies mauris, et auctor diam tincidunt eu. Nullam molestie odio risus, vitae efficitur ante malesuada a.",
                 fontSize = 20.sp,
-                color = Color.Black,
+                color = MaterialTheme.colorScheme.onSecondary,
                 modifier = Modifier.padding(16.dp)
             )
             Spacer(modifier = Modifier.padding(8.dp))
@@ -148,6 +152,8 @@ fun ContactUsView(navController: NavController) {
             ) {
                 Text("Enviar")
             }
+        }
+
         }
     }
 }
