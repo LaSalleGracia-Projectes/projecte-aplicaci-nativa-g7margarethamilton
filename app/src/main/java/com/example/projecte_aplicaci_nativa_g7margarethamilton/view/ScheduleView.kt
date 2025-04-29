@@ -3,11 +3,24 @@ package com.example.projecte_aplicaci_nativa_g7margarethamilton.view
 import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.core.Spring
+//import androidx.compose.animation.core.animateContentSize
+//import androidx.compose.animation.core.expandVertically
+//import androidx.compose.animation.core.fadeIn
+//import androidx.compose.animation.core.fadeOut
+import androidx.compose.animation.core.spring
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
@@ -281,76 +294,110 @@ fun ScheduleView(
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun TaskItem(task: Schedule_task, onDelete: () -> Unit) {
-    Row(
+    var expanded by remember { mutableStateOf(false) }
+    val backgroundColor = MaterialTheme.colorScheme.surface
+    val contentColor = MaterialTheme.colorScheme.onSurface
+    
+    Card(
         modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = 4.dp)
+            .animateContentSize(
+                animationSpec = spring(
+                    dampingRatio = Spring.DampingRatioMediumBouncy,
+                    stiffness = Spring.StiffnessLow
+                )
+            )
+            .clickable { expanded = !expanded },
+        elevation = CardDefaults.cardElevation(
+            defaultElevation = 2.dp,
+            pressedElevation = 4.dp
+        ),
+        colors = CardDefaults.cardColors(
+            containerColor = backgroundColor
+        )
     ) {
-        Column(
+        Row(
             modifier = Modifier
-                .width(60.dp)
-                .padding(end = 8.dp),
-            horizontalAlignment = Alignment.End
+                .fillMaxWidth()
+                .padding(12.dp),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            Text(
-                text = task.start_time.substring(0, 5),
-                fontSize = 14.sp,
-                color = MaterialTheme.colorScheme.onSecondary
-            )
-            HorizontalDivider(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 4.dp)
-                    .height(1.dp),
-                color = MaterialTheme.colorScheme.onSecondary
-            )
-            Text(
-                text = task.end_time.substring(0, 5),
-                fontSize = 14.sp,
-                color = MaterialTheme.colorScheme.onSecondary
-            )
-        }
-
-        Box(
-            modifier = Modifier
-                .weight(1f)
-                .border(1.dp, Color.LightGray)
-                .background(Color.White)
-                .background(MaterialTheme.colorScheme.surface)
-                .padding(12.dp)
-        ) {
+            // Tiempo
             Column(
-                modifier = Modifier.fillMaxSize(),
-                verticalArrangement = Arrangement.Center
+                modifier = Modifier
+                    .width(70.dp)
+                    .padding(end = 12.dp),
+                horizontalAlignment = Alignment.Start
             ) {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
+                Text(
+                    text = task.start_time.substring(0, 5),
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = contentColor.copy(alpha = 0.8f)
+                )
+                Spacer(modifier = Modifier.height(4.dp))
+                Text(
+                    text = task.end_time.substring(0, 5),
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = contentColor.copy(alpha = 0.8f)
+                )
+            }
+
+            // Línea vertical decorativa
+            Box(
+                modifier = Modifier
+                    .width(4.dp)
+                    .height(40.dp)
+                    .background(
+                        MaterialTheme.colorScheme.primary.copy(alpha = 0.5f),
+                        shape = RoundedCornerShape(2.dp)
+                    )
+            )
+
+            // Contenido
+            Column(
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(horizontal = 12.dp)
+            ) {
+                Text(
+                    text = task.title,
+                    style = MaterialTheme.typography.titleMedium,
+                    color = contentColor,
+                    fontWeight = FontWeight.SemiBold
+                )
+                
+                AnimatedVisibility(
+                    visible = expanded,
+                    enter = expandVertically() + fadeIn(),
+                    exit = shrinkVertically() + fadeOut()
                 ) {
                     Text(
-                        text = task.title,
-                        fontSize = 16.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = MaterialTheme.colorScheme.onSecondary
+                        text = task.content,
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = contentColor.copy(alpha = 0.7f),
+                        modifier = Modifier.padding(top = 8.dp)
                     )
-                    IconButton(
-                        onClick = onDelete,
-                        modifier = Modifier.size(24.dp)
-                    ) {
-                        Icon(
-                            imageVector = Icons.Default.Delete,
-                            contentDescription = "Eliminar tarea",
-                            tint = MaterialTheme.colorScheme.error
-                        )
-                    }
                 }
-                Text(
-                    text = task.content,
-                    fontSize = 14.sp,
-                    color = MaterialTheme.colorScheme.onSecondary
-                )
+            }
 
+            // Botón de eliminar con animación
+            IconButton(
+                onClick = {
+                    // Animación de desvanecimiento antes de eliminar
+                    expanded = false
+                    onDelete()
+                },
+                modifier = Modifier
+                    .size(32.dp)
+                    .padding(4.dp)
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Delete,
+                    contentDescription = "Eliminar tarea",
+                    tint = MaterialTheme.colorScheme.error.copy(alpha = 0.7f)
+                )
             }
         }
     }
@@ -555,4 +602,26 @@ fun AddTaskDialog(
         }
     )
 }
+
+//@RequiresApi(Build.VERSION_CODES.O)
+//@Preview(showBackground = true)
+//@Composable
+//fun TaskItemPreview() {
+//    val sampleTask = Schedule_task(
+//        id = 1,
+//        title = "Reunión de equipo",
+//        content = "Discutir los avances del proyecto y planificar próximos pasos",
+//        priority = 1,
+//        start_time = "09:00",
+//        end_time = "10:30",
+//        week_day = 2,
+//        id_schedule = 1,
+//        id_category = 1
+//    )
+//
+//    TaskItem(
+//        task = sampleTask,
+//        onDelete = {}
+//    )
+//}
 
