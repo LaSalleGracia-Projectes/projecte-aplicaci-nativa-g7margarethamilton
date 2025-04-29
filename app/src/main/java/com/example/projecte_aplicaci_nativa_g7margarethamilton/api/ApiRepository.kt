@@ -47,7 +47,7 @@ class ApiRepository {
             UpdateScheduleRequest(userId, title, isFavorite, categoryId)
         )
 
-    suspend fun deleteSchedule(token: String, id: String, userId: String) =
+    suspend fun deleteSchedule(token: String, id: String) =
         apiInterface.deleteSchedule("Bearer $token", id)
 
     //TASK
