@@ -27,6 +27,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import coil3.compose.AsyncImage
+import com.example.projecte_aplicaci_nativa_g7margarethamilton.Routes
 import com.example.projecte_aplicaci_nativa_g7margarethamilton.model.User
 import com.example.projecte_aplicaci_nativa_g7margarethamilton.viewModel.UserViewModel
 import java.time.OffsetDateTime
@@ -56,19 +57,9 @@ fun ProfileView(navController: NavController, viewModel: UserViewModel) {
                         color = MaterialTheme.colorScheme.onSecondary
                     )
                 },
-                navigationIcon = {
-                    //FIX: la flecha lleva a la pantalla de welcome
-                    IconButton(onClick = { /*navController.popBackStack()*/ }) {
-                        Icon(
-                            imageVector = Icons.Default.ArrowBack,
-                            contentDescription = "Volver",
-                            tint = MaterialTheme.colorScheme.onBackground
-                        )
-                    }
-                },
                 actions = {
                     IconButton(
-                        onClick = { /* TODO: Navigate to edit profile */ }
+                        onClick = { navController.navigate(Routes.EditProfile.route) },
                     ) {
                         Icon(
                             imageVector = Icons.Default.Edit,
@@ -251,7 +242,7 @@ fun ProfileView(navController: NavController, viewModel: UserViewModel) {
 
 fun formatDateHumanReadable(dateStr: String): String {
     val dateTime = OffsetDateTime.parse(dateStr)
-    val formatter = DateTimeFormatter.ofPattern("dd'/'mm'/'yyyy")
+    val formatter = DateTimeFormatter.ofPattern("dd'/'MM'/'yyyy")
     return dateTime.format(formatter)
 }
 

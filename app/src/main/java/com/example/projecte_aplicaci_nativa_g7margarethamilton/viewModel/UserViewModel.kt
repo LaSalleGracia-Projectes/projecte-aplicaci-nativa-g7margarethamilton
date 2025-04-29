@@ -1,7 +1,6 @@
 package com.example.projecte_aplicaci_nativa_g7margarethamilton.viewModel
 
 import android.content.Context
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.projecte_aplicaci_nativa_g7margarethamilton.model.User
@@ -48,6 +47,26 @@ class UserViewModel : ViewModel() {
     val token: StateFlow<String?> = _token
 
     val repository = ApiRepository()
+
+    val nicknameField  = MutableStateFlow("")
+    val avatarUrlField = MutableStateFlow("")
+
+    private val _updateMsg   = MutableStateFlow<String?>(null)
+    val updateMsg: StateFlow<String?> = _updateMsg.asStateFlow()
+
+    private val _updateError = MutableStateFlow<String?>(null)
+    val updateError: StateFlow<String?> = _updateError.asStateFlow()
+
+    val themeModeField             = MutableStateFlow(false)
+    val langCodeField              = MutableStateFlow("en")
+    val allowNotificationField     = MutableStateFlow(false)
+    val mergeScheduleCalendarField = MutableStateFlow(false)
+
+    private val _settingsMsg   = MutableStateFlow<String?>(null)
+    val settingsMsg: StateFlow<String?>   = _settingsMsg.asStateFlow()
+
+    private val _settingsError = MutableStateFlow<String?>(null)
+    val settingsError: StateFlow<String?> = _settingsError.asStateFlow()
 
     fun validateNickname(nickname: String): Boolean {
         if (nickname.length < 2) {
@@ -162,7 +181,7 @@ class UserViewModel : ViewModel() {
             app_token = "",
             created_at = ""
         )
-        
+
         CoroutineScope(Dispatchers.IO).launch {
             try {
                 val response = repository.login(user)
@@ -172,6 +191,7 @@ class UserViewModel : ViewModel() {
                         _token.value = loginResponse?.tokenApp
                         _currentUser.value = loginResponse?.user
                         _missatgeLogin.value = loginResponse?.message ?: "Inicio de sesión exitoso"
+                        loadSettings()
                     } else {
                         when (response.code()) {
                             401 -> _missatgeLogin.value = "Credenciales incorrectas"
@@ -202,6 +222,7 @@ class UserViewModel : ViewModel() {
                         _token.value = loginResponse?.tokenApp
                         _currentUser.value = loginResponse?.user
                         _missatgeLogin.value = loginResponse?.message ?: "Login amb Google exitós"
+                        loadSettings()
                     } else {
                         _missatgeLogin.value = "Error en iniciar sessió amb Google"
                     }
@@ -262,5 +283,110 @@ class UserViewModel : ViewModel() {
             val googleClient = GoogleAuthUiClient(context)
             googleClient.signOut(context)
         }
+    }
+
+    fun loadSession(token: String, user: User) {
+        _token.value       = token
+        _currentUser.value = user
+
+        // Pre‐carreguem els camps amb els valors existents
+        nicknameField.value  = user.nickname
+        avatarUrlField.value = user.avatar_url ?: ""
+    }
+
+    fun updateProfile() {
+        val t    = token.value ?: return
+        val user = currentUser.value ?: return
+
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                val resp = repository.updateUser(
+                    token     = t,
+                    email     = user.email,
+                    nickname  = nicknameField.value,
+                    avatarUrl = avatarUrlField.value,
+                    // mantenim els flags tal com estan
+                    isAdmin   = user.is_admin,
+                    isBanned  = user.is_banned
+                )
+
+                withContext(Dispatchers.Main) {
+                    if (resp.isSuccessful) {
+                        // actualitzem l’usuari en memòria i enviem missatge OK
+                        val updated = resp.body()!!.user
+                        _currentUser.value = updated
+                        _updateMsg.value    = resp.body()!!.message
+                    } else {
+                        _updateError.value  = "Error ${resp.code()} actualitzant perfil"
+                    }
+                }
+            } catch (e: Exception) {
+                withContext(Dispatchers.Main) {
+                    _updateError.value = "Connexió fallida: ${e.localizedMessage}"
+                }
+            }
+        }
+    }
+
+    fun clearUpdateState() {
+        _updateMsg.value   = null
+        _updateError.value = null
+    }
+
+    fun loadSettings() {
+        val t    = token.value ?: return
+        val u    = currentUser.value ?: return
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                val resp = repository.getUserSettings(t, u.email)
+                withContext(Dispatchers.Main) {
+                    if (resp.isSuccessful) resp.body()?.let { s ->
+                        themeModeField.value             = s.theme_mode
+                        langCodeField.value              = s.lang_code
+                        allowNotificationField.value     = s.allow_notification
+                        mergeScheduleCalendarField.value = s.merge_schedule_calendar
+                    } else {
+                        _settingsError.value = "Error carregant settings: ${resp.code()}"
+                    }
+                }
+            } catch (e: Exception) {
+                withContext(Dispatchers.Main) {
+                    _settingsError.value = "Connexió fallida: ${e.localizedMessage}"
+                }
+            }
+        }
+    }
+
+    fun updateSettings() {
+        val t = token.value ?: return
+        val u = currentUser.value ?: return
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                val resp = repository.updateUserSettings(
+                    t,
+                    u.email,
+                    themeModeField.value,
+                    langCodeField.value,
+                    allowNotificationField.value,
+                    mergeScheduleCalendarField.value
+                )
+                withContext(Dispatchers.Main) {
+                    if (resp.isSuccessful) {
+                        _settingsMsg.value = resp.body()?.message
+                    } else {
+                        _settingsError.value = "Error ${resp.code()} actualitzant settings"
+                    }
+                }
+            } catch (e: Exception) {
+                withContext(Dispatchers.Main) {
+                    _settingsError.value = "Connexió fallida: ${e.localizedMessage}"
+                }
+            }
+        }
+    }
+
+    fun clearSettingsState() {
+        _settingsMsg.value   = null
+        _settingsError.value = null
     }
 }
