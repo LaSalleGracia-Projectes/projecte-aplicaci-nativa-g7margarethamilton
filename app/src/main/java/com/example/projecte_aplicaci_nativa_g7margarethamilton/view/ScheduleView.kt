@@ -73,6 +73,7 @@ fun ScheduleView(
     val filteredTasks by viewModel.filteredTasksByDay.collectAsState()
     val showAddTaskDialog = remember { mutableStateOf(false) }
     val calendar = Calendar.getInstance()
+    val currentDay = calendar.get(Calendar.DAY_OF_WEEK)
     val week_day = remember { mutableIntStateOf(calendar.get(Calendar.DAY_OF_WEEK)) }
     var diaSemanaString = when (week_day.intValue) {
         1 -> "Domingo"
@@ -181,13 +182,26 @@ fun ScheduleView(
                     )
                 }
 
-                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                Column(
+                    modifier = Modifier
+                        .clickable{
+                            week_day.intValue = currentDay
+                        },
+                    horizontalAlignment = Alignment.CenterHorizontally) {
                     Text(
                         text = diaSemanaString,
                         fontSize = 20.sp,
                         fontWeight = FontWeight.Bold,
                         color = MaterialTheme.colorScheme.onSecondary
                     )
+                    if (currentDay == week_day.intValue) {
+                        Text(
+                            text = "Hoy",
+                            fontSize = 16.sp,
+                            fontWeight = FontWeight.Thin,
+                            color = MaterialTheme.colorScheme.onSecondary
+                        )
+                    }
                 }
 
                 IconButton(
