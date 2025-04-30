@@ -155,7 +155,7 @@ class ApiRepository {
      * CALENDAR
      */
 
-    suspend fun getAllCalendars(token: String, id: String) =
+    suspend fun getAllCalendars(token: String) =
         apiInterface.getAllCalendar("Bearer $token")
 
     suspend fun createCalendar(
