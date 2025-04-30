@@ -5,8 +5,10 @@ import androidx.annotation.RequiresApi
 import com.example.projecte_aplicaci_nativa_g7margarethamilton.model.User
 import com.example.projecte_aplicaci_nativa_g7margarethamilton.model.moduls.Schedule
 import com.example.projecte_aplicaci_nativa_g7margarethamilton.model.moduls.Schedule_task
+import com.example.projecte_aplicaci_nativa_g7margarethamilton.model.moduls.UserSettings
 import com.google.gson.GsonBuilder
 import okhttp3.OkHttpClient
+import okhttp3.ResponseBody
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -84,6 +86,19 @@ interface ApiService {
         @Path("email") email: String
     ): Response<DeleteUserResponse>
 
+    @GET("setting/{email}")
+    suspend fun getUserSettings(
+        @Header("Authorization") token: String,
+        @Path("email") email: String
+    ): Response<UserSettings>
+
+    @PUT("setting/{email}")
+    suspend fun updateUserSettings(
+        @Header("Authorization") token: String,
+        @Path("email") email: String,
+        @Body request: UpdateSettingsRequest
+    ): Response<UpdateSettingsResponse>
+
     //GET ALL SCHEDULES
     @GET("schedule/")
     suspend fun getAllSchedules(
@@ -127,10 +142,18 @@ interface ApiService {
         @Body request: CreateTaskRequest
     ): Response<Schedule_task>
 
+    //GET ALL TASKS
     @GET("schedule-task")
     suspend fun getAllTasks(
         @Header("Authorization") token: String,
     ): Response<List<Schedule_task>>
+
+    //DELETE TASK
+    @DELETE("schedule-task/{id}")
+    suspend fun deleteTask(
+        @Header("Authorization") token: String,
+        @Path("id") id: String
+    ): Response<ResponseBody>
 
     companion object{
         private const val BASE_URL = "http://10.0.2.2:3000/api/v1/"
@@ -174,8 +197,10 @@ data class CreateTaskRequest(
     val priority: Int,
     val start_time: String,
     val end_time: String,
-    val id_shedule: Int,
-    val id_category: Int
+    val id_schedule: Int,
+    val id_category: Int,
+    val week_day: Int,
+
 )
 
 data class UpdateUserRequest(
@@ -192,4 +217,17 @@ data class UpdateUserResponse(
 
 data class DeleteUserResponse(
     val message: String
+)
+
+data class UpdateSettingsRequest(
+    val theme_mode: Boolean,
+    val lang_code: String,
+    val allow_notification: Boolean,
+    val merge_schedule_calendar: Boolean
+)
+
+// Response de l'API de settings
+data class UpdateSettingsResponse(
+    val message: String,
+    val settings: UserSettings
 )
