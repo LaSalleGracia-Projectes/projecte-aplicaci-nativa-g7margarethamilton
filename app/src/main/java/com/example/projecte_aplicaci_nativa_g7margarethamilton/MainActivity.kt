@@ -24,6 +24,7 @@ import androidx.core.view.WindowInsetsControllerCompat
 import androidx.navigation.compose.rememberNavController
 import com.example.projecte_aplicaci_nativa_g7margarethamilton.ui.theme.Projecteaplicacinativag7margarethamiltonTheme
 import com.example.projecte_aplicaci_nativa_g7margarethamilton.view.EntryPoint
+import com.example.projecte_aplicaci_nativa_g7margarethamilton.viewModel.CalendarViewModel
 import com.example.projecte_aplicaci_nativa_g7margarethamilton.viewModel.UserViewModel
 
 @SuppressLint("NewApi")
@@ -33,6 +34,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
 
         val viewModel = UserViewModel()
+        val calendarViewModel = CalendarViewModel(viewModel)
         WindowCompat.setDecorFitsSystemWindows(window, false)
 
         setContent {
@@ -48,7 +50,7 @@ class MainActivity : ComponentActivity() {
                         .systemBarsPadding(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    EntryPoint(navController, viewModel)
+                    EntryPoint(navController, viewModel, calendarViewModel)
                 }
             }
         }
