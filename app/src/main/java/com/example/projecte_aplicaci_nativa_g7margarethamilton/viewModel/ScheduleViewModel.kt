@@ -249,39 +249,12 @@ class ScheduleViewModel(
         )
     }
 
-//    fun createNewSchedule(title: String, email: String, categoryId: Int) {
-//        val token = userViewModel.token.value ?: return
-//
-//        CoroutineScope(Dispatchers.IO).launch {
-//            try {
-//                _isLoading.value = true
-//                val response = repository.createSchedule(
-//                    token = token,
-//                    userId = email,
-//                    title = title,
-//                    isFavorite = false,
-//                    categoryId = categoryId
-//                )
-//
-//                withContext(Dispatchers.Main) {
-//                    if (response.isSuccessful) {
-//                        // Recargar los schedules para obtener el nuevo
-//                        loadSchedules()
-//                        //setCurrentSchedule(response.body()!!)
-//                        _error.value = null
-//                    } else {
-//                        _error.value = "Error al crear la agenda: ${response.message()}"
-//                    }
-//                }
-//            } catch (e: Exception) {
-//                withContext(Dispatchers.Main) {
-//                    _error.value = "Error: ${e.message}"
-//                }
-//            } finally {
-//                _isLoading.value = false
-//            }
-//        }
-//    }
+    /**
+     * Crea un nuevo horario y lo establece como el actual.
+     * @param title Título del nuevo horario
+     * @param email Email del usuario
+     * @param categoryId ID de la categoría
+     */
     fun createNewSchedule(
         title: String,
         email: String,
