@@ -15,6 +15,7 @@ class ApiRepository {
     suspend fun loginWithGoogle(idToken: String): Response<LoginResponse> {
         return ApiService.create().loginWithGoogle(mapOf("id_token" to idToken))
     }
+
     // LOGOUT
     suspend fun logoutApp(email: String, password: String?, googleId: String?) =
         apiInterface.logoutApp(
@@ -79,21 +80,34 @@ class ApiRepository {
     )
 
     //SCHEDULE
-    suspend fun getAllSchedules(token: String,) =
+    suspend fun getAllSchedules(token: String) =
         apiInterface.getAllSchedules("Bearer $token")
 
     suspend fun getSchedule(token: String, id: String) =
         apiInterface.getSchedule("Bearer $token", id)
 
 
-    suspend fun createSchedule(token: String, userId: String, title: String, isFavorite: Boolean, categoryId: Int) =
+    suspend fun createSchedule(
+        token: String,
+        userId: String,
+        title: String,
+        isFavorite: Boolean,
+        categoryId: Int
+    ) =
         apiInterface.createSchedule(
             "Bearer $token",
             CreateScheduleRequest(userId, title, isFavorite, categoryId)
         )
 
 
-    suspend fun updateSchedule(token: String, id: String, userId: String, title: String, isFavorite: Boolean, categoryId: Int) =
+    suspend fun updateSchedule(
+        token: String,
+        id: String,
+        userId: String,
+        title: String,
+        isFavorite: Boolean,
+        categoryId: Int
+    ) =
         apiInterface.updateSchedule(
             "Bearer $token",
             id,
@@ -104,7 +118,7 @@ class ApiRepository {
 
         apiInterface.deleteSchedule("Bearer $token", id)
 
-    //TASK
+    //SCHEDULE-TASK
     suspend fun createTask(
         token: String,
         userId: String,
@@ -118,7 +132,17 @@ class ApiRepository {
         categoryId: Int
     ) = apiInterface.createTask(
         "Bearer $token",
-        CreateTaskRequest(userId = userId, title =  title, content =  content, priority =  priority, start_time =  startTime, end_time =  endTime, week_day =  week_day, id_schedule =  scheduleId, id_category =  categoryId)
+        CreateTaskRequest(
+            userId = userId,
+            title = title,
+            content = content,
+            priority = priority,
+            start_time = startTime,
+            end_time = endTime,
+            week_day = week_day,
+            id_schedule = scheduleId,
+            id_category = categoryId
+        )
     )
 
     suspend fun deleteTask(token: String, id: String) =
@@ -127,10 +151,73 @@ class ApiRepository {
     suspend fun getAllTasks(token: String) =
         apiInterface.getAllTasks("Bearer $token")
 
+    /**
+     * CALENDAR
+     */
+
+    suspend fun getAllCalendars(token: String, id: String) =
+        apiInterface.getAllCalendar("Bearer $token")
+
+    suspend fun createCalendar(
+        token: String,
+        userId: String,
+        title: String,
+        isFavorite: Boolean,
+        categoryId: Int
+    ) =
+        apiInterface.createCalendar(
+            "bearer $token",
+            CreateCalendarRequest(
+                userId = userId,
+                title = title,
+                is_favorite = isFavorite,
+                id_category = categoryId
+            )
+        )
+
+    suspend fun getCalendarTask(
+        token: String,
+        id: String
+    ) =
+        apiInterface.getCalendarTask("Bearer $token", id)
+
+    suspend fun getAllCalendarTask(token: String) =
+        apiInterface.getAllCalendarTask("Bearer $token")
+
+    suspend fun createCalendarTask(
+        token: String,
+        userId: String,
+        title: String,
+        content: String,
+        isCompleted: Boolean,
+        priority: Int,
+        startTime: String,
+        endTime: String,
+        calendarId: Int,
+        categoryId: Int
+    ) = apiInterface.createCalendarTask(
+        "Bearer $token",
+        CreateCalendarTaskRequest(
+            userId = userId,
+            title = title,
+            content = content,
+            is_completed = isCompleted,
+            priority = priority,
+            start_time = startTime,
+            end_time = endTime,
+            id_calendar = calendarId,
+            id_category = categoryId
+        )
+    )
+
+    suspend fun deleteCalendarTask(token: String, id: String) =
+        apiInterface.deleteCalendarTask("Bearer $token", id)
+
     data class UpdateUserRequest(
         val nickname: String?,
         val avatar_url: String?,
         val is_admin: Boolean,
         val is_banned: Boolean
     )
+
 }

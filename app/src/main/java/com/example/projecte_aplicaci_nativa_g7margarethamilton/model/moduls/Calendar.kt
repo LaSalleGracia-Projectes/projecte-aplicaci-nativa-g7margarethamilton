@@ -1,13 +1,16 @@
 package com.example.projecte_aplicaci_nativa_g7margarethamilton.model.moduls
 
 import java.sql.Time
+import java.time.ZonedDateTime
 
 class Calendar(
     id: Int,
     title: String,
     is_favorite: Boolean,
+    email: String,
     id_category: Int,
-    created_at: Time
+    tasks: List<Calendar_task>?,
+    created_at: ZonedDateTime
 )
 
 class Calendar_task(
@@ -20,6 +23,6 @@ class Calendar_task(
     end_time: Time,
     id_calendar: Int,
     id_category: Int,
-    created_at: Time,
+    created_at: ZonedDateTime,
 )
 
