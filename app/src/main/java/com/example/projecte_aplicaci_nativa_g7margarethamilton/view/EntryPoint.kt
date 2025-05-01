@@ -23,7 +23,7 @@ fun EntryPoint(navController: NavHostController, viewModel: UserViewModel) {
         composable(Routes.Login.route) { LogIn(navController, viewModel) }
         composable(Routes.Register.route) { SignIn(navController, viewModel) }
 
-        composable(Routes.Home.route) { HomeView(navController) }
+        composable(Routes.Home.route) { HomeView(navController, viewModel) }
         composable(Routes.Settings.route) { SettingsView(navController) }
         composable(Routes.Profile.route) { ProfileView(navController, viewModel) }
         composable(Routes.Schedule.route) { ScheduleView(navController, viewModel) }
