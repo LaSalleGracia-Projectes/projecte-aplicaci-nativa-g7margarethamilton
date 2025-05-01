@@ -95,8 +95,8 @@ class CalendarViewModel(
     fun createCalendarTask(
         title: String,
         content: String,
-        startTime: LocalTime,
-        endTime: LocalTime,
+        startTime: String,
+        endTime: String,
         categoryId: Int,
         email: String
     ) {
