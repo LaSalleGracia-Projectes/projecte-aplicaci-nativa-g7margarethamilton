@@ -25,14 +25,19 @@ import androidx.navigation.compose.rememberNavController
 import com.example.projecte_aplicaci_nativa_g7margarethamilton.ui.theme.Projecteaplicacinativag7margarethamiltonTheme
 import com.example.projecte_aplicaci_nativa_g7margarethamilton.view.EntryPoint
 import com.example.projecte_aplicaci_nativa_g7margarethamilton.viewModel.UserViewModel
+import com.example.projecte_aplicaci_nativa_g7margarethamilton.viewModel.setLocale
 
 @SuppressLint("NewApi")
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
-
         val viewModel = UserViewModel()
+
+        val lang = viewModel.getSavedLanguage(this)
+        val contextWithLocale = this.setLocale(lang)
+
+        super.onCreate(savedInstanceState)
+
+        enableEdgeToEdge()
         WindowCompat.setDecorFitsSystemWindows(window, false)
 
         setContent {
@@ -53,6 +58,7 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
+
 }
 
 @Composable

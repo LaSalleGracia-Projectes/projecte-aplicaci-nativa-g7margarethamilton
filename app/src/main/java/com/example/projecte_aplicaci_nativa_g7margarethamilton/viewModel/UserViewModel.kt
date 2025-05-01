@@ -1,5 +1,6 @@
 package com.example.projecte_aplicaci_nativa_g7margarethamilton.viewModel
 
+import android.app.Activity
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -168,7 +169,7 @@ class UserViewModel : ViewModel() {
         _missatgeRegister.value = ""
     }
 
-    fun login(email: String, password: String) {
+    fun login(context: Context, email: String, password: String) {
         val user = User(
             nickname = "",
             email = email,
@@ -191,7 +192,7 @@ class UserViewModel : ViewModel() {
                         _token.value = loginResponse?.tokenApp
                         _currentUser.value = loginResponse?.user
                         _missatgeLogin.value = loginResponse?.message ?: "Inicio de sesión exitoso"
-                        loadSettings()
+                        loadSettings(context)
                     } else {
                         when (response.code()) {
                             401 -> _missatgeLogin.value = "Credenciales incorrectas"
@@ -212,7 +213,7 @@ class UserViewModel : ViewModel() {
         _missatgeLogin.value = ""
     }
 
-    fun loginWithGoogle(idToken: String) {
+    fun loginWithGoogle(context: Context, idToken: String) {
         CoroutineScope(Dispatchers.IO).launch {
             try {
                 val response = repository.loginWithGoogle(idToken)
@@ -222,7 +223,7 @@ class UserViewModel : ViewModel() {
                         _token.value = loginResponse?.tokenApp
                         _currentUser.value = loginResponse?.user
                         _missatgeLogin.value = loginResponse?.message ?: "Login amb Google exitós"
-                        loadSettings()
+                        loadSettings(context)
                     } else {
                         _missatgeLogin.value = "Error en iniciar sessió amb Google"
                     }
@@ -333,9 +334,26 @@ class UserViewModel : ViewModel() {
         _updateError.value = null
     }
 
-    fun loadSettings() {
-        val t    = token.value ?: return
-        val u    = currentUser.value ?: return
+    fun saveLanguageToPrefs(context: Context, lang: String) {
+        val prefs = context.getSharedPreferences("settings", Context.MODE_PRIVATE)
+        prefs.edit().putString("lang", lang).apply()
+    }
+
+    fun getSavedLanguage(context: Context): String {
+        val prefs = context.getSharedPreferences("settings", Context.MODE_PRIVATE)
+        val lang = prefs.getString("lang", null)
+
+        return when (lang) {
+            "ca", "es", "en" -> lang
+            else -> "ca"
+        }
+    }
+
+
+    fun loadSettings(context: Context) {
+        val t = token.value ?: return
+        val u = currentUser.value ?: return
+
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 val resp = repository.getUserSettings(t, u.email)
@@ -345,6 +363,14 @@ class UserViewModel : ViewModel() {
                         langCodeField.value              = s.lang_code
                         allowNotificationField.value     = s.allow_notification
                         mergeScheduleCalendarField.value = s.merge_schedule_calendar
+
+                        // ✅ Desa preferència i aplica l'idioma
+                        saveLanguageToPrefs(context, s.lang_code)
+                        context.setLocale(s.lang_code)
+
+                        // ✅ Reinicia l’activitat per aplicar el canvi
+                        //val activity = context as? Activity
+                        //activity?.recreate()
                     } else {
                         _settingsError.value = "Error carregant settings: ${resp.code()}"
                     }
@@ -356,6 +382,7 @@ class UserViewModel : ViewModel() {
             }
         }
     }
+
 
     fun updateSettings() {
         val t = token.value ?: return

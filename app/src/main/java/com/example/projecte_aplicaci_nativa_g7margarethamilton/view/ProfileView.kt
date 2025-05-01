@@ -272,12 +272,3 @@ private fun InfoRow(title: String, value: String, iconTint: Color) {
         }
     }
 }
-
-@SuppressLint("ViewModelConstructorInComposable")
-@Preview(showBackground = true)
-@Composable
-fun ProfileViewPreview() {
-    val navController = rememberNavController()
-    val viewModel = UserViewModel()
-    ProfileView(navController, viewModel)
-}

@@ -11,12 +11,14 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.projecte_aplicaci_nativa_g7margarethamilton.view.BottomNavBar
 import com.example.projecte_aplicaci_nativa_g7margarethamilton.viewModel.UserViewModel
+import com.example.projecte_aplicaci_nativa_g7margarethamilton.viewModel.setLocale
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -25,9 +27,12 @@ fun ProfileSettingsView(
     viewModel: UserViewModel
 ) {
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
+    val context = LocalContext.current
+    val lang = viewModel.getSavedLanguage(context)
+    val localizedContext = context.setLocale(lang)
 
     // Carreguem settings un cop en iniciar la vista
-    LaunchedEffect(Unit) { viewModel.loadSettings() }
+    LaunchedEffect(Unit) { viewModel.loadSettings(context) }
 
     // Estats locals per al dropdown d'idioma
     var expandedLanguage by remember { mutableStateOf(false) }
