@@ -7,13 +7,10 @@ import retrofit2.Response
 
 
 class ApiRepository {
-    @RequiresApi(Build.VERSION_CODES.O)
     val apiInterface = ApiService.create()
 
     //AUTH
-    @RequiresApi(Build.VERSION_CODES.O)
     suspend fun register(usuari: User) = apiInterface.register(usuari)
-    @RequiresApi(Build.VERSION_CODES.O)
     suspend fun login(usuari: User) = apiInterface.login(usuari)
     suspend fun loginWithGoogle(idToken: String): Response<LoginResponse> {
         return ApiService.create().loginWithGoogle(mapOf("id_token" to idToken))
@@ -82,22 +79,20 @@ class ApiRepository {
     )
 
     //SCHEDULE
-    @RequiresApi(Build.VERSION_CODES.O)
     suspend fun getAllSchedules(token: String,) =
         apiInterface.getAllSchedules("Bearer $token")
 
-    @RequiresApi(Build.VERSION_CODES.O)
     suspend fun getSchedule(token: String, id: String) =
         apiInterface.getSchedule("Bearer $token", id)
 
-    @RequiresApi(Build.VERSION_CODES.O)
+
     suspend fun createSchedule(token: String, userId: String, title: String, isFavorite: Boolean, categoryId: Int) =
         apiInterface.createSchedule(
             "Bearer $token",
             CreateScheduleRequest(userId, title, isFavorite, categoryId)
         )
 
-    @RequiresApi(Build.VERSION_CODES.O)
+
     suspend fun updateSchedule(token: String, id: String, userId: String, title: String, isFavorite: Boolean, categoryId: Int) =
         apiInterface.updateSchedule(
             "Bearer $token",
@@ -105,12 +100,11 @@ class ApiRepository {
             UpdateScheduleRequest(userId, title, isFavorite, categoryId)
         )
 
-    @RequiresApi(Build.VERSION_CODES.O)
-    suspend fun deleteSchedule(token: String, id: String, userId: String) =
+    suspend fun deleteSchedule(token: String, id: String) =
+
         apiInterface.deleteSchedule("Bearer $token", id)
 
     //TASK
-    @RequiresApi(Build.VERSION_CODES.O)
     suspend fun createTask(
         token: String,
         userId: String,
@@ -119,14 +113,17 @@ class ApiRepository {
         priority: Int,
         startTime: String,
         endTime: String,
+        week_day: Int,
         scheduleId: Int,
         categoryId: Int
     ) = apiInterface.createTask(
         "Bearer $token",
-        CreateTaskRequest(userId, title, content, priority, startTime, endTime, scheduleId, categoryId)
+        CreateTaskRequest(userId = userId, title =  title, content =  content, priority =  priority, start_time =  startTime, end_time =  endTime, week_day =  week_day, id_schedule =  scheduleId, id_category =  categoryId)
     )
 
-    @RequiresApi(Build.VERSION_CODES.O)
+    suspend fun deleteTask(token: String, id: String) =
+        apiInterface.deleteTask("Bearer $token", id)
+
     suspend fun getAllTasks(token: String) =
         apiInterface.getAllTasks("Bearer $token")
 
