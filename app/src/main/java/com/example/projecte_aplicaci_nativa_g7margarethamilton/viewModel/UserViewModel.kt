@@ -364,13 +364,8 @@ class UserViewModel : ViewModel() {
                         allowNotificationField.value     = s.allow_notification
                         mergeScheduleCalendarField.value = s.merge_schedule_calendar
 
-                        // ✅ Desa preferència i aplica l'idioma
                         saveLanguageToPrefs(context, s.lang_code)
                         context.setLocale(s.lang_code)
-
-                        // ✅ Reinicia l’activitat per aplicar el canvi
-                        //val activity = context as? Activity
-                        //activity?.recreate()
                     } else {
                         _settingsError.value = "Error carregant settings: ${resp.code()}"
                     }
@@ -384,7 +379,7 @@ class UserViewModel : ViewModel() {
     }
 
 
-    fun updateSettings() {
+    fun updateSettings(context: Context) {
         val t = token.value ?: return
         val u = currentUser.value ?: return
         viewModelScope.launch(Dispatchers.IO) {
@@ -400,6 +395,7 @@ class UserViewModel : ViewModel() {
                 withContext(Dispatchers.Main) {
                     if (resp.isSuccessful) {
                         _settingsMsg.value = resp.body()?.message
+                        loadSettings(context)
                     } else {
                         _settingsError.value = "Error ${resp.code()} actualitzant settings"
                     }

@@ -1,4 +1,9 @@
 <resources>
     <string name="app_name">projecte-aplicaci-nativa-g7margarethamilton</string>
-    <string name="home_view_title">Que haremos hoy</string>
+    <string name="home_view_title">¿Qué hacemos hoy?</string>
+    <string name="home_view_task">Tareas de hoy</string>
+    <string name="home_view_schedule">Horario</string>
+    <string name="home_view_calendar">Calendario</string>
+    <string name="home_view_list">Compra</string>
+    <string name="home_view_training">Entrenamiento</string>
 </resources>
