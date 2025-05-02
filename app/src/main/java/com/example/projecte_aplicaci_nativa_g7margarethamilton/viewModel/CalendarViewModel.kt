@@ -147,6 +147,42 @@ class CalendarViewModel(
         )
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun updateCalendarTask(
+        taskId: Int,
+        title: String,
+        content: String,
+        isCompleted: Boolean,
+        startTime: String,
+        endTime: String,
+        categoryId: Int,
+        email: String
+    ) {
+        val token = userViewModel.token.value ?: return
+        val currentCalendarId = _currentCalendar.value?.id ?: return
+
+        executeApiCall(
+            apiCall = {
+                repository.updateCalendarTask(
+                    token = token,
+                    id = taskId.toString(),
+                    userId = email,
+                    title = title,
+                    content = content,
+                    isCompleted = isCompleted,
+                    priority = 1,
+                    startTime = startTime,
+                    endTime = endTime,
+                    calendarId = currentCalendarId,
+                    categoryId = categoryId
+                )
+            },
+            onSuccess = {
+                loadAllCalendarTasks()
+            }
+        )
+    }
+
     // Función de utilidad para ejecutar llamadas a la API
     private fun <T> executeApiCall(
         apiCall: suspend () -> retrofit2.Response<T>,

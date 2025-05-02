@@ -210,6 +210,34 @@ class ApiRepository {
         )
     )
 
+    suspend fun updateCalendarTask(
+        token: String,
+        id: String,
+        userId: String,
+        title: String,
+        content: String,
+        isCompleted: Boolean,
+        priority: Int,
+        startTime: String,
+        endTime: String,
+        calendarId: Int,
+        categoryId: Int
+    ) = apiInterface.updateCalendarTask(
+        "Bearer $token",
+        id,
+        CreateCalendarTaskRequest(
+            userId = userId,
+            title = title,
+            content = content,
+            is_completed = isCompleted,
+            priority = priority,
+            start_time = startTime,
+            end_time = endTime,
+            id_calendar = calendarId,
+            id_category = categoryId
+        )
+    )
+
     suspend fun deleteCalendarTask(token: String, id: String) =
         apiInterface.deleteCalendarTask("Bearer $token", id)
 
