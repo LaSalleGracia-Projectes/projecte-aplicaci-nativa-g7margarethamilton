@@ -66,7 +66,7 @@ fun HomeView(navController: NavController, viewModel: UserViewModel) {
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 HomeOptionButton(
-                    title = "Tareas del día",
+                    title = localizedContext.getString(R.string.home_view_task),
                     onClick = { navController.navigate(Routes.Schedule.route) },
                     modifier = Modifier.weight(1f)
                 )
@@ -81,7 +81,7 @@ fun HomeView(navController: NavController, viewModel: UserViewModel) {
             ) {
                 // Botón Agenda
                 HomeOptionButton(
-                    title = "Agenda",
+                    title = localizedContext.getString(R.string.home_view_schedule),
                     onClick = { /*TODO: navigate to Agenda*/ },
                     modifier = Modifier.weight(1f)
                 )
@@ -90,7 +90,7 @@ fun HomeView(navController: NavController, viewModel: UserViewModel) {
 
                 // Botón Calendari
                 HomeOptionButton(
-                    title = "Calendari",
+                    title = localizedContext.getString(R.string.home_view_calendar),
                     onClick = { navController.navigate(Routes.Calendar.route) },
                     modifier = Modifier.weight(1f)
                 )
@@ -104,7 +104,7 @@ fun HomeView(navController: NavController, viewModel: UserViewModel) {
             ) {
                 // Botón Lista compra
                 HomeOptionButton(
-                    title = "Lista compra",
+                    title = localizedContext.getString(R.string.home_view_list),
                     onClick = { navController.navigate(Routes.ShoppingList.route) },
                     modifier = Modifier.weight(1f)
                 )
@@ -113,7 +113,7 @@ fun HomeView(navController: NavController, viewModel: UserViewModel) {
 
                 // Botón Rutines exercici
                 HomeOptionButton(
-                    title = "Exercici",
+                    title = localizedContext.getString(R.string.home_view_training),
                     onClick = { navController.navigate(Routes.Exercises.route) },
                     modifier = Modifier.weight(1f)
                 )
