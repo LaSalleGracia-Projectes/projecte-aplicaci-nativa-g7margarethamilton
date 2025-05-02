@@ -1,4 +1,3 @@
-// File: view/settings/ProfileSettingsView.kt
 package com.example.projecte_aplicaci_nativa_g7margarethamilton.view.settings
 
 import androidx.compose.foundation.background
@@ -63,7 +62,7 @@ fun ProfileSettingsView(
                     }
                 },
                 actions = {
-                    IconButton(onClick = { viewModel.updateSettings() }) {
+                    IconButton(onClick = { viewModel.updateSettings(context) }) {
                         Icon(
                             imageVector = Icons.Default.Check,
                             contentDescription = "Guardar",
