@@ -1,9 +1,16 @@
 <resources>
     <string name="app_name">projecte-aplicaci-nativa-g7margarethamilton</string>
+    <!-- Home View -->
     <string name="home_view_title">What are we doing today?</string>
     <string name="home_view_task">Today\'s tasks</string>
     <string name="home_view_schedule">Schedule</string>
     <string name="home_view_calendar">Calendar</string>
     <string name="home_view_list">Shopping</string>
     <string name="home_view_training">Training</string>
+    <!-- Advanced Settings View -->
+    <string name="advanced_settings_view_title">Advanced Settings</string>
+    <string name="advanced_settings_view_theme">Theme (Light/Dark)</string>
+    <string name="advanced_settings_view_language">Language</string>
+    <string name="advanced_settings_view_notifications">Notifications</string>
+    <string name="advanced_settings_view_merge_task">Merge schedule and calendar tasks</string>
 </resources>

@@ -6,4 +6,10 @@
     <string name="home_view_calendar">Calendario</string>
     <string name="home_view_list">Compra</string>
     <string name="home_view_training">Entrenamiento</string>
+    <!-- Advanced Settings View -->
+    <string name="advanced_settings_view_title">Configuración avanzada</string>
+    <string name="advanced_settings_view_theme">Tema (Claro/Oscuro)</string>
+    <string name="advanced_settings_view_language">Idioma</string>
+    <string name="advanced_settings_view_notifications">Notificaciones</string>
+    <string name="advanced_settings_view_merge_task">Unir tareas de horario y calendario</string>
 </resources>

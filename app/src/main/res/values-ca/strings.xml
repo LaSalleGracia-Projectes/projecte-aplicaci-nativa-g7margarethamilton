@@ -1,9 +1,16 @@
 <resources>
     <string name="app_name">projecte-aplicaci-nativa-g7margarethamilton</string>
+    <!-- Home View -->
     <string name="home_view_title">Què fem avui?</string>
     <string name="home_view_task">Tasques d\'avui</string>
     <string name="home_view_schedule">Horari</string>
     <string name="home_view_calendar">Calendari</string>
     <string name="home_view_list">Compra</string>
     <string name="home_view_training">Entrenament</string>
+    <!-- Advanced Settings View -->
+    <string name="advanced_settings_view_title">Configuració avançada</string>
+    <string name="advanced_settings_view_theme">Tema (Clar/Fosc)</string>
+    <string name="advanced_settings_view_language">Idioma</string>
+    <string name="advanced_settings_view_notifications">Notificacions</string>
+    <string name="advanced_settings_view_merge_task">Unir tasques horari i calendari</string>
 </resources>
