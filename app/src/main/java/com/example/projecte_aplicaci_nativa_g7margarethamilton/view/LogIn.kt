@@ -94,22 +94,22 @@ fun LogIn(navController: NavController, viewModel: UserViewModel) {
                         viewModel.sendResetPasswordEmail(forgotEmail, context)
                         showForgotDialog = false
                     }) {
-                        Text("Enviar")
+                        Text(localizedContext.getString(R.string.forgot_password_view_send_button))
                     }
                 },
                 dismissButton = {
                     Button(onClick = { showForgotDialog = false }) {
-                        Text("Cancel·lar")
+                        Text(localizedContext.getString(R.string.forgot_password_view_cancel_button))
                     }
                 },
-                title = { Text("Restablir la contrasenya") },
+                title = { Text(localizedContext.getString(R.string.forgot_password_view_title)) },
                 text = {
                     Column {
-                        Text("Introdueix el teu correu per restablir la contrasenya:")
+                        Text(localizedContext.getString(R.string.forgot_password_view_description))
                         OutlinedTextField(
                             value = forgotEmail,
                             onValueChange = { forgotEmail = it },
-                            placeholder = { Text("exemple@correu.com") },
+                            placeholder = { Text(localizedContext.getString(R.string.forgot_password_view_email_placeholder)) },
                             singleLine = true,
                             modifier = Modifier.fillMaxWidth()
                         )
