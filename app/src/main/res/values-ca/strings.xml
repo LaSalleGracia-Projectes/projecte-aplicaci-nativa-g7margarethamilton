@@ -14,6 +14,12 @@
     <string name="training_view_title">Entrenament</string>
     <string name="training_view_in_construction">Proximament</string>
 
+    <!-- Settings View -->
+    <string name="settings_view_title">Configuració</string>
+    <string name="settings_view_terms_and_conditions">Termes &amp; Condicions</string>
+    <string name="settings_view_about">Sobre nosaltres</string>
+    <string name="settings_view_contact">Contacte</string>
+    <string name="settings_view_advanced_settings">Configuració avançada</string>
     <!-- Advanced Settings View -->
     <string name="advanced_settings_view_title">Configuració avançada</string>
     <string name="advanced_settings_view_theme">Tema (Clar/Fosc)</string>

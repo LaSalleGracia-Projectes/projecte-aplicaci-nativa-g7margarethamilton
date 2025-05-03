@@ -24,7 +24,7 @@ fun EntryPoint(navController: NavHostController, viewModel: UserViewModel) {
         composable(Routes.Register.route) { SignIn(navController, viewModel) }
 
         composable(Routes.Home.route) { HomeView(navController, viewModel) }
-        composable(Routes.Settings.route) { SettingsView(navController) }
+        composable(Routes.Settings.route) { SettingsView(viewModel, navController) }
         composable(Routes.Profile.route) { ProfileView(navController, viewModel) }
         composable(Routes.Schedule.route) { ScheduleView(navController, viewModel) }
         composable(Routes.AboutUs.route) { AboutUsView(navController) }

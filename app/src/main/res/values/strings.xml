@@ -13,6 +13,13 @@
     <!-- Training View -->
     <string name="training_view_title">Training</string>
     <string name="training_view_in_construction">Coming soon</string>
+
+    <!-- Settings View -->
+    <string name="settings_view_title">Settings</string>
+    <string name="settings_view_terms_and_conditions">Terms &amp; Conditions</string>
+    <string name="settings_view_about">About us</string>
+    <string name="settings_view_contact">Contact</string>
+    <string name="settings_view_advanced_settings">Advanced settings</string>
     <!-- Advanced Settings View -->
     <string name="advanced_settings_view_title">Advanced Settings</string>
     <string name="advanced_settings_view_theme">Theme (Light/Dark)</string>
