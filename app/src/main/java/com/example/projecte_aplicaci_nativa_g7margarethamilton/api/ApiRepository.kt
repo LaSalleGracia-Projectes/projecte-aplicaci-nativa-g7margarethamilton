@@ -39,12 +39,13 @@ class ApiRepository {
         email: String,
         nickname: String?,
         avatarUrl: String?,
+        password: Any?,
         isAdmin: Boolean,
-        isBanned: Boolean
+        isBanned: Boolean,
     ) = apiInterface.updateUser(
         "Bearer $token",
         email,
-        UpdateUserRequest(nickname, avatarUrl, isAdmin, isBanned)
+        UpdateUserRequest(nickname, avatarUrl, password, isAdmin, isBanned)
     )
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -241,11 +242,6 @@ class ApiRepository {
     suspend fun deleteCalendarTask(token: String, id: String) =
         apiInterface.deleteCalendarTask("Bearer $token", id)
 
-    data class UpdateUserRequest(
-        val nickname: String?,
-        val avatar_url: String?,
-        val is_admin: Boolean,
-        val is_banned: Boolean
-    )
+
 
 }

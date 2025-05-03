@@ -32,6 +32,8 @@ class UserViewModel : ViewModel() {
     val confirmPasswordError = _confirmPasswordError.asStateFlow()
     private var confirmPasswordValid = false
 
+    val newPassword = MutableStateFlow("")
+
     var _correctFormat = MutableStateFlow(false)
     val correctFormat = _correctFormat.asStateFlow()
 
@@ -286,29 +288,32 @@ class UserViewModel : ViewModel() {
         }
     }
 
-    fun loadSession(token: String, user: User) {
-        _token.value       = token
-        _currentUser.value = user
-
-        // Pre‐carreguem els camps amb els valors existents
-        nicknameField.value  = user.nickname
-        avatarUrlField.value = user.avatar_url ?: ""
+    fun loadSession() {
+        nicknameField.value  = currentUser.value?.nickname ?: "Nickname"
+        avatarUrlField.value = currentUser.value?.avatar_url ?: "https://example.com/default_avatar.png"
+        newPassword.value    = currentUser.value?.password ?: ""
     }
 
-    fun updateProfile() {
+    fun updateProfile(changePassword: Boolean) {
         val t    = token.value ?: return
         val user = currentUser.value ?: return
+
+        if (changePassword){
+
+        }
 
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 val resp = repository.updateUser(
-                    token     = t,
-                    email     = user.email,
-                    nickname  = nicknameField.value,
+                    token = t,
+                    email = user.email,
+                    nickname = nicknameField.value,
                     avatarUrl = avatarUrlField.value,
                     // mantenim els flags tal com estan
-                    isAdmin   = user.is_admin,
-                    isBanned  = user.is_banned
+                    isAdmin = user.is_admin,
+                    password = changePassword.let { if (it) newPassword.value else false },
+
+                    isBanned = user.is_banned
                 )
 
                 withContext(Dispatchers.Main) {
@@ -379,6 +384,7 @@ class UserViewModel : ViewModel() {
     }
 
 
+
     fun updateSettings(context: Context) {
         val t = token.value ?: return
         val u = currentUser.value ?: return
@@ -411,5 +417,29 @@ class UserViewModel : ViewModel() {
     fun clearSettingsState() {
         _settingsMsg.value   = null
         _settingsError.value = null
+    }
+
+    fun deleteUser(context: Context){
+        val t = token.value ?: return
+        val u = currentUser.value ?: return
+
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                val resp = repository.deleteUser(t, u.email)
+                withContext(Dispatchers.Main) {
+                    if (resp.isSuccessful) {
+                        _updateMsg.value = resp.body()?.message
+                    } else {
+                        _updateError.value  = "Error ${resp.code()} eliminant perfil"
+                    }
+                }
+            } catch (e: Exception) {
+                withContext(Dispatchers.Main) {
+                    _updateError.value = "Connexió fallida: ${e.localizedMessage}"
+                }
+            }finally {
+                logout(context)
+            }
+        }
     }
 }
