@@ -63,7 +63,7 @@ fun SignIn(navController: NavController, viewModel: UserViewModel) {
                 .getResult(ApiException::class.java)
             val idToken = account?.idToken
             if (idToken != null) {
-                viewModel.loginWithGoogle(idToken)
+                viewModel.loginWithGoogle(context, idToken)
             }
         } catch (e: ApiException) {
             // Error al fer login amb Google

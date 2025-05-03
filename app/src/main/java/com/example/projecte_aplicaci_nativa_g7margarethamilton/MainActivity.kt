@@ -24,15 +24,26 @@ import androidx.core.view.WindowInsetsControllerCompat
 import androidx.navigation.compose.rememberNavController
 import com.example.projecte_aplicaci_nativa_g7margarethamilton.ui.theme.Projecteaplicacinativag7margarethamiltonTheme
 import com.example.projecte_aplicaci_nativa_g7margarethamilton.view.EntryPoint
+import com.example.projecte_aplicaci_nativa_g7margarethamilton.viewModel.CalendarViewModel
 import com.example.projecte_aplicaci_nativa_g7margarethamilton.viewModel.UserViewModel
+import com.example.projecte_aplicaci_nativa_g7margarethamilton.viewModel.setLocale
 
 @SuppressLint("NewApi")
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
+        val viewModel = UserViewModel()
+
+        val lang = viewModel.getSavedLanguage(this)
+        val contextWithLocale = this.setLocale(lang)
+
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
+
 
         val viewModel = UserViewModel()
+        val calendarViewModel = CalendarViewModel(viewModel)
+
+        enableEdgeToEdge()
+
         WindowCompat.setDecorFitsSystemWindows(window, false)
 
         setContent {
@@ -48,11 +59,12 @@ class MainActivity : ComponentActivity() {
                         .systemBarsPadding(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    EntryPoint(navController, viewModel)
+                    EntryPoint(navController, viewModel, calendarViewModel)
                 }
             }
         }
     }
+
 }
 
 @Composable

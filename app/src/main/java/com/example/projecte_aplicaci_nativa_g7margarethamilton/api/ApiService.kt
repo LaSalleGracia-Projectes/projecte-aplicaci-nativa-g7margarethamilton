@@ -3,11 +3,14 @@ import ZonedDateTimeAdapter
 import android.os.Build
 import androidx.annotation.RequiresApi
 import com.example.projecte_aplicaci_nativa_g7margarethamilton.model.User
+import com.example.projecte_aplicaci_nativa_g7margarethamilton.model.moduls.Calendar
+import com.example.projecte_aplicaci_nativa_g7margarethamilton.model.moduls.Calendar_task
 import com.example.projecte_aplicaci_nativa_g7margarethamilton.model.moduls.Schedule
 import com.example.projecte_aplicaci_nativa_g7margarethamilton.model.moduls.Schedule_task
 import com.example.projecte_aplicaci_nativa_g7margarethamilton.model.moduls.UserSettings
 import com.google.gson.GsonBuilder
 import okhttp3.OkHttpClient
+import okhttp3.ResponseBody
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -98,6 +101,9 @@ interface ApiService {
         @Body request: UpdateSettingsRequest
     ): Response<UpdateSettingsResponse>
 
+    /**
+    SCHEDULE
+     */
     //GET ALL SCHEDULES
     @GET("schedule/")
     suspend fun getAllSchedules(
@@ -141,10 +147,91 @@ interface ApiService {
         @Body request: CreateTaskRequest
     ): Response<Schedule_task>
 
+    //GET ALL TASKS
     @GET("schedule-task")
     suspend fun getAllTasks(
         @Header("Authorization") token: String,
     ): Response<List<Schedule_task>>
+
+    //DELETE TASK
+    @DELETE("schedule-task/{id}")
+    suspend fun deleteTask(
+        @Header("Authorization") token: String,
+        @Path("id") id: String
+    ): Response<ResponseBody>
+
+    /**
+     * CALENDAR
+     */
+    //GET ALL CALENDAR
+    @GET("calendar/")
+    suspend fun getAllCalendar(
+        @Header("Authorization") token: String,
+    ): Response<List<Calendar>>
+
+    //GET CALENDAR BY ID
+    @GET("calendar/{id}")
+    suspend fun getCalendar(
+        @Header("Authorization") token: String,
+        @Path("id") id: String,
+    ): Response<Calendar>
+
+    //CREATE CALENDAR
+    @POST("calendar/")
+    suspend fun createCalendar(
+        @Header("Authorization") token: String,
+        @Body request: CreateCalendarRequest
+    ): Response<Calendar>
+
+    //UPDATE CALENDAR
+    @PUT("calendar/{id}")
+    suspend fun updateCalendar(
+        @Header("Authorization") token: String,
+        @Path("id") id: String,
+        @Body request: CreateCalendarRequest
+    ): Response<Calendar>
+
+    //DELETE CALENDAR
+    @DELETE("calendar/{id}")
+    suspend fun deleteCalendar(
+        @Header("Authorization") token: String,
+        @Path("id") id: String
+    ): Response<Unit>
+
+    //GET CALENDAR-TASK
+    @GET("calendar-task/")
+    suspend fun getAllCalendarTask(
+        @Header("Authorization") token: String,
+    ): Response<List<Calendar_task>>
+
+    //GET CALENDAR-TASK BY ID
+    @GET("calendar-task/{id}")
+    suspend fun getCalendarTask(
+        @Header("Authorization") token: String,
+        @Path("id") id: String,
+    ): Response<Calendar_task>
+
+    //CREATE CALENDAR-TASK
+    @POST("calendar-task/")
+    suspend fun createCalendarTask(
+        @Header("Authorization") token: String,
+        @Body request: CreateCalendarTaskRequest
+    ): Response<Calendar_task>
+
+    //UPDATE CALENDAR-TASK
+    @PUT("calendar-task/{id}")
+    suspend fun updateCalendarTask(
+        @Header("Authorization") token: String,
+        @Path("id") id: String,
+        @Body request: CreateCalendarTaskRequest
+    ): Response<Calendar_task>
+
+    //DELETE CALENDAR-TASK
+    @DELETE("calendar-task/{id}")
+    suspend fun deleteCalendarTask(
+        @Header("Authorization") token: String,
+        @Path("id") id: String
+    ): Response<Unit>
 
     companion object{
         private const val BASE_URL = "http://10.0.2.2:3000/api/v1/"
@@ -167,6 +254,25 @@ interface ApiService {
     }
 }
 
+data class CreateCalendarTaskRequest (
+    val userId: String,
+    val title: String,
+    val content: String,
+    val is_completed: Boolean,
+    val priority: Int,
+    val start_time: String,
+    val end_time: String,
+    val id_calendar: Int,
+    val id_category: Int,
+)
+
+data class CreateCalendarRequest (
+    val userId: String,
+    val title: String,
+    val is_favorite: Boolean,
+    val id_category: Int
+)
+
 data class CreateScheduleRequest(
     val userId: String,
     val title: String,
@@ -188,8 +294,10 @@ data class CreateTaskRequest(
     val priority: Int,
     val start_time: String,
     val end_time: String,
-    val id_shedule: Int,
-    val id_category: Int
+    val id_schedule: Int,
+    val id_category: Int,
+    val week_day: Int,
+
 )
 
 data class UpdateUserRequest(
