@@ -1,66 +1,54 @@
 package com.example.projecte_aplicaci_nativa_g7margarethamilton.view
 
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.DropdownMenu
-import androidx.compose.material3.DropdownMenuItem
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Switch
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.foundation.layout.*
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.projecte_aplicaci_nativa_g7margarethamilton.R
 import com.example.projecte_aplicaci_nativa_g7margarethamilton.Routes
 import com.example.projecte_aplicaci_nativa_g7margarethamilton.viewModel.UserViewModel
+import com.example.projecte_aplicaci_nativa_g7margarethamilton.viewModel.setLocale
 
 @Composable
 fun WelcomeView(navController: NavController, viewModel: UserViewModel) {
     val context = LocalContext.current
-
-    // 🔄 Carrega settings al llançar la vista
-    LaunchedEffect(Unit) {
-        viewModel.loadSettings(context)
-    }
-
     val selectedLang by viewModel.langCodeField.collectAsState()
     val themeModeField by viewModel.themeModeField.collectAsState()
 
-    // Per mostrar emojis
+    LaunchedEffect(Unit) {
+        if (!viewModel.hasForcedEnglish) {
+            viewModel.langCodeField.value = "en"
+            context.setLocale("en")
+            viewModel.saveLanguageToPrefs(context, "en")
+            viewModel.loadSettings(context)
+            viewModel.userHasSelectedLang = true
+            viewModel.hasForcedEnglish = true
+        }
+    }
+
+    // 🔤 Texts traduïts amb locale aplicat
+    val localizedContext = context.setLocale(selectedLang)
+
     val languageOptions = listOf(
-        "ca" to "\uD83C\uDDE6\uD83C\uDDE9", // o 🇦🇩
+        "ca" to "🇦🇩",
         "es" to "🇪🇸",
         "en" to "🇬🇧"
     )
 
     var dropdownExpanded by remember { mutableStateOf(false) }
+
+    val selectedEmoji = if (viewModel.userHasSelectedLang) {
+        languageOptions.firstOrNull { it.first == selectedLang }?.second ?: "🌐"
+    } else {
+        "🌐"
+    }
 
     Scaffold { paddingValues ->
         Box(
@@ -71,72 +59,101 @@ fun WelcomeView(navController: NavController, viewModel: UserViewModel) {
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(24.dp),
+                    .padding(horizontal = 24.dp)
+                    .padding(top = 48.dp, bottom = 140.dp),
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                // Títols i botons com abans...
-
-                Text("Welcome", fontSize = 36.sp, fontWeight = FontWeight.Bold)
+                Text(
+                    text = localizedContext.getString(R.string.welcome_view_title),
+                    fontSize = 36.sp,
+                    fontWeight = FontWeight.Bold
+                )
                 Spacer(modifier = Modifier.height(8.dp))
-                Text("to", fontSize = 32.sp)
+                Text(
+                    text = localizedContext.getString(R.string.welcome_view_subtitle),
+                    fontSize = 32.sp
+                )
                 Spacer(modifier = Modifier.height(8.dp))
                 Text("Flow2Day!", fontSize = 36.sp, fontWeight = FontWeight.Bold)
-                Spacer(modifier = Modifier.height(100.dp))
+                Spacer(modifier = Modifier.height(64.dp))
 
                 Button(
                     onClick = { navController.navigate(Routes.Login.route) },
-                    modifier = Modifier.fillMaxWidth().height(56.dp)
-                ) { Text("Login", fontSize = 16.sp) }
+                    modifier = Modifier.fillMaxWidth(0.85f).height(50.dp)
+                ) {
+                    Text(
+                        text = localizedContext.getString(R.string.welcome_view_login_button),
+                        fontSize = 16.sp
+                    )
+                }
 
-                Spacer(modifier = Modifier.height(16.dp))
+                Spacer(modifier = Modifier.height(12.dp))
 
                 Button(
                     onClick = { navController.navigate(Routes.Register.route) },
-                    modifier = Modifier.fillMaxWidth().height(56.dp)
-                ) { Text("Register", fontSize = 16.sp) }
+                    modifier = Modifier.fillMaxWidth(0.85f).height(50.dp)
+                ) {
+                    Text(
+                        text = localizedContext.getString(R.string.welcome_view_register_button),
+                        fontSize = 16.sp
+                    )
+                }
             }
 
-            // 🔽 Idioma + switch a la part inferior
+            // 🌍 Idioma i tema
             Row(
                 modifier = Modifier
                     .align(Alignment.BottomCenter)
                     .fillMaxWidth()
-                    .padding(16.dp),
+                    .padding(20.dp),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                // Idioma amb banderes
-                Box {
+                Box(
+                    modifier = Modifier
+                        .clickable { dropdownExpanded = true }
+                        .padding(8.dp)
+                ) {
                     Text(
-                        text = languageOptions.find { it.first == selectedLang }?.second ?: "🌐",
-                        modifier = Modifier
-                            .clickable { dropdownExpanded = true }
-                            .padding(12.dp)
-                            .border(1.dp, MaterialTheme.colorScheme.onSurface, MaterialTheme.shapes.small)
+                        text = selectedEmoji,
+                        fontSize = 32.sp
                     )
+
                     DropdownMenu(
                         expanded = dropdownExpanded,
                         onDismissRequest = { dropdownExpanded = false }
                     ) {
                         languageOptions.forEach { (code, emoji) ->
                             DropdownMenuItem(
-                                text = { Text(emoji) },
+                                text = {
+                                    Text(text = emoji, fontSize = 28.sp)
+                                },
                                 onClick = {
                                     viewModel.langCodeField.value = code
+                                    viewModel.saveLanguageToPrefs(context, code)
+                                    context.setLocale(code)
+                                    viewModel.loadSettings(context)
                                     dropdownExpanded = false
+                                    viewModel.userHasSelectedLang = true
                                 }
                             )
                         }
                     }
                 }
 
-                // Switch/boto bolea
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Text("Bolea")
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.padding(end = 8.dp)
+                ) {
+                    Text(
+                        text = if (themeModeField) "🌙" else "☀️",
+                        fontSize = 20.sp,
+                        modifier = Modifier.padding(end = 6.dp)
+                    )
                     Switch(
                         checked = themeModeField,
-                        onCheckedChange = { viewModel.themeModeField.value = it },
+                        onCheckedChange = { viewModel.themeModeField.value = it }
                     )
                 }
             }

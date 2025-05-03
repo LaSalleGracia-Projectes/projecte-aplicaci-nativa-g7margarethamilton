@@ -33,7 +33,7 @@ fun EntryPoint(
         composable(Routes.Profile.route) { ProfileView(navController, userViewModel) }
         composable(Routes.Schedule.route) { ScheduleView(navController, userViewModel) }
         composable(Routes.AboutUs.route) { AboutUsView(userViewModel, navController) }
-        composable(Routes.ContactUs.route) { ContactUsView(navController) }
+        composable(Routes.ContactUs.route) { ContactUsView(navController, userViewModel) }
         composable(Routes.Calendar.route) { CalendarView(navController,calendarViewModel, userViewModel) }
         composable(Routes.ProfileSettings.route) { ProfileSettingsView(navController, userViewModel) }
         composable(Routes.EditProfile.route) { EditProfileView(navController, userViewModel) }

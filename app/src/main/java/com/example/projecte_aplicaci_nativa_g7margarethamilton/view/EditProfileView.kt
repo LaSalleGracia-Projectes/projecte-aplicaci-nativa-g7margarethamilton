@@ -53,6 +53,7 @@ fun EditProfileView(
     val lang = viewModel.getSavedLanguage(context)
     val localizedContext = context.setLocale(lang)
 
+    viewModel.loadSession()
     Scaffold(
         modifier = Modifier
             .nestedScroll(scrollBehavior.nestedScrollConnection)
@@ -77,7 +78,7 @@ fun EditProfileView(
                     }
                 },
                 actions = {
-                    IconButton(onClick = { viewModel.updateProfile() }) {
+                    IconButton(onClick = { viewModel.updateProfile(false) }) {
                         Icon(
                             imageVector = Icons.Default.Check,
                             contentDescription = "Confirmar",

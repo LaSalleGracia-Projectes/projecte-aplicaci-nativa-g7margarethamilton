@@ -1,7 +1,9 @@
 package com.example.projecte_aplicaci_nativa_g7margarethamilton.viewModel
 
-import android.app.Activity
 import android.content.Context
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.projecte_aplicaci_nativa_g7margarethamilton.model.User
@@ -31,6 +33,8 @@ class UserViewModel : ViewModel() {
     private val _confirmPasswordError = MutableStateFlow<String?>(null)
     val confirmPasswordError = _confirmPasswordError.asStateFlow()
     private var confirmPasswordValid = false
+
+    val newPassword = MutableStateFlow("")
 
     var _correctFormat = MutableStateFlow(false)
     val correctFormat = _correctFormat.asStateFlow()
@@ -68,6 +72,12 @@ class UserViewModel : ViewModel() {
 
     private val _settingsError = MutableStateFlow<String?>(null)
     val settingsError: StateFlow<String?> = _settingsError.asStateFlow()
+
+    val isSettingsLoaded = MutableStateFlow(false)
+
+    var hasForcedEnglish by mutableStateOf(false)
+    var userHasSelectedLang by mutableStateOf(false)
+
 
     fun validateNickname(nickname: String): Boolean {
         if (nickname.length < 2) {
@@ -236,6 +246,25 @@ class UserViewModel : ViewModel() {
         }
     }
 
+    fun sendResetPasswordEmail(email: String, context: Context) {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                val response = repository.resetPassword(email)
+                withContext(Dispatchers.Main) {
+                    if (response.isSuccessful) {
+                        android.widget.Toast.makeText(context, "Correu enviat si l'usuari existeix", android.widget.Toast.LENGTH_LONG).show()
+                    } else {
+                        android.widget.Toast.makeText(context, "No s'ha pogut enviar el correu", android.widget.Toast.LENGTH_LONG).show()
+                    }
+                }
+            } catch (e: Exception) {
+                withContext(Dispatchers.Main) {
+                    android.widget.Toast.makeText(context, "Error de connexió: ${e.localizedMessage}", android.widget.Toast.LENGTH_LONG).show()
+                }
+            }
+        }
+    }
+
     fun logout(context: Context) {
         _currentUser.value = null
         _token.value = null
@@ -286,29 +315,32 @@ class UserViewModel : ViewModel() {
         }
     }
 
-    fun loadSession(token: String, user: User) {
-        _token.value       = token
-        _currentUser.value = user
-
-        // Pre‐carreguem els camps amb els valors existents
-        nicknameField.value  = user.nickname
-        avatarUrlField.value = user.avatar_url ?: ""
+    fun loadSession() {
+        nicknameField.value  = currentUser.value?.nickname ?: "Nickname"
+        avatarUrlField.value = currentUser.value?.avatar_url ?: "https://example.com/default_avatar.png"
+        newPassword.value    = currentUser.value?.password ?: ""
     }
 
-    fun updateProfile() {
+    fun updateProfile(changePassword: Boolean) {
         val t    = token.value ?: return
         val user = currentUser.value ?: return
+
+        if (changePassword){
+
+        }
 
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 val resp = repository.updateUser(
-                    token     = t,
-                    email     = user.email,
-                    nickname  = nicknameField.value,
+                    token = t,
+                    email = user.email,
+                    nickname = nicknameField.value,
                     avatarUrl = avatarUrlField.value,
                     // mantenim els flags tal com estan
-                    isAdmin   = user.is_admin,
-                    isBanned  = user.is_banned
+                    isAdmin = user.is_admin,
+                    password = changePassword.let { if (it) newPassword.value else false },
+
+                    isBanned = user.is_banned
                 )
 
                 withContext(Dispatchers.Main) {
@@ -339,16 +371,20 @@ class UserViewModel : ViewModel() {
         prefs.edit().putString("lang", lang).apply()
     }
 
+    fun hasUserChosenLanguage(context: Context): Boolean {
+        val prefs = context.getSharedPreferences("settings", Context.MODE_PRIVATE)
+        return prefs.getBoolean("lang_selected", false)
+    }
+
     fun getSavedLanguage(context: Context): String {
         val prefs = context.getSharedPreferences("settings", Context.MODE_PRIVATE)
         val lang = prefs.getString("lang", null)
 
         return when (lang) {
             "ca", "es", "en" -> lang
-            else -> "ca"
+            else -> "en"
         }
     }
-
 
     fun loadSettings(context: Context) {
         val t = token.value ?: return
@@ -358,25 +394,32 @@ class UserViewModel : ViewModel() {
             try {
                 val resp = repository.getUserSettings(t, u.email)
                 withContext(Dispatchers.Main) {
-                    if (resp.isSuccessful) resp.body()?.let { s ->
-                        themeModeField.value             = s.theme_mode
-                        langCodeField.value              = s.lang_code
-                        allowNotificationField.value     = s.allow_notification
-                        mergeScheduleCalendarField.value = s.merge_schedule_calendar
+                    if (resp.isSuccessful) {
+                        resp.body()?.let { s ->
+                            themeModeField.value             = s.theme_mode
+                            langCodeField.value              = s.lang_code
+                            allowNotificationField.value     = s.allow_notification
+                            mergeScheduleCalendarField.value = s.merge_schedule_calendar
 
-                        saveLanguageToPrefs(context, s.lang_code)
-                        context.setLocale(s.lang_code)
+                            saveLanguageToPrefs(context, s.lang_code)
+                            context.setLocale(s.lang_code)
+
+                            isSettingsLoaded.value = true // ✅ Indiquem que s'han carregat correctament
+                        }
                     } else {
                         _settingsError.value = "Error carregant settings: ${resp.code()}"
+                        isSettingsLoaded.value = true // ✅ Tot i error, evitem bloqueig indefinit
                     }
                 }
             } catch (e: Exception) {
                 withContext(Dispatchers.Main) {
                     _settingsError.value = "Connexió fallida: ${e.localizedMessage}"
+                    isSettingsLoaded.value = true // ✅ També aquí per evitar bloqueig
                 }
             }
         }
     }
+
 
 
     fun updateSettings(context: Context) {
@@ -411,5 +454,48 @@ class UserViewModel : ViewModel() {
     fun clearSettingsState() {
         _settingsMsg.value   = null
         _settingsError.value = null
+    }
+
+    fun deleteUser(context: Context){
+        val t = token.value ?: return
+        val u = currentUser.value ?: return
+
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                val resp = repository.deleteUser(t, u.email)
+                withContext(Dispatchers.Main) {
+                    if (resp.isSuccessful) {
+                        _updateMsg.value = resp.body()?.message
+                    } else {
+                        _updateError.value  = "Error ${resp.code()} eliminant perfil"
+                    }
+                }
+            } catch (e: Exception) {
+                withContext(Dispatchers.Main) {
+                    _updateError.value = "Connexió fallida: ${e.localizedMessage}"
+                }
+            }finally {
+                logout(context)
+            }
+        }
+    }
+
+    fun sendMessage(email: String, message: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                val resp = repository.contactUs(email, message)
+                withContext(Dispatchers.Main) {
+                    if (resp.isSuccessful) {
+                        _updateMsg.value = resp.body()?.message
+                    } else {
+                        _updateError.value  = "Error ${resp.code()} enviant missatge"
+                    }
+                }
+            } catch (e: Exception) {
+                withContext(Dispatchers.Main) {
+                    _updateError.value = "Connexió fallida: ${e.localizedMessage}"
+                }
+            }
+        }
     }
 }

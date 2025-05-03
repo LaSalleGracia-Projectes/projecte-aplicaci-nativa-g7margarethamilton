@@ -16,6 +16,9 @@ class ApiRepository {
         return ApiService.create().loginWithGoogle(mapOf("id_token" to idToken))
     }
 
+    suspend fun resetPassword(email: String) =
+        apiInterface.resetPassword(mapOf("email" to email))
+
     // LOGOUT
     suspend fun logoutApp(email: String, password: String?, googleId: String?) =
         apiInterface.logoutApp(
@@ -39,12 +42,13 @@ class ApiRepository {
         email: String,
         nickname: String?,
         avatarUrl: String?,
+        password: Any?,
         isAdmin: Boolean,
-        isBanned: Boolean
+        isBanned: Boolean,
     ) = apiInterface.updateUser(
         "Bearer $token",
         email,
-        UpdateUserRequest(nickname, avatarUrl, isAdmin, isBanned)
+        UpdateUserRequest(nickname, avatarUrl, password, isAdmin, isBanned)
     )
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -76,6 +80,15 @@ class ApiRepository {
             langCode,
             allowNotification,
             mergeScheduleCalendar
+        )
+    )
+    suspend fun contactUs(
+        email: String,
+        message: String
+    ) = apiInterface.contactUs(
+        ContactRequest(
+            email = email,
+            message = message
         )
     )
 
@@ -241,11 +254,6 @@ class ApiRepository {
     suspend fun deleteCalendarTask(token: String, id: String) =
         apiInterface.deleteCalendarTask("Bearer $token", id)
 
-    data class UpdateUserRequest(
-        val nickname: String?,
-        val avatar_url: String?,
-        val is_admin: Boolean,
-        val is_banned: Boolean
-    )
+
 
 }

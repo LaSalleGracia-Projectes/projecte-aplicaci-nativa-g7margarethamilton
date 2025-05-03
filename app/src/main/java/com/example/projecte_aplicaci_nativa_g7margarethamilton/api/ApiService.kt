@@ -54,6 +54,9 @@ interface ApiService {
         @Body body: Map<String, String>
     ): Response<LoginResponse>
 
+    @POST("auth/reset-password")
+    suspend fun resetPassword(@Body body: Map<String, String>): Response<Map<String, String>>
+
     //LOGOUT
     @POST("auth/app/logout")
     suspend fun logoutApp(
@@ -76,7 +79,7 @@ interface ApiService {
     suspend fun updateUser(
         @Header("Authorization") token: String,
         @Path("email") email: String,
-        @Body request: ApiRepository.UpdateUserRequest
+        @Body request: UpdateUserRequest
     ): Response<UpdateUserResponse>
 
     /**
@@ -86,7 +89,7 @@ interface ApiService {
     suspend fun deleteUser(
         @Header("Authorization") token: String,
         @Path("email") email: String
-    ): Response<DeleteUserResponse>
+    ): Response<MessageResponse>
 
     @GET("setting/{email}")
     suspend fun getUserSettings(
@@ -100,6 +103,11 @@ interface ApiService {
         @Path("email") email: String,
         @Body request: UpdateSettingsRequest
     ): Response<UpdateSettingsResponse>
+
+    @POST("auth/contact")
+    suspend fun contactUs(
+        @Body body: ContactRequest
+    ): Response<MessageResponse>
 
     /**
     SCHEDULE
@@ -254,6 +262,11 @@ interface ApiService {
     }
 }
 
+data class ContactRequest(
+    val email: String,
+    val message: String
+)
+
 data class CreateCalendarTaskRequest (
     val userId: String,
     val title: String,
@@ -303,16 +316,18 @@ data class CreateTaskRequest(
 data class UpdateUserRequest(
     val nickname: String?,
     val avatar_url: String?,
+    val password: Any?,
     val is_admin: Boolean,
     val is_banned: Boolean
 )
+
 
 data class UpdateUserResponse(
     val message: String,
     val user: User
 )
 
-data class DeleteUserResponse(
+data class MessageResponse(
     val message: String
 )
 
