@@ -11,6 +11,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.projecte_aplicaci_nativa_g7margarethamilton.R
 import com.example.projecte_aplicaci_nativa_g7margarethamilton.Routes
 import com.example.projecte_aplicaci_nativa_g7margarethamilton.viewModel.UserViewModel
 import com.example.projecte_aplicaci_nativa_g7margarethamilton.viewModel.setLocale
@@ -20,11 +21,12 @@ fun WelcomeView(navController: NavController, viewModel: UserViewModel) {
     val context = LocalContext.current
     val selectedLang by viewModel.langCodeField.collectAsState()
     val themeModeField by viewModel.themeModeField.collectAsState()
+    val localizedContext = context.setLocale(selectedLang)
 
     val languageOptions = listOf(
-        "en" to "🇬🇧",
         "ca" to "🇦🇩",
-        "es" to "🇪🇸"
+        "es" to "🇪🇸",
+        "en" to "🇬🇧"
     )
 
     var dropdownExpanded by remember { mutableStateOf(false) }
@@ -56,9 +58,9 @@ fun WelcomeView(navController: NavController, viewModel: UserViewModel) {
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Text("Welcome", fontSize = 36.sp, fontWeight = FontWeight.Bold)
+                Text(text = localizedContext.getString(R.string.welcome_view_title), fontSize = 36.sp, fontWeight = FontWeight.Bold)
                 Spacer(modifier = Modifier.height(8.dp))
-                Text("to", fontSize = 32.sp)
+                Text(text = localizedContext.getString(R.string.welcome_view_subtitle), fontSize = 32.sp)
                 Spacer(modifier = Modifier.height(8.dp))
                 Text("Flow2Day!", fontSize = 36.sp, fontWeight = FontWeight.Bold)
                 Spacer(modifier = Modifier.height(64.dp))
@@ -67,7 +69,7 @@ fun WelcomeView(navController: NavController, viewModel: UserViewModel) {
                     onClick = { navController.navigate(Routes.Login.route) },
                     modifier = Modifier.fillMaxWidth(0.85f).height(50.dp)
                 ) {
-                    Text("Login", fontSize = 16.sp)
+                    Text(text = localizedContext.getString(R.string.welcome_view_login_button), fontSize = 16.sp)
                 }
 
                 Spacer(modifier = Modifier.height(12.dp))
@@ -76,7 +78,7 @@ fun WelcomeView(navController: NavController, viewModel: UserViewModel) {
                     onClick = { navController.navigate(Routes.Register.route) },
                     modifier = Modifier.fillMaxWidth(0.85f).height(50.dp)
                 ) {
-                    Text("Register", fontSize = 16.sp)
+                    Text(text = localizedContext.getString(R.string.welcome_view_register_button), fontSize = 16.sp)
                 }
             }
 
