@@ -20,6 +20,16 @@
     <string name="settings_view_about">About us</string>
     <string name="settings_view_contact">Contact</string>
     <string name="settings_view_advanced_settings">Advanced settings</string>
+    <!-- Terms and Conditions View -->
+    <string name="terms_and_conditions_view_title">Terms &amp; Conditions</string>
+    <string name="terms_and_conditions_view_accept">Accept</string>
+    <!-- About View -->
+    <string name="about_view_title">About us</string>
+    <string name="about_view_description">Our Flow2Day app is designed to help you manage your time efficiently and effectively. With an intuitive interface and powerful tools, we help you stay organized and focused on your goals.</string>
+    <string name="about_view_developer_1">Hi, I\'m Carlos</string>
+    <string name="about_view_developer_2">Hi, I\'m Jaime</string>
+    <string name="about_view_developer_3">Hi, I\'m Nahomy</string>
+    <string name="about_view_developer_4">Hi, I\'m Jaume</string>
     <!-- Advanced Settings View -->
     <string name="advanced_settings_view_title">Advanced Settings</string>
     <string name="advanced_settings_view_theme">Theme (Light/Dark)</string>

@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">projecte-aplicaci-nativa-g7margarethamilton</string>
+    <!-- Home View -->
     <string name="home_view_title">¿Qué hacemos hoy?</string>
     <string name="home_view_task">Tareas de hoy</string>
     <string name="home_view_schedule">Horario</string>
@@ -19,6 +20,18 @@
     <string name="settings_view_about">Sobre nosotros</string>
     <string name="settings_view_contact">Contacto</string>
     <string name="settings_view_advanced_settings">Configuración avanzada</string>
+    <!-- Terms and Conditions View -->
+    <!-- TODO: Falta aplicar les traduccions a la vista -->
+    <string name="terms_and_conditions_view_title">Términos &amp; Condiciones</string>
+    <!-- TODO: Falta el contingut per fer, ja que dona error al executar el programa -->
+    <string name="terms_and_conditions_view_accept">Aceptar</string>
+    <!-- About View -->
+    <string name="about_view_title">Sobre nosotros</string>
+    <string name="about_view_description">Nuestra aplicación Flow2Day está diseñada para ayudarte a gestionar tu tiempo de manera eficiente y efectiva. Con una interfaz intuitiva y herramientas potentes, te ayudamos a mantenerte organizado y enfocado en tus objetivos.</string>
+    <string name="about_view_developer_1">Hola, soy Carlos</string>
+    <string name="about_view_developer_2">Hola, soy Jaime</string>
+    <string name="about_view_developer_3">Hola, soy Nahomy</string>
+    <string name="about_view_developer_4">Hola, soy Jaume</string>
     <!-- Advanced Settings View -->
     <string name="advanced_settings_view_title">Configuración avanzada</string>
     <string name="advanced_settings_view_theme">Tema (Claro/Oscuro)</string>

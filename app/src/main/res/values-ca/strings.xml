@@ -20,6 +20,16 @@
     <string name="settings_view_about">Sobre nosaltres</string>
     <string name="settings_view_contact">Contacte</string>
     <string name="settings_view_advanced_settings">Configuració avançada</string>
+    <!-- Terms and Conditions View TODO: Falta aplicar el de termes a la view -->
+    <string name="terms_and_conditions_view_title">Termes &amp; Condicions</string>
+    <string name="terms_and_conditions_view_accept">Acceptar</string>
+    <!-- About View -->
+    <string name="about_view_title">Sobre nosaltres</string>
+    <string name="about_view_description">La nostra aplicació Flow2Day està dissenyada per ajudar-te a gestionar el teu temps de manera eficient i efectiva. Amb una interfície intuïtiva i eines potents, t’ajudem a mantenir-te organitzat i centrat en els teus objectius.</string>
+    <string name="about_view_developer_1">Hola sóc en Carlos</string>
+    <string name="about_view_developer_2">Hola sóc en Jaime</string>
+    <string name="about_view_developer_3">Hola sóc na Nahomy</string>
+    <string name="about_view_developer_4">Hola sóc en Jaume</string>
     <!-- Advanced Settings View -->
     <string name="advanced_settings_view_title">Configuració avançada</string>
     <string name="advanced_settings_view_theme">Tema (Clar/Fosc)</string>

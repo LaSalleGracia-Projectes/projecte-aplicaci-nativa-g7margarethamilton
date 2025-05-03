@@ -18,6 +18,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -27,12 +28,18 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.projecte_aplicaci_nativa_g7margarethamilton.R
+import com.example.projecte_aplicaci_nativa_g7margarethamilton.viewModel.UserViewModel
+import com.example.projecte_aplicaci_nativa_g7margarethamilton.viewModel.setLocale
 
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
 @Composable
-fun AboutUsView(navController: NavController) {
+fun AboutUsView(viewModel: UserViewModel, navController: NavController) {
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
+
+    val context = LocalContext.current
+    val lang = viewModel.getSavedLanguage(context)
+    val localizedContext = context.setLocale(lang)
 
     val images = listOf(
         R.drawable.profile_avatar_placeholder_large,
@@ -42,10 +49,10 @@ fun AboutUsView(navController: NavController) {
     )
 
     val texts = listOf(
-        "Hola soy Carlos.\n",
-        "Hola soy Jaime.\n",
-        "Hola soy Nahomy.\n",
-        "Hola soy Jaume.\n"
+        "${localizedContext.getString(R.string.about_view_developer_1)}\n",
+        "${localizedContext.getString(R.string.about_view_developer_2)}\n",
+        "${localizedContext.getString(R.string.about_view_developer_3)}\n",
+        "${localizedContext.getString(R.string.about_view_developer_4)}\n"
     )
 
     Scaffold(
@@ -56,7 +63,7 @@ fun AboutUsView(navController: NavController) {
             CenterAlignedTopAppBar(
                 title = {
                     Text(
-                        text = "Sobre nosotros",
+                        text = localizedContext.getString(R.string.about_view_title),
                         fontSize = 30.sp,
                         fontWeight = FontWeight.SemiBold,
                         color = MaterialTheme.colorScheme.onSecondary
@@ -107,7 +114,7 @@ fun AboutUsView(navController: NavController) {
                     )
                     Spacer(modifier = Modifier.height(8.dp))
                     Text(
-                        text = "Nuestra aplicación Flow2Day está diseñada para ayudarte a gestionar tu tiempo de manera eficiente y efectiva. Con una interfaz intuitiva y herramientas poderosas, te ayudamos a mantenerte organizado y enfocado en tus objetivos.",
+                        text = localizedContext.getString(R.string.about_view_description),
                         fontSize = 18.sp,
                         color = MaterialTheme.colorScheme.onBackground,
                         textAlign = TextAlign.Start,
@@ -178,11 +185,3 @@ fun CarruselImagenes(images: List<Int>, texts: List<String>) {
         )
     }
 }
-
-@Preview(showBackground = true, showSystemUi = true)
-@Composable
-fun AboutUsViewPreview() {
-    val navController = rememberNavController()
-    AboutUsView(navController)
-}
-
