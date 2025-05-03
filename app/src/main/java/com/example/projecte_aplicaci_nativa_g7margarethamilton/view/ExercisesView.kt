@@ -20,15 +20,22 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.projecte_aplicaci_nativa_g7margarethamilton.R
+import com.example.projecte_aplicaci_nativa_g7margarethamilton.viewModel.UserViewModel
+import com.example.projecte_aplicaci_nativa_g7margarethamilton.viewModel.setLocale
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ExercisesView(navController: NavController){
+fun ExercisesView(viewModel: UserViewModel, navController: NavController){
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
+    val context = LocalContext.current
+    val lang = viewModel.getSavedLanguage(context)
+    val localizedContext = context.setLocale(lang)
 
     Scaffold(
         modifier = Modifier
@@ -38,7 +45,7 @@ fun ExercisesView(navController: NavController){
             CenterAlignedTopAppBar(
                 title = {
                     Text(
-                        text = "Exercicis",
+                        text = localizedContext.getString(R.string.training_view_title),
                         fontSize = 30.sp,
                         fontWeight = FontWeight.SemiBold,
                         color = MaterialTheme.colorScheme.onSecondary,
@@ -75,7 +82,9 @@ fun ExercisesView(navController: NavController){
                     .padding(16.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ){
-                Text("TODO")
+                Text(
+                    text = localizedContext.getString(R.string.training_view_in_construction),
+                )
             }
         }
     }
