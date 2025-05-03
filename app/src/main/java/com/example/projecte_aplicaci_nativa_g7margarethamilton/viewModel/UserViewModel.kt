@@ -447,4 +447,23 @@ class UserViewModel : ViewModel() {
             }
         }
     }
+
+    fun sendMessage(email: String, message: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                val resp = repository.contactUs(email, message)
+                withContext(Dispatchers.Main) {
+                    if (resp.isSuccessful) {
+                        _updateMsg.value = resp.body()?.message
+                    } else {
+                        _updateError.value  = "Error ${resp.code()} enviant missatge"
+                    }
+                }
+            } catch (e: Exception) {
+                withContext(Dispatchers.Main) {
+                    _updateError.value = "Connexió fallida: ${e.localizedMessage}"
+                }
+            }
+        }
+    }
 }
