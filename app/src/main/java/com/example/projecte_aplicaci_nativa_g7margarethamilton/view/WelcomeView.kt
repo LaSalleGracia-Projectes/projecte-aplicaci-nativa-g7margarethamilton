@@ -21,7 +21,6 @@ fun WelcomeView(navController: NavController, viewModel: UserViewModel) {
     val context = LocalContext.current
     val selectedLang by viewModel.langCodeField.collectAsState()
     val themeModeField by viewModel.themeModeField.collectAsState()
-    val localizedContext = context.setLocale(selectedLang)
 
     val languageOptions = listOf(
         "ca" to "🇦🇩",
@@ -30,13 +29,25 @@ fun WelcomeView(navController: NavController, viewModel: UserViewModel) {
     )
 
     var dropdownExpanded by remember { mutableStateOf(false) }
+    var userHasSelectedLang by remember { mutableStateOf(false) }
 
-    // ✅ Estat reactiu: s'actualitza quan l'usuari selecciona idioma
-    var userHasSelectedLang by remember {
-        mutableStateOf(viewModel.hasUserChosenLanguage(context))
+    // ✅ Només forcem anglès si no ho hem fet mai
+    LaunchedEffect(Unit) {
+        if (!viewModel.hasForcedEnglish(context)) {
+            viewModel.langCodeField.value = "en"
+            context.setLocale("en")
+            viewModel.saveLanguageToPrefs(context, "en")
+            viewModel.loadSettings(context)
+            viewModel.markForcedEnglish(context)
+            userHasSelectedLang = true
+        } else {
+            viewModel.loadSettings(context)
+            userHasSelectedLang = viewModel.hasUserChosenLanguage(context)
+        }
     }
 
-    // 🌍 Emoji mundial si no ha triat idioma encara
+    val localizedContext = context.setLocale(selectedLang)
+
     val selectedEmoji = if (userHasSelectedLang) {
         languageOptions.firstOrNull { it.first == selectedLang }?.second ?: "🌐"
     } else {
@@ -49,7 +60,6 @@ fun WelcomeView(navController: NavController, viewModel: UserViewModel) {
                 .fillMaxSize()
                 .padding(paddingValues)
         ) {
-            // 👉 Contingut principal
             Column(
                 modifier = Modifier
                     .fillMaxSize()
@@ -58,9 +68,16 @@ fun WelcomeView(navController: NavController, viewModel: UserViewModel) {
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Text(text = localizedContext.getString(R.string.welcome_view_title), fontSize = 36.sp, fontWeight = FontWeight.Bold)
+                Text(
+                    text = localizedContext.getString(R.string.welcome_view_title),
+                    fontSize = 36.sp,
+                    fontWeight = FontWeight.Bold
+                )
                 Spacer(modifier = Modifier.height(8.dp))
-                Text(text = localizedContext.getString(R.string.welcome_view_subtitle), fontSize = 32.sp)
+                Text(
+                    text = localizedContext.getString(R.string.welcome_view_subtitle),
+                    fontSize = 32.sp
+                )
                 Spacer(modifier = Modifier.height(8.dp))
                 Text("Flow2Day!", fontSize = 36.sp, fontWeight = FontWeight.Bold)
                 Spacer(modifier = Modifier.height(64.dp))
@@ -69,7 +86,10 @@ fun WelcomeView(navController: NavController, viewModel: UserViewModel) {
                     onClick = { navController.navigate(Routes.Login.route) },
                     modifier = Modifier.fillMaxWidth(0.85f).height(50.dp)
                 ) {
-                    Text(text = localizedContext.getString(R.string.welcome_view_login_button), fontSize = 16.sp)
+                    Text(
+                        text = localizedContext.getString(R.string.welcome_view_login_button),
+                        fontSize = 16.sp
+                    )
                 }
 
                 Spacer(modifier = Modifier.height(12.dp))
@@ -78,11 +98,14 @@ fun WelcomeView(navController: NavController, viewModel: UserViewModel) {
                     onClick = { navController.navigate(Routes.Register.route) },
                     modifier = Modifier.fillMaxWidth(0.85f).height(50.dp)
                 ) {
-                    Text(text = localizedContext.getString(R.string.welcome_view_register_button), fontSize = 16.sp)
+                    Text(
+                        text = localizedContext.getString(R.string.welcome_view_register_button),
+                        fontSize = 16.sp
+                    )
                 }
             }
 
-            // 🌐 Banderes i 🌙 Tema fosc
+            // 🌍 Idioma i tema
             Row(
                 modifier = Modifier
                     .align(Alignment.BottomCenter)
@@ -91,7 +114,6 @@ fun WelcomeView(navController: NavController, viewModel: UserViewModel) {
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                // 🌍 Emoji de llengua
                 Box(
                     modifier = Modifier
                         .clickable { dropdownExpanded = true }
@@ -108,23 +130,20 @@ fun WelcomeView(navController: NavController, viewModel: UserViewModel) {
                     ) {
                         languageOptions.forEach { (code, emoji) ->
                             DropdownMenuItem(
-                                text = {
-                                    Text(text = emoji, fontSize = 28.sp)
-                                },
+                                text = { Text(text = emoji, fontSize = 28.sp) },
                                 onClick = {
                                     viewModel.langCodeField.value = code
                                     viewModel.saveLanguageToPrefs(context, code)
                                     context.setLocale(code)
                                     viewModel.loadSettings(context)
                                     dropdownExpanded = false
-                                    userHasSelectedLang = true // ✅ Activem bandera correcta
+                                    userHasSelectedLang = true
                                 }
                             )
                         }
                     }
                 }
 
-                // 🌗 Switch mode clar/fosc
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier.padding(end = 8.dp)

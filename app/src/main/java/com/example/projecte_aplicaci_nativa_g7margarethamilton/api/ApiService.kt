@@ -54,6 +54,9 @@ interface ApiService {
         @Body body: Map<String, String>
     ): Response<LoginResponse>
 
+    @POST("auth/reset-password")
+    suspend fun resetPassword(@Body body: Map<String, String>): Response<Map<String, String>>
+
     //LOGOUT
     @POST("auth/app/logout")
     suspend fun logoutApp(
