@@ -42,10 +42,10 @@ fun AboutUsView(viewModel: UserViewModel, navController: NavController) {
     val localizedContext = context.setLocale(lang)
 
     val images = listOf(
-        R.drawable.profile_avatar_placeholder_large,
-        R.drawable.profile_avatar_placeholder_large,
-        R.drawable.profile_avatar_placeholder_large,
-        R.drawable.profile_avatar_placeholder_large
+        R.drawable.carlos,
+        R.drawable.jaime,
+        R.drawable.suki,
+        R.drawable.jaume
     )
 
     val texts = listOf(
@@ -141,20 +141,35 @@ fun CarruselImagenes(images: List<Int>, texts: List<String>) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        HorizontalPager(
-            state = pagerState,
+        Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(200.dp)
-        ) { page ->
-            Image(
-                painter = painterResource(id = images[page]),
-                contentDescription = "Imagen ${page + 1}",
+                .height(300.dp)
+                .padding(horizontal = 16.dp)
+        ) {
+            HorizontalPager(
+                state = pagerState,
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .clip(MaterialTheme.shapes.medium),
-                contentScale = ContentScale.Crop
-            )
+                    .fillMaxSize()
+            ) { page ->
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(4.dp)
+                        .clip(RoundedCornerShape(16.dp))
+                        .background(MaterialTheme.colorScheme.surface),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Image(
+                        painter = painterResource(id = images[page]),
+                        contentDescription = "Imagen ${page + 1}",
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(16.dp),
+                        contentScale = ContentScale.Fit
+                    )
+                }
+            }
         }
 
         Row(
@@ -165,13 +180,13 @@ fun CarruselImagenes(images: List<Int>, texts: List<String>) {
             verticalAlignment = Alignment.CenterVertically
         ) {
             repeat(images.size) { iteration ->
-                val color = if (currentPage == iteration) Color(0xFF2E3B4E) else Color.LightGray
+                val color = if (currentPage == iteration) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.surfaceVariant
                 Box(
                     modifier = Modifier
-                        .padding(2.dp)
+                        .padding(4.dp)
                         .clip(CircleShape)
                         .background(color)
-                        .size(8.dp)
+                        .size(if (currentPage == iteration) 10.dp else 8.dp)
                 )
             }
         }
