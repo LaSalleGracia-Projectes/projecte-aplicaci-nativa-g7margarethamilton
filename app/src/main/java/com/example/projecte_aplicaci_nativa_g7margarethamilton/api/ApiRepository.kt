@@ -82,6 +82,15 @@ class ApiRepository {
             mergeScheduleCalendar
         )
     )
+    suspend fun contactUs(
+        email: String,
+        message: String
+    ) = apiInterface.contactUs(
+        ContactRequest(
+            email = email,
+            message = message
+        )
+    )
 
     //SCHEDULE
     suspend fun getAllSchedules(token: String) =

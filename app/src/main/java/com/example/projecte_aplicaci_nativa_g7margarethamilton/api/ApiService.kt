@@ -89,7 +89,7 @@ interface ApiService {
     suspend fun deleteUser(
         @Header("Authorization") token: String,
         @Path("email") email: String
-    ): Response<DeleteUserResponse>
+    ): Response<MessageResponse>
 
     @GET("setting/{email}")
     suspend fun getUserSettings(
@@ -103,6 +103,11 @@ interface ApiService {
         @Path("email") email: String,
         @Body request: UpdateSettingsRequest
     ): Response<UpdateSettingsResponse>
+
+    @POST("auth/contact")
+    suspend fun contactUs(
+        @Body body: ContactRequest
+    ): Response<MessageResponse>
 
     /**
     SCHEDULE
@@ -257,6 +262,11 @@ interface ApiService {
     }
 }
 
+data class ContactRequest(
+    val email: String,
+    val message: String
+)
+
 data class CreateCalendarTaskRequest (
     val userId: String,
     val title: String,
@@ -317,7 +327,7 @@ data class UpdateUserResponse(
     val user: User
 )
 
-data class DeleteUserResponse(
+data class MessageResponse(
     val message: String
 )
 
