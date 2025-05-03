@@ -32,7 +32,7 @@ fun EntryPoint(navController: NavHostController, viewModel: UserViewModel) {
         composable(Routes.Calendar.route) { CalendarView(navController) }
         composable(Routes.ProfileSettings.route) { ProfileSettingsView(navController, viewModel) }
         composable(Routes.EditProfile.route) { EditProfileView(navController, viewModel) }
-        composable(Routes.Exercises.route) { ExercisesView(navController) }
-        composable(Routes.ShoppingList.route) { ShoppingListView(navController) }
+        composable(Routes.Exercises.route) { ExercisesView(viewModel, navController) }
+        composable(Routes.ShoppingList.route) { ShoppingListView(viewModel, navController) }
     }
 }

@@ -7,10 +7,29 @@
     <string name="home_view_calendar">Calendari</string>
     <string name="home_view_list">Compra</string>
     <string name="home_view_training">Entrenament</string>
+    <!-- Shopping List View -->
+    <string name="shopping_list_view_title">Llista de la compra</string>
+    <string name="shopping_list_view_in_construction">Proximament</string>
+    <!-- Training View -->
+    <string name="training_view_title">Entrenament</string>
+    <string name="training_view_in_construction">Proximament</string>
+
     <!-- Advanced Settings View -->
     <string name="advanced_settings_view_title">Configuració avançada</string>
     <string name="advanced_settings_view_theme">Tema (Clar/Fosc)</string>
     <string name="advanced_settings_view_language">Idioma</string>
     <string name="advanced_settings_view_notifications">Notificacions</string>
     <string name="advanced_settings_view_merge_task">Unir tasques horari i calendari</string>
+
+    <!-- Profile View -->
+    <string name="profile_view_title">Perfil</string>
+    <string name="profile_view_date">Usuari/a des-de:</string>
+    <string name="profile_view_change_password">Canviar contrassenya</string>
+    <string name="profile_view_delete_account">Esborrar compte</string>
+    <string name="profile_view_logout">Tancar sessió</string>
+    <string name="profile_view_logout_on_all_devices">Tancar sessió en tots els dispositius</string>
+    <!-- Edit Profile View -->
+    <string name="edit_profile_view_title">Editar perfil</string>
+    <string name="edit_profile_view_nickname">Nom d\'usuari</string>
+    <string name="edit_profile_view_avatar">Url d\'Avatar</string>
 </resources>

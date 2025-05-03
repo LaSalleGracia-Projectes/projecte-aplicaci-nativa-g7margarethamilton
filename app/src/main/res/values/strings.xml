@@ -7,10 +7,28 @@
     <string name="home_view_calendar">Calendar</string>
     <string name="home_view_list">Shopping</string>
     <string name="home_view_training">Training</string>
+    <!-- Shopping List View -->
+    <string name="shopping_list_view_title">Shopping List</string>
+    <string name="shopping_list_view_in_construction">Coming soon</string>
+    <!-- Training View -->
+    <string name="training_view_title">Training</string>
+    <string name="training_view_in_construction">Coming soon</string>
     <!-- Advanced Settings View -->
     <string name="advanced_settings_view_title">Advanced Settings</string>
     <string name="advanced_settings_view_theme">Theme (Light/Dark)</string>
     <string name="advanced_settings_view_language">Language</string>
     <string name="advanced_settings_view_notifications">Notifications</string>
     <string name="advanced_settings_view_merge_task">Merge schedule and calendar tasks</string>
+
+    <!-- Profile View -->
+    <string name="profile_view_title">Profile</string>
+    <string name="profile_view_date">User since:</string>
+    <string name="profile_view_change_password">Change password</string>
+    <string name="profile_view_delete_account">Delete account</string>
+    <string name="profile_view_logout">Log out</string>
+    <string name="profile_view_logout_on_all_devices">Log out on all devices</string>
+    <!-- Edit Profile View -->
+    <string name="edit_profile_view_title">Edit Profile</string>
+    <string name="edit_profile_view_nickname">Username</string>
+    <string name="edit_profile_view_avatar">Avatar URL</string>
 </resources>
