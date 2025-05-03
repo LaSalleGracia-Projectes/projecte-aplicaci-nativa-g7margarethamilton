@@ -2,6 +2,7 @@ package com.example.projecte_aplicaci_nativa_g7margarethamilton.view
 
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -54,6 +55,8 @@ fun LogIn(navController: NavController, viewModel: UserViewModel) {
     val context = LocalContext.current
     val lang = viewModel.getSavedLanguage(context)
     val localizedContext = context.setLocale(lang)
+    var showForgotDialog by rememberSaveable { mutableStateOf(false) }
+    var forgotEmail by rememberSaveable { mutableStateOf("") }
     val launcher = rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         try {
             val account = GoogleSignIn.getSignedInAccountFromIntent(result.data).getResult(ApiException::class.java)
@@ -80,6 +83,38 @@ fun LogIn(navController: NavController, viewModel: UserViewModel) {
             Icon(
                 imageVector = Icons.Default.Close,
                 contentDescription = "Close"
+            )
+        }
+
+        if (showForgotDialog) {
+            androidx.compose.material3.AlertDialog(
+                onDismissRequest = { showForgotDialog = false },
+                confirmButton = {
+                    Button(onClick = {
+                        viewModel.sendResetPasswordEmail(forgotEmail, context)
+                        showForgotDialog = false
+                    }) {
+                        Text("Enviar")
+                    }
+                },
+                dismissButton = {
+                    Button(onClick = { showForgotDialog = false }) {
+                        Text("Cancel·lar")
+                    }
+                },
+                title = { Text("Restablir la contrasenya") },
+                text = {
+                    Column {
+                        Text("Introdueix el teu correu per restablir la contrasenya:")
+                        OutlinedTextField(
+                            value = forgotEmail,
+                            onValueChange = { forgotEmail = it },
+                            placeholder = { Text("exemple@correu.com") },
+                            singleLine = true,
+                            modifier = Modifier.fillMaxWidth()
+                        )
+                    }
+                }
             )
         }
 
@@ -160,6 +195,7 @@ fun LogIn(navController: NavController, viewModel: UserViewModel) {
                 modifier = Modifier
                     .align(Alignment.Start)
                     .padding(bottom = 24.dp)
+                    .clickable { showForgotDialog = true }
             )
 
             // Login button
