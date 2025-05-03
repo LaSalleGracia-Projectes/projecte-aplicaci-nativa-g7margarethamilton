@@ -282,7 +282,8 @@ fun ScheduleView(
                 onClick = { showAddTaskDialog.value = true },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(top = 16.dp)
+                    .padding(top = 16.dp),
+                enabled = currentSchedule != null,
             ) {
                 Text("Añadir Tarea")
             }

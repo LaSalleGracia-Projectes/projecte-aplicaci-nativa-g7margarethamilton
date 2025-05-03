@@ -81,8 +81,9 @@ fun HomeView(navController: NavController, viewModel: UserViewModel) {
             ) {
                 // Botón Agenda
                 HomeOptionButton(
+
                     title = localizedContext.getString(R.string.home_view_schedule),
-                    onClick = { /*TODO: navigate to Agenda*/ },
+                    onClick = { navController.navigate(Routes.Schedule.route) },
                     modifier = Modifier.weight(1f)
                 )
 
