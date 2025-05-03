@@ -56,7 +56,7 @@ fun LogIn(navController: NavController, viewModel: UserViewModel) {
             val account = GoogleSignIn.getSignedInAccountFromIntent(result.data).getResult(ApiException::class.java)
             val idToken = account?.idToken
             if (idToken != null) {
-                viewModel.loginWithGoogle(idToken)
+                viewModel.loginWithGoogle(context, idToken)
             }
         } catch (e: ApiException) {
             // Error
@@ -162,7 +162,7 @@ fun LogIn(navController: NavController, viewModel: UserViewModel) {
             // Login button
             Button(
                 onClick = {
-                    viewModel.login(email, password)
+                    viewModel.login(context, email, password)
                 },
                 modifier = Modifier
                     .fillMaxWidth()

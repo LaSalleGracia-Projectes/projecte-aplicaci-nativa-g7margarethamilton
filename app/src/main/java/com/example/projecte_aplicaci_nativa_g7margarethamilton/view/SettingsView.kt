@@ -30,14 +30,21 @@ import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.StrokeJoin
 import androidx.compose.ui.graphics.vector.path
+import androidx.compose.ui.platform.LocalContext
+import com.example.projecte_aplicaci_nativa_g7margarethamilton.R
 import com.example.projecte_aplicaci_nativa_g7margarethamilton.Routes
+import com.example.projecte_aplicaci_nativa_g7margarethamilton.viewModel.UserViewModel
+import com.example.projecte_aplicaci_nativa_g7margarethamilton.viewModel.setLocale
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SettingsView(navController: NavController) {
+fun SettingsView(viewModel: UserViewModel, navController: NavController) {
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
     var showTermsModal by remember { mutableStateOf(false) }
+    val context = LocalContext.current
+    val lang = viewModel.getSavedLanguage(context)
+    val localizedContext = context.setLocale(lang)
 
     Scaffold(
         modifier = Modifier
@@ -47,7 +54,7 @@ fun SettingsView(navController: NavController) {
             CenterAlignedTopAppBar(
                 title = {
                     Text(
-                        text = "Ajustes",
+                        text = localizedContext.getString(R.string.settings_view_title),
                         fontSize = 30.sp,
                         fontWeight = FontWeight.SemiBold,
                         color = MaterialTheme.colorScheme.onSecondary,
@@ -74,7 +81,7 @@ fun SettingsView(navController: NavController) {
             Spacer(modifier = Modifier.height(8.dp))
             
             SettingOption(
-                title = "Terms and conditions",
+                title = localizedContext.getString(R.string.settings_view_terms_and_conditions),
                 icon = Article,
                 onClick = { showTermsModal = true }
             )
@@ -83,19 +90,19 @@ fun SettingsView(navController: NavController) {
             }
             
             SettingOption(
-                title = "About Us",
+                title = localizedContext.getString(R.string.settings_view_about),
                 icon = Icons.Default.Info,
                 onClick = { navController.navigate(Routes.AboutUs.route) }
             )
             
             SettingOption(
-                title = "Contact",
+                title = localizedContext.getString(R.string.settings_view_contact),
                 icon = Icons.Default.Email,
                 onClick = { navController.navigate(Routes.ContactUs.route) }
             )
             
             SettingOption(
-                title = "Advanced settings",
+                title = localizedContext.getString(R.string.settings_view_advanced_settings),
                 icon = Icons.Default.Settings,
                 onClick = { navController.navigate(Routes.ProfileSettings.route) }
             )
@@ -155,15 +162,7 @@ fun SettingOption(
     }
 }
 
-@Preview(showBackground = true, showSystemUi = true)
-@Composable
-fun SettingsViewPreview() {
-    val navController = rememberNavController()
-    SettingsView(navController)
-}
-
-
-public val Article: ImageVector
+val Article: ImageVector
     get() {
         if (_Article != null) {
             return _Article!!

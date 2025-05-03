@@ -26,15 +26,24 @@ import com.example.projecte_aplicaci_nativa_g7margarethamilton.ui.theme.Projecte
 import com.example.projecte_aplicaci_nativa_g7margarethamilton.view.EntryPoint
 import com.example.projecte_aplicaci_nativa_g7margarethamilton.viewModel.CalendarViewModel
 import com.example.projecte_aplicaci_nativa_g7margarethamilton.viewModel.UserViewModel
+import com.example.projecte_aplicaci_nativa_g7margarethamilton.viewModel.setLocale
 
 @SuppressLint("NewApi")
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
+        val viewModel = UserViewModel()
+
+        val lang = viewModel.getSavedLanguage(this)
+        val contextWithLocale = this.setLocale(lang)
+
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
+
 
         val viewModel = UserViewModel()
         val calendarViewModel = CalendarViewModel(viewModel)
+
+        enableEdgeToEdge()
+
         WindowCompat.setDecorFitsSystemWindows(window, false)
 
         setContent {
@@ -55,6 +64,7 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
+
 }
 
 @Composable

@@ -1,13 +1,11 @@
 package com.example.projecte_aplicaci_nativa_g7margarethamilton.view
 
-import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.ExitToApp
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -21,19 +19,16 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import coil3.compose.AsyncImage
+import com.example.projecte_aplicaci_nativa_g7margarethamilton.R
 import com.example.projecte_aplicaci_nativa_g7margarethamilton.Routes
-import com.example.projecte_aplicaci_nativa_g7margarethamilton.model.User
 import com.example.projecte_aplicaci_nativa_g7margarethamilton.viewModel.UserViewModel
+import com.example.projecte_aplicaci_nativa_g7margarethamilton.viewModel.setLocale
 import java.time.OffsetDateTime
 import java.time.format.DateTimeFormatter
-import java.util.Date
-import java.util.Locale
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -41,7 +36,8 @@ fun ProfileView(navController: NavController, viewModel: UserViewModel) {
     val currentUser by viewModel.currentUser.collectAsState()
     val context = LocalContext.current
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
-
+    val lang = viewModel.getSavedLanguage(context)
+    val localizedContext = context.setLocale(lang)
 
     Scaffold(
         modifier = Modifier
@@ -51,7 +47,7 @@ fun ProfileView(navController: NavController, viewModel: UserViewModel) {
             CenterAlignedTopAppBar(
                 title = {
                     Text(
-                        text = "Perfil",
+                        text = localizedContext.getString(R.string.profile_view_title),
                         fontSize = 30.sp,
                         fontWeight = FontWeight.SemiBold,
                         color = MaterialTheme.colorScheme.onSecondary
@@ -157,7 +153,7 @@ fun ProfileView(navController: NavController, viewModel: UserViewModel) {
                     ) {
                         // Usuario desde
                         InfoRow(
-                            title = "Usuari/a des-de:",
+                            title = localizedContext.getString(R.string.profile_view_date),
                             value = formatDateHumanReadable(currentUser?.created_at ?: "0001-01-01T00:00:00Z"),
                             iconTint = MaterialTheme.colorScheme.onSecondary
                         )
@@ -186,6 +182,36 @@ fun ProfileView(navController: NavController, viewModel: UserViewModel) {
                     horizontalAlignment = Alignment.End
                 ) {
                     Button(
+                        onClick = {  },
+                        modifier = Modifier.padding(top = 8.dp),
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = MaterialTheme.colorScheme.primary,
+                        ),
+                        contentPadding = PaddingValues(horizontal = 24.dp, vertical = 12.dp),
+                        shape = RoundedCornerShape(8.dp)
+                    ) {
+                        Text(
+                            text = localizedContext.getString(R.string.profile_view_change_password),
+                            fontSize = 16.sp,
+                            fontWeight = FontWeight.Medium
+                        )
+                    }
+                    Button(
+                        onClick = {  },
+                        modifier = Modifier.padding(top = 8.dp),
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = MaterialTheme.colorScheme.primary,
+                        ),
+                        contentPadding = PaddingValues(horizontal = 24.dp, vertical = 12.dp),
+                        shape = RoundedCornerShape(8.dp)
+                    ) {
+                        Text(
+                            text = localizedContext.getString(R.string.profile_view_delete_account),
+                            fontSize = 16.sp,
+                            fontWeight = FontWeight.Medium
+                        )
+                    }
+                    Button(
                         onClick = {
                             viewModel.logout(context)
                             navController.navigate("welcome")
@@ -205,7 +231,7 @@ fun ProfileView(navController: NavController, viewModel: UserViewModel) {
                         )
                         Spacer(modifier = Modifier.width(8.dp))
                         Text(
-                            text = "Log out",
+                            text = localizedContext.getString(R.string.profile_view_logout),
                             fontSize = 16.sp,
                             fontWeight = FontWeight.Medium
                         )
@@ -229,7 +255,7 @@ fun ProfileView(navController: NavController, viewModel: UserViewModel) {
                         )
                         Spacer(modifier = Modifier.width(8.dp))
                         Text(
-                            text = "Logout on all devices",
+                            text = localizedContext.getString(R.string.profile_view_logout_on_all_devices),
                             fontSize = 16.sp,
                             fontWeight = FontWeight.Medium
                         )
@@ -271,13 +297,4 @@ private fun InfoRow(title: String, value: String, iconTint: Color) {
             )
         }
     }
-}
-
-@SuppressLint("ViewModelConstructorInComposable")
-@Preview(showBackground = true)
-@Composable
-fun ProfileViewPreview() {
-    val navController = rememberNavController()
-    val viewModel = UserViewModel()
-    ProfileView(navController, viewModel)
 }
