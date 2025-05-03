@@ -73,7 +73,7 @@ fun AboutUsView(viewModel: UserViewModel, navController: NavController) {
                     IconButton(onClick = { navController.popBackStack() }) {
                         Icon(
                             imageVector = Icons.Default.ArrowBack,
-                            contentDescription = "Volver",
+                            contentDescription = localizedContext.getString(R.string.common_back),
                             tint = MaterialTheme.colorScheme.onBackground
                         )
                     }
@@ -105,7 +105,7 @@ fun AboutUsView(viewModel: UserViewModel, navController: NavController) {
 
                 Column {
                     Text(
-                        text = "Flow2Day!",
+                        text = localizedContext.getString(R.string.common_app_name),
                         fontSize = 30.sp,
                         fontWeight = FontWeight.Bold,
                         color = MaterialTheme.colorScheme.onBackground,
@@ -149,7 +149,7 @@ fun CarruselImagenes(images: List<Int>, texts: List<String>) {
         ) { page ->
             Image(
                 painter = painterResource(id = images[page]),
-                contentDescription = "Imagen ${page + 1}",
+                contentDescription = null,
                 modifier = Modifier
                     .fillMaxWidth()
                     .clip(MaterialTheme.shapes.medium),

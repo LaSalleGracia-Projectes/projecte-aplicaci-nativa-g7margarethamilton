@@ -43,10 +43,9 @@
     <string name="settings_view_contact">Contacto</string>
     <string name="settings_view_advanced_settings">Configuración avanzada</string>
     <!-- Terms and Conditions View -->
-    <!-- TODO: Falta aplicar les traduccions a la vista -->
-    <string name="terms_and_conditions_view_title">Términos &amp; Condiciones</string>
-    <!-- TODO: Falta el contingut per fer, ja que dona error al executar el programa -->
+    <string name="terms_and_conditions_view_title">Términos y Condiciones</string>
     <string name="terms_and_conditions_view_accept">Aceptar</string>
+    <string name="terms_and_conditions_view_content">1. Aceptación de los términos\nAl acceder y utilizar esta aplicación, usted acepta estar sujeto a estos términos y condiciones.\n\n2. Uso de la aplicación\nEsta aplicación está destinada únicamente a fines de registro y uso personal.\n\n3. Privacidad\nNos comprometemos a proteger su privacidad y datos personales de acuerdo con nuestra política de privacidad.\n\n4. Modificaciones\nNos reservamos el derecho de modificar estos términos en cualquier momento.\n\n5. Limitación de responsabilidad\nNo nos hacemos responsables de cualquier daño directo o indirecto que pueda surgir del uso de esta aplicación.</string>
     <!-- About View -->
     <string name="about_view_title">Sobre nosotros</string>
     <string name="about_view_description">Nuestra aplicación Flow2Day está diseñada para ayudarte a gestionar tu tiempo de manera eficiente y efectiva. Con una interfaz intuitiva y herramientas potentes, te ayudamos a mantenerte organizado y enfocado en tus objetivos.</string>
@@ -72,4 +71,50 @@
     <string name="edit_profile_view_title">Editar perfil</string>
     <string name="edit_profile_view_nickname">Nombre de usuario</string>
     <string name="edit_profile_view_avatar">URL del avatar</string>
+    <!-- Contact View -->
+    <string name="contact_view_title">Contáctanos</string>
+    <string name="contact_view_problem_title">¿Tienes algún problema?</string>
+    <string name="contact_view_problem_description">Te escuchamos. Si tienes alguna pregunta, sugerencia o comentario, no dudes en escribirnos. Estamos aquí para ayudarte.</string>
+    <string name="contact_view_write_here">Escribe aquí...</string>
+    <string name="contact_view_send">Enviar</string>
+    <string name="contact_view_success_title">¡Gracias por tu mensaje!</string>
+    <string name="contact_view_success_description">Hemos recibido tu comentario y nos pondremos en contacto contigo lo antes posible.</string>
+    <string name="contact_view_back">Volver</string>
+    
+    <!-- Common -->
+    <string name="common_back">Volver</string>
+    <string name="common_save">Guardar</string>
+    <string name="common_app_name">Flow2Day!</string>
+    <string name="common_image_description">Imagen %1$d</string>
+    
+    <!-- Calendar -->
+    <string name="calendar_weekdays">L,M,X,J,V,S,D</string>
+    <string name="calendar_hour">%02d</string>
+    <string name="calendar_view_title">Calendario</string>
+    <string name="calendar_create">Crear Calendario</string>
+    <string name="calendar_create_new">Crear</string>
+    <string name="calendar_cancel">Cancelar</string>
+    <string name="calendar_create_new_agenda">Crear nuevo calendario</string>
+    <string name="calendar_edit_task">Editar tarea</string>
+    <string name="calendar_delete_task">Eliminar tarea</string>
+    <string name="calendar_edit_event">Editar Evento</string>
+    <string name="calendar_save">Guardar</string>
+    <string name="calendar_select_time">Seleccionar hora</string>
+    <string name="calendar_24h_format">Formato 24 horas</string>
+    <string name="calendar_accept">Aceptar</string>
+    <string name="calendar_select_date">Seleccionar fecha</string>
+    <string name="calendar_previous_month">Mes anterior</string>
+    <string name="calendar_next_month">Mes siguiente</string>
+
+    <!-- Schedule -->
+    <string name="schedule_view_title">Agenda</string>
+    <string name="schedule_close">Cerrar</string>
+    <string name="schedule_calendar">Calendario</string>
+    <string name="schedule_no_tasks">No hay tareas programadas para este día</string>
+    <string name="schedule_add_task">Añadir Tarea</string>
+    <string name="schedule_new_task">Nueva Tarea</string>
+    <string name="schedule_add">Añadir</string>
+    <string name="schedule_new_agenda">Nueva Agenda</string>
+    <string name="schedule_title_empty">El título no puede estar vacío</string>
+    <string name="schedule_create">Crear</string>
 </resources>

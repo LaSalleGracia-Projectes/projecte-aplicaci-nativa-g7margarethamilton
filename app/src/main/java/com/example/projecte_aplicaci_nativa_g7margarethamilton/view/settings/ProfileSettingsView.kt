@@ -58,7 +58,7 @@ fun ProfileSettingsView(
                     IconButton(onClick = { navController.navigate(Routes.Settings.route) }) {
                         Icon(
                             imageVector = Icons.Default.ArrowBack,
-                            contentDescription = "Volver",
+                            contentDescription = localizedContext.getString(R.string.common_back),
                             tint = MaterialTheme.colorScheme.onBackground
                         )
                     }
@@ -70,7 +70,7 @@ fun ProfileSettingsView(
                     }) {
                         Icon(
                             imageVector = Icons.Default.Check,
-                            contentDescription = "Guardar",
+                            contentDescription = localizedContext.getString(R.string.common_save),
                             tint = MaterialTheme.colorScheme.onSecondary
                         )
                     }
