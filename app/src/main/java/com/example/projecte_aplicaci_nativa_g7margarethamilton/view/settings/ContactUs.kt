@@ -50,7 +50,6 @@ import androidx.compose.runtime.collectAsState
 @Composable
 fun ContactUsView(navController: NavController, viewModel: UserViewModel) {
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
-    val backgroundColor = Color(0xFFF8F8F8)
     var showSuccessScreen by remember { mutableStateOf(false) }
     val updateMsg by viewModel.updateMsg.collectAsState()
     val updateError by viewModel.updateError.collectAsState()
