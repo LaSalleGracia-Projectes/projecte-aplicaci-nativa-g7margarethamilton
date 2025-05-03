@@ -1,29 +1,9 @@
 package com.example.projecte_aplicaci_nativa_g7margarethamilton.view
 
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Button
-import androidx.compose.material3.DropdownMenu
-import androidx.compose.material3.DropdownMenuItem
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Switch
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.foundation.layout.*
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -34,7 +14,6 @@ import androidx.navigation.NavController
 import com.example.projecte_aplicaci_nativa_g7margarethamilton.Routes
 import com.example.projecte_aplicaci_nativa_g7margarethamilton.viewModel.UserViewModel
 import com.example.projecte_aplicaci_nativa_g7margarethamilton.viewModel.setLocale
-import org.checkerframework.checker.units.qual.s
 
 @Composable
 fun WelcomeView(navController: NavController, viewModel: UserViewModel) {
@@ -42,14 +21,25 @@ fun WelcomeView(navController: NavController, viewModel: UserViewModel) {
     val selectedLang by viewModel.langCodeField.collectAsState()
     val themeModeField by viewModel.themeModeField.collectAsState()
 
-    // Per mostrar emojis
     val languageOptions = listOf(
         "en" to "🇬🇧",
-        "ca" to "\uD83C\uDDE6\uD83C\uDDE9", // o 🇦🇩
+        "ca" to "🇦🇩",
         "es" to "🇪🇸"
     )
 
     var dropdownExpanded by remember { mutableStateOf(false) }
+
+    // ✅ Estat reactiu: s'actualitza quan l'usuari selecciona idioma
+    var userHasSelectedLang by remember {
+        mutableStateOf(viewModel.hasUserChosenLanguage(context))
+    }
+
+    // 🌍 Emoji mundial si no ha triat idioma encara
+    val selectedEmoji = if (userHasSelectedLang) {
+        languageOptions.firstOrNull { it.first == selectedLang }?.second ?: "🌐"
+    } else {
+        "🌐"
+    }
 
     Scaffold { paddingValues ->
         Box(
@@ -57,81 +47,94 @@ fun WelcomeView(navController: NavController, viewModel: UserViewModel) {
                 .fillMaxSize()
                 .padding(paddingValues)
         ) {
+            // 👉 Contingut principal
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(24.dp),
+                    .padding(horizontal = 24.dp)
+                    .padding(top = 48.dp, bottom = 140.dp),
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                // Títols i botons com abans...
-
                 Text("Welcome", fontSize = 36.sp, fontWeight = FontWeight.Bold)
                 Spacer(modifier = Modifier.height(8.dp))
                 Text("to", fontSize = 32.sp)
                 Spacer(modifier = Modifier.height(8.dp))
                 Text("Flow2Day!", fontSize = 36.sp, fontWeight = FontWeight.Bold)
-                Spacer(modifier = Modifier.height(100.dp))
+                Spacer(modifier = Modifier.height(64.dp))
 
                 Button(
                     onClick = { navController.navigate(Routes.Login.route) },
-                    modifier = Modifier.fillMaxWidth().height(56.dp)
-                ) { Text("Login", fontSize = 16.sp) }
+                    modifier = Modifier.fillMaxWidth(0.85f).height(50.dp)
+                ) {
+                    Text("Login", fontSize = 16.sp)
+                }
 
-                Spacer(modifier = Modifier.height(16.dp))
+                Spacer(modifier = Modifier.height(12.dp))
 
                 Button(
                     onClick = { navController.navigate(Routes.Register.route) },
-                    modifier = Modifier.fillMaxWidth().height(56.dp)
-                ) { Text("Register", fontSize = 16.sp) }
+                    modifier = Modifier.fillMaxWidth(0.85f).height(50.dp)
+                ) {
+                    Text("Register", fontSize = 16.sp)
+                }
             }
 
-            // 🔽 Idioma + switch a la part inferior
+            // 🌐 Banderes i 🌙 Tema fosc
             Row(
                 modifier = Modifier
                     .align(Alignment.BottomCenter)
                     .fillMaxWidth()
-                    .padding(16.dp),
+                    .padding(20.dp),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                // Idioma amb banderes
-                Box {
+                // 🌍 Emoji de llengua
+                Box(
+                    modifier = Modifier
+                        .clickable { dropdownExpanded = true }
+                        .padding(8.dp)
+                ) {
                     Text(
-                        text = languageOptions.find { it.first == selectedLang }?.second ?: "🌐",
-                        modifier = Modifier
-                            .clickable { dropdownExpanded = true }
-                            .padding(12.dp)
-                            .border(1.dp, MaterialTheme.colorScheme.onSurface, MaterialTheme.shapes.small)
+                        text = selectedEmoji,
+                        fontSize = 32.sp
                     )
+
                     DropdownMenu(
                         expanded = dropdownExpanded,
                         onDismissRequest = { dropdownExpanded = false }
                     ) {
                         languageOptions.forEach { (code, emoji) ->
                             DropdownMenuItem(
-                                text = { Text(emoji) },
+                                text = {
+                                    Text(text = emoji, fontSize = 28.sp)
+                                },
                                 onClick = {
                                     viewModel.langCodeField.value = code
-                                    dropdownExpanded = false
                                     viewModel.saveLanguageToPrefs(context, code)
                                     context.setLocale(code)
                                     viewModel.loadSettings(context)
-                                    navController.navigate(Routes.Welcome.route) {
-                                        popUpTo(Routes.Welcome.route) { inclusive = true }
-                                    }
+                                    dropdownExpanded = false
+                                    userHasSelectedLang = true // ✅ Activem bandera correcta
                                 }
                             )
                         }
                     }
                 }
 
-                // Switch/boto bolea
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Text("Bolea")
+                // 🌗 Switch mode clar/fosc
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.padding(end = 8.dp)
+                ) {
+                    Text(
+                        text = if (themeModeField) "🌙" else "☀️",
+                        fontSize = 20.sp,
+                        modifier = Modifier.padding(end = 6.dp)
+                    )
                     Switch(
                         checked = themeModeField,
-                        onCheckedChange = { viewModel.themeModeField.value = it },
+                        onCheckedChange = { viewModel.themeModeField.value = it }
                     )
                 }
             }

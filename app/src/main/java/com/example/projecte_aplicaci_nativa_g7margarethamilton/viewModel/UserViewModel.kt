@@ -339,6 +339,11 @@ class UserViewModel : ViewModel() {
         prefs.edit().putString("lang", lang).apply()
     }
 
+    fun hasUserChosenLanguage(context: Context): Boolean {
+        val prefs = context.getSharedPreferences("settings", Context.MODE_PRIVATE)
+        return prefs.getBoolean("lang_selected", false)
+    }
+
     fun getSavedLanguage(context: Context): String {
         val prefs = context.getSharedPreferences("settings", Context.MODE_PRIVATE)
         val lang = prefs.getString("lang", null)
