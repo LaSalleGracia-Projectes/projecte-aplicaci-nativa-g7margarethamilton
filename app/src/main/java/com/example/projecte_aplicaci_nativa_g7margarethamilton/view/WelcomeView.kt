@@ -22,6 +22,20 @@ fun WelcomeView(navController: NavController, viewModel: UserViewModel) {
     val selectedLang by viewModel.langCodeField.collectAsState()
     val themeModeField by viewModel.themeModeField.collectAsState()
 
+    LaunchedEffect(Unit) {
+        if (!viewModel.hasForcedEnglish) {
+            viewModel.langCodeField.value = "en"
+            context.setLocale("en")
+            viewModel.saveLanguageToPrefs(context, "en")
+            viewModel.loadSettings(context)
+            viewModel.userHasSelectedLang = true
+            viewModel.hasForcedEnglish = true
+        }
+    }
+
+    // 🔤 Texts traduïts amb locale aplicat
+    val localizedContext = context.setLocale(selectedLang)
+
     val languageOptions = listOf(
         "ca" to "🇦🇩",
         "es" to "🇪🇸",
@@ -29,26 +43,8 @@ fun WelcomeView(navController: NavController, viewModel: UserViewModel) {
     )
 
     var dropdownExpanded by remember { mutableStateOf(false) }
-    var userHasSelectedLang by remember { mutableStateOf(false) }
 
-    // ✅ Només forcem anglès si no ho hem fet mai
-    LaunchedEffect(Unit) {
-        if (!viewModel.hasForcedEnglish(context)) {
-            viewModel.langCodeField.value = "en"
-            context.setLocale("en")
-            viewModel.saveLanguageToPrefs(context, "en")
-            viewModel.loadSettings(context)
-            viewModel.markForcedEnglish(context)
-            userHasSelectedLang = true
-        } else {
-            viewModel.loadSettings(context)
-            userHasSelectedLang = viewModel.hasUserChosenLanguage(context)
-        }
-    }
-
-    val localizedContext = context.setLocale(selectedLang)
-
-    val selectedEmoji = if (userHasSelectedLang) {
+    val selectedEmoji = if (viewModel.userHasSelectedLang) {
         languageOptions.firstOrNull { it.first == selectedLang }?.second ?: "🌐"
     } else {
         "🌐"
@@ -130,14 +126,16 @@ fun WelcomeView(navController: NavController, viewModel: UserViewModel) {
                     ) {
                         languageOptions.forEach { (code, emoji) ->
                             DropdownMenuItem(
-                                text = { Text(text = emoji, fontSize = 28.sp) },
+                                text = {
+                                    Text(text = emoji, fontSize = 28.sp)
+                                },
                                 onClick = {
                                     viewModel.langCodeField.value = code
                                     viewModel.saveLanguageToPrefs(context, code)
                                     context.setLocale(code)
                                     viewModel.loadSettings(context)
                                     dropdownExpanded = false
-                                    userHasSelectedLang = true
+                                    viewModel.userHasSelectedLang = true
                                 }
                             )
                         }

@@ -1,6 +1,9 @@
 package com.example.projecte_aplicaci_nativa_g7margarethamilton.viewModel
 
 import android.content.Context
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.projecte_aplicaci_nativa_g7margarethamilton.model.User
@@ -71,7 +74,10 @@ class UserViewModel : ViewModel() {
     val settingsError: StateFlow<String?> = _settingsError.asStateFlow()
 
     val isSettingsLoaded = MutableStateFlow(false)
-    var shouldShowWelcome: Boolean = false
+
+    var hasForcedEnglish by mutableStateOf(false)
+    var userHasSelectedLang by mutableStateOf(false)
+
 
     fun validateNickname(nickname: String): Boolean {
         if (nickname.length < 2) {
@@ -370,8 +376,6 @@ class UserViewModel : ViewModel() {
         return prefs.getBoolean("lang_selected", false)
     }
 
-
-
     fun getSavedLanguage(context: Context): String {
         val prefs = context.getSharedPreferences("settings", Context.MODE_PRIVATE)
         val lang = prefs.getString("lang", null)
@@ -380,16 +384,6 @@ class UserViewModel : ViewModel() {
             "ca", "es", "en" -> lang
             else -> "en"
         }
-    }
-
-    fun hasForcedEnglish(context: Context): Boolean {
-        val prefs = context.getSharedPreferences("settings", Context.MODE_PRIVATE)
-        return prefs.getBoolean("forced_en_once", false)
-    }
-
-    fun markForcedEnglish(context: Context) {
-        val prefs = context.getSharedPreferences("settings", Context.MODE_PRIVATE)
-        prefs.edit().putBoolean("forced_en_once", true).apply()
     }
 
     fun loadSettings(context: Context) {
