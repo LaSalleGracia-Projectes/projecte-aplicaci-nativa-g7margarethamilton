@@ -1,5 +1,27 @@
 <resources>
     <string name="app_name">projecte-aplicaci-nativa-g7margarethamilton</string>
+    <!-- Welcome View -->
+    <string name="welcome_view_title">Welcome</string>
+    <string name="welcome_view_subtitle">to</string>
+    <string name="welcome_view_login_button">LogIn</string>
+    <string name="welcome_view_register_button" >Register</string>
+    <!-- Login View -->
+    <string name="login_view_title">Log In</string>
+    <string name="login_view_email_placeholder">Email</string>
+    <string name="login_view_password_placeholder">Password</string>
+    <string name="login_view_forgot_password">Forgot password?</string>
+    <string name="login_view_login_button">Log In</string>
+    <string name="login_view_or">or</string>
+    <string name="login_view_google_button">Login With Google</string>
+    <!-- Register View -->
+    <string name="register_view_title">Register</string>
+    <string name="register_view_name_placeholder">Name</string>
+    <string name="register_view_email_placeholder">Email</string>
+    <string name="register_view_password_placeholder">Password</string>
+    <string name="register_view_confirm_password_placeholder">Confirm Password</string>
+    <string name="register_view_register_button">Register</string>
+    <string name="register_view_or">Or</string>
+    <string name="register_view_google_button">Register With Google</string>
     <!-- Home View -->
     <string name="home_view_title">What are we doing today?</string>
     <string name="home_view_task">Today\'s tasks</string>

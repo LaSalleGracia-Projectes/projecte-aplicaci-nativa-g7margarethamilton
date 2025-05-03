@@ -36,9 +36,11 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.projecte_aplicaci_nativa_g7margarethamilton.R
 import com.example.projecte_aplicaci_nativa_g7margarethamilton.Routes
 import com.example.projecte_aplicaci_nativa_g7margarethamilton.model.GoogleAuthUiClient
 import com.example.projecte_aplicaci_nativa_g7margarethamilton.viewModel.UserViewModel
+import com.example.projecte_aplicaci_nativa_g7margarethamilton.viewModel.setLocale
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.common.api.ApiException
 
@@ -50,7 +52,8 @@ fun LogIn(navController: NavController, viewModel: UserViewModel) {
     val passwordError by viewModel.passwordError.collectAsState()
     val correctFormat by viewModel.correctFormat.collectAsState()
     val context = LocalContext.current
-
+    val lang = viewModel.getSavedLanguage(context)
+    val localizedContext = context.setLocale(lang)
     val launcher = rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         try {
             val account = GoogleSignIn.getSignedInAccountFromIntent(result.data).getResult(ApiException::class.java)
@@ -98,7 +101,7 @@ fun LogIn(navController: NavController, viewModel: UserViewModel) {
 
             // Login subtitle
             Text(
-                text = "Login",
+                text = localizedContext.getString(R.string.login_view_title),
                 fontSize = 18.sp,
                 color = MaterialTheme.colorScheme.onSecondary,
                 modifier = Modifier.padding(bottom = 32.dp)
@@ -112,7 +115,7 @@ fun LogIn(navController: NavController, viewModel: UserViewModel) {
                     viewModel.validateEmail(it)
                     viewModel.validateLogin(email, password)
                 },
-                placeholder = { Text("Email") },
+                placeholder = { Text(localizedContext.getString(R.string.login_view_email_placeholder)) },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(bottom = 12.dp),
@@ -134,7 +137,7 @@ fun LogIn(navController: NavController, viewModel: UserViewModel) {
                     viewModel.validatePassword(it)
                     viewModel.validateLogin(email, password)
                 },
-                placeholder = { Text("Contraseña") },
+                placeholder = { Text(localizedContext.getString(R.string.login_view_password_placeholder)) },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(bottom = 0.dp),
@@ -151,7 +154,7 @@ fun LogIn(navController: NavController, viewModel: UserViewModel) {
 
             // Forgot password text
             Text(
-                text = "Forgot your password?",
+                text = localizedContext.getString(R.string.login_view_forgot_password),
                 color = MaterialTheme.colorScheme.onSecondary,
                 fontSize = 14.sp,
                 modifier = Modifier
@@ -173,7 +176,7 @@ fun LogIn(navController: NavController, viewModel: UserViewModel) {
                 shape = MaterialTheme.shapes.small,
                 enabled = correctFormat
             ) {
-                Text("Login")
+                Text(localizedContext.getString(R.string.login_view_login_button))
             }
 
             val missatgeLogin by viewModel.missatgeLogin.collectAsState()
@@ -196,7 +199,7 @@ fun LogIn(navController: NavController, viewModel: UserViewModel) {
 
             // Or separator
             Text(
-                text = "or",
+                text = localizedContext.getString(R.string.login_view_or),
                 color = MaterialTheme.colorScheme.onSecondary,
                 modifier = Modifier.padding(vertical = 12.dp)
             )
@@ -216,7 +219,7 @@ fun LogIn(navController: NavController, viewModel: UserViewModel) {
                 shape = MaterialTheme.shapes.small,
                 enabled = true
             ) {
-                Text("Login With Google")
+                Text(localizedContext.getString(R.string.login_view_google_button))
             }
         }
     }
