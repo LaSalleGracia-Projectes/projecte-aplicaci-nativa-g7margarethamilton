@@ -15,6 +15,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.projecte_aplicaci_nativa_g7margarethamilton.R
+import com.example.projecte_aplicaci_nativa_g7margarethamilton.Routes
 import com.example.projecte_aplicaci_nativa_g7margarethamilton.view.BottomNavBar
 import com.example.projecte_aplicaci_nativa_g7margarethamilton.viewModel.UserViewModel
 import com.example.projecte_aplicaci_nativa_g7margarethamilton.viewModel.setLocale
@@ -41,19 +43,19 @@ fun ProfileSettingsView(
     Scaffold(
         modifier = Modifier
             .nestedScroll(scrollBehavior.nestedScrollConnection)
-            .padding(top = 40.dp),
+            .padding(top = 45.dp),
         topBar = {
             CenterAlignedTopAppBar(
                 title = {
                     Text(
-                        text = "Configuració de perfil",
+                        text = localizedContext.getString(R.string.advanced_settings_view_title),
                         fontSize = 30.sp,
                         fontWeight = FontWeight.SemiBold,
                         color = MaterialTheme.colorScheme.onSecondary,
                     )
                 },
                 navigationIcon = {
-                    IconButton(onClick = { navController.popBackStack() }) {
+                    IconButton(onClick = { navController.navigate(Routes.Settings.route) }) {
                         Icon(
                             imageVector = Icons.Default.ArrowBack,
                             contentDescription = "Volver",
@@ -62,7 +64,10 @@ fun ProfileSettingsView(
                     }
                 },
                 actions = {
-                    IconButton(onClick = { viewModel.updateSettings(context) }) {
+                    IconButton(onClick = {
+                        viewModel.updateSettings(context)
+                        navController.navigate(Routes.ProfileSettings.route)
+                    }) {
                         Icon(
                             imageVector = Icons.Default.Check,
                             contentDescription = "Guardar",
@@ -90,7 +95,7 @@ fun ProfileSettingsView(
         ) {
             // Modo oscuro
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Text("Modo oscuro")
+                Text(localizedContext.getString(R.string.advanced_settings_view_theme))
                 Spacer(modifier = Modifier.weight(1f))
                 Switch(
                     checked = viewModel.themeModeField.collectAsState().value,
@@ -108,7 +113,7 @@ fun ProfileSettingsView(
                 OutlinedTextField(
                     value = selectedLanguage,
                     onValueChange = {},
-                    label = { Text("Idioma") },
+                    label = { Text(localizedContext.getString(R.string.advanced_settings_view_language)) },
                     readOnly = true,
                     trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expandedLanguage) },
                     modifier = Modifier.menuAnchor()
@@ -132,7 +137,7 @@ fun ProfileSettingsView(
 
             // Notificacions
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Text("Notificacions")
+                Text(localizedContext.getString(R.string.advanced_settings_view_notifications))
                 Spacer(modifier = Modifier.weight(1f))
                 Switch(
                     checked = viewModel.allowNotificationField.collectAsState().value,
@@ -143,7 +148,7 @@ fun ProfileSettingsView(
 
             // Merge calendari
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Text("Unir calendari d'horaris")
+                Text(localizedContext.getString(R.string.advanced_settings_view_merge_task))
                 Spacer(modifier = Modifier.weight(1f))
                 Switch(
                     checked = viewModel.mergeScheduleCalendarField.collectAsState().value,

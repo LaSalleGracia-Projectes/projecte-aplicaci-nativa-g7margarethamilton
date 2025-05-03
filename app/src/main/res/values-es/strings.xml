@@ -1,9 +1,53 @@
 <resources>
     <string name="app_name">projecte-aplicaci-nativa-g7margarethamilton</string>
+    <!-- Home View -->
     <string name="home_view_title">¿Qué hacemos hoy?</string>
     <string name="home_view_task">Tareas de hoy</string>
     <string name="home_view_schedule">Horario</string>
     <string name="home_view_calendar">Calendario</string>
     <string name="home_view_list">Compra</string>
     <string name="home_view_training">Entrenamiento</string>
+    <!-- Shopping List View -->
+    <string name="shopping_list_view_title">Lista de la compra</string>
+    <string name="shopping_list_view_in_construction">Próximamente</string>
+    <!-- Training View -->
+    <string name="training_view_title">Entrenamiento</string>
+    <string name="training_view_in_construction">Próximamente</string>
+
+    <!-- Settings View -->
+    <string name="settings_view_title">Configuración</string>
+    <string name="settings_view_terms_and_conditions">Términos &amp; Condiciones</string>
+    <string name="settings_view_about">Sobre nosotros</string>
+    <string name="settings_view_contact">Contacto</string>
+    <string name="settings_view_advanced_settings">Configuración avanzada</string>
+    <!-- Terms and Conditions View -->
+    <!-- TODO: Falta aplicar les traduccions a la vista -->
+    <string name="terms_and_conditions_view_title">Términos &amp; Condiciones</string>
+    <!-- TODO: Falta el contingut per fer, ja que dona error al executar el programa -->
+    <string name="terms_and_conditions_view_accept">Aceptar</string>
+    <!-- About View -->
+    <string name="about_view_title">Sobre nosotros</string>
+    <string name="about_view_description">Nuestra aplicación Flow2Day está diseñada para ayudarte a gestionar tu tiempo de manera eficiente y efectiva. Con una interfaz intuitiva y herramientas potentes, te ayudamos a mantenerte organizado y enfocado en tus objetivos.</string>
+    <string name="about_view_developer_1">Hola, soy Carlos</string>
+    <string name="about_view_developer_2">Hola, soy Jaime</string>
+    <string name="about_view_developer_3">Hola, soy Nahomy</string>
+    <string name="about_view_developer_4">Hola, soy Jaume</string>
+    <!-- Advanced Settings View -->
+    <string name="advanced_settings_view_title">Configuración avanzada</string>
+    <string name="advanced_settings_view_theme">Tema (Claro/Oscuro)</string>
+    <string name="advanced_settings_view_language">Idioma</string>
+    <string name="advanced_settings_view_notifications">Notificaciones</string>
+    <string name="advanced_settings_view_merge_task">Unir tareas de horario y calendario</string>
+
+    <!-- Profile View -->
+    <string name="profile_view_title">Perfil</string>
+    <string name="profile_view_date">Usuario/a desde:</string>
+    <string name="profile_view_change_password">Cambiar contraseña</string>
+    <string name="profile_view_delete_account">Eliminar cuenta</string>
+    <string name="profile_view_logout">Cerrar sesión</string>
+    <string name="profile_view_logout_on_all_devices">Cerrar sesión en todos los dispositivos</string>
+    <!-- Edit Profile View -->
+    <string name="edit_profile_view_title">Editar perfil</string>
+    <string name="edit_profile_view_nickname">Nombre de usuario</string>
+    <string name="edit_profile_view_avatar">URL del avatar</string>
 </resources>
