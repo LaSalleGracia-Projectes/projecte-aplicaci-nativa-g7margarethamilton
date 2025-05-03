@@ -12,17 +12,13 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -30,34 +26,27 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.projecte_aplicaci_nativa_g7margarethamilton.Routes
 import com.example.projecte_aplicaci_nativa_g7margarethamilton.viewModel.UserViewModel
+import com.example.projecte_aplicaci_nativa_g7margarethamilton.viewModel.setLocale
+import org.checkerframework.checker.units.qual.s
 
 @Composable
 fun WelcomeView(navController: NavController, viewModel: UserViewModel) {
     val context = LocalContext.current
-
-    // 🔄 Carrega settings al llançar la vista
-    LaunchedEffect(Unit) {
-        viewModel.loadSettings(context)
-    }
-
     val selectedLang by viewModel.langCodeField.collectAsState()
     val themeModeField by viewModel.themeModeField.collectAsState()
 
     // Per mostrar emojis
     val languageOptions = listOf(
+        "en" to "🇬🇧",
         "ca" to "\uD83C\uDDE6\uD83C\uDDE9", // o 🇦🇩
-        "es" to "🇪🇸",
-        "en" to "🇬🇧"
+        "es" to "🇪🇸"
     )
 
     var dropdownExpanded by remember { mutableStateOf(false) }
@@ -125,6 +114,12 @@ fun WelcomeView(navController: NavController, viewModel: UserViewModel) {
                                 onClick = {
                                     viewModel.langCodeField.value = code
                                     dropdownExpanded = false
+                                    viewModel.saveLanguageToPrefs(context, code)
+                                    context.setLocale(code)
+                                    viewModel.loadSettings(context)
+                                    navController.navigate(Routes.Welcome.route) {
+                                        popUpTo(Routes.Welcome.route) { inclusive = true }
+                                    }
                                 }
                             )
                         }

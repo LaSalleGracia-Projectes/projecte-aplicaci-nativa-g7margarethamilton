@@ -345,7 +345,7 @@ class UserViewModel : ViewModel() {
 
         return when (lang) {
             "ca", "es", "en" -> lang
-            else -> "ca"
+            else -> "en"
         }
     }
 
