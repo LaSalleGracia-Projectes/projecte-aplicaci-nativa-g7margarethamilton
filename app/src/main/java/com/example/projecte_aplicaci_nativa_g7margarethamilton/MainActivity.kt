@@ -38,7 +38,6 @@ class MainActivity : ComponentActivity() {
 
         super.onCreate(savedInstanceState)
 
-
         val calendarViewModel = CalendarViewModel(viewModel)
 
         enableEdgeToEdge()
