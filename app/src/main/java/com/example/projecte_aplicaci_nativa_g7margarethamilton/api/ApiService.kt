@@ -79,7 +79,7 @@ interface ApiService {
     suspend fun updateUser(
         @Header("Authorization") token: String,
         @Path("email") email: String,
-        @Body request: ApiRepository.UpdateUserRequest
+        @Body request: UpdateUserRequest
     ): Response<UpdateUserResponse>
 
     /**
@@ -306,9 +306,11 @@ data class CreateTaskRequest(
 data class UpdateUserRequest(
     val nickname: String?,
     val avatar_url: String?,
+    val password: Any?,
     val is_admin: Boolean,
     val is_banned: Boolean
 )
+
 
 data class UpdateUserResponse(
     val message: String,
