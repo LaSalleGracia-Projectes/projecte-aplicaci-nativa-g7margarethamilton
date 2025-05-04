@@ -13,6 +13,12 @@
     <string name="login_view_login_button">Iniciar sesión</string>
     <string name="login_view_or">o</string>
     <string name="login_view_google_button">Iniciar sesión con Google</string>
+    <!-- Forgot Password View -->
+    <string name="forgot_password_view_title">¿Has olvidado la contraseña?</string>
+    <string name="forgot_password_view_description">Por favor, introduce tu correo electrónico para restablecer la contraseña:</string>
+    <string name="forgot_password_view_email_placeholder">ejemplo@correo.com</string>
+    <string name="forgot_password_view_send_button">Enviar</string>
+    <string name="forgot_password_view_cancel_button">Cancelar</string>
     <!-- Register View -->
     <string name="register_view_title">Registro</string>
     <string name="register_view_name_placeholder">Nombre</string>
@@ -22,6 +28,7 @@
     <string name="register_view_register_button">Registrarse</string>
     <string name="register_view_or">o</string>
     <string name="register_view_google_button">Regístrate con Google</string>
+
     <!-- Home View -->
     <string name="home_view_title">¿Qué hacemos hoy?</string>
     <string name="home_view_task">Tareas de hoy</string>

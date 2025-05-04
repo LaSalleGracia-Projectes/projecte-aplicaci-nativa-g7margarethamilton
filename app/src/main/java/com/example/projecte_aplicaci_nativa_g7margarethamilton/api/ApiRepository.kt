@@ -16,6 +16,9 @@ class ApiRepository {
         return ApiService.create().loginWithGoogle(mapOf("id_token" to idToken))
     }
 
+    suspend fun resetPassword(email: String) =
+        apiInterface.resetPassword(mapOf("email" to email))
+
     // LOGOUT
     suspend fun logoutApp(email: String, password: String?, googleId: String?) =
         apiInterface.logoutApp(

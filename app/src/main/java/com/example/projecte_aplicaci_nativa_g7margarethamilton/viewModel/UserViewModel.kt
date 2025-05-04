@@ -1,7 +1,9 @@
 package com.example.projecte_aplicaci_nativa_g7margarethamilton.viewModel
 
-import android.app.Activity
 import android.content.Context
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.projecte_aplicaci_nativa_g7margarethamilton.model.User
@@ -70,6 +72,12 @@ class UserViewModel : ViewModel() {
 
     private val _settingsError = MutableStateFlow<String?>(null)
     val settingsError: StateFlow<String?> = _settingsError.asStateFlow()
+
+    val isSettingsLoaded = MutableStateFlow(false)
+
+    var hasForcedEnglish by mutableStateOf(false)
+    var userHasSelectedLang by mutableStateOf(false)
+
 
     fun validateNickname(nickname: String): Boolean {
         if (nickname.length < 2) {
@@ -238,6 +246,25 @@ class UserViewModel : ViewModel() {
         }
     }
 
+    fun sendResetPasswordEmail(email: String, context: Context) {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                val response = repository.resetPassword(email)
+                withContext(Dispatchers.Main) {
+                    if (response.isSuccessful) {
+                        android.widget.Toast.makeText(context, "Correu enviat si l'usuari existeix", android.widget.Toast.LENGTH_LONG).show()
+                    } else {
+                        android.widget.Toast.makeText(context, "No s'ha pogut enviar el correu", android.widget.Toast.LENGTH_LONG).show()
+                    }
+                }
+            } catch (e: Exception) {
+                withContext(Dispatchers.Main) {
+                    android.widget.Toast.makeText(context, "Error de connexió: ${e.localizedMessage}", android.widget.Toast.LENGTH_LONG).show()
+                }
+            }
+        }
+    }
+
     fun logout(context: Context) {
         _currentUser.value = null
         _token.value = null
@@ -359,7 +386,6 @@ class UserViewModel : ViewModel() {
         }
     }
 
-
     fun loadSettings(context: Context) {
         val t = token.value ?: return
         val u = currentUser.value ?: return
@@ -368,21 +394,27 @@ class UserViewModel : ViewModel() {
             try {
                 val resp = repository.getUserSettings(t, u.email)
                 withContext(Dispatchers.Main) {
-                    if (resp.isSuccessful) resp.body()?.let { s ->
-                        themeModeField.value             = s.theme_mode
-                        langCodeField.value              = s.lang_code
-                        allowNotificationField.value     = s.allow_notification
-                        mergeScheduleCalendarField.value = s.merge_schedule_calendar
+                    if (resp.isSuccessful) {
+                        resp.body()?.let { s ->
+                            themeModeField.value             = s.theme_mode
+                            langCodeField.value              = s.lang_code
+                            allowNotificationField.value     = s.allow_notification
+                            mergeScheduleCalendarField.value = s.merge_schedule_calendar
 
-                        saveLanguageToPrefs(context, s.lang_code)
-                        context.setLocale(s.lang_code)
+                            saveLanguageToPrefs(context, s.lang_code)
+                            context.setLocale(s.lang_code)
+
+                            isSettingsLoaded.value = true // ✅ Indiquem que s'han carregat correctament
+                        }
                     } else {
                         _settingsError.value = "Error carregant settings: ${resp.code()}"
+                        isSettingsLoaded.value = true // ✅ Tot i error, evitem bloqueig indefinit
                     }
                 }
             } catch (e: Exception) {
                 withContext(Dispatchers.Main) {
                     _settingsError.value = "Connexió fallida: ${e.localizedMessage}"
+                    isSettingsLoaded.value = true // ✅ També aquí per evitar bloqueig
                 }
             }
         }
