@@ -1,7 +1,5 @@
 package com.example.projecte_aplicaci_nativa_g7margarethamilton.api
 import ZonedDateTimeAdapter
-import android.os.Build
-import androidx.annotation.RequiresApi
 import com.example.projecte_aplicaci_nativa_g7margarethamilton.model.User
 import com.example.projecte_aplicaci_nativa_g7margarethamilton.model.moduls.Calendar
 import com.example.projecte_aplicaci_nativa_g7margarethamilton.model.moduls.Calendar_task
@@ -14,13 +12,13 @@ import okhttp3.ResponseBody
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.http.POST
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.Header
-import retrofit2.http.Path
+import retrofit2.http.POST
 import retrofit2.http.PUT
+import retrofit2.http.Path
 import java.time.ZonedDateTime
 
 data class RegisterResponse(
@@ -245,7 +243,6 @@ interface ApiService {
         private const val BASE_URL = "http://10.0.2.2:3000/api/v1/"
         //private const val BASE_URL = "http://192.168.195.129:3000/api/v1/"
 
-        @RequiresApi(Build.VERSION_CODES.O)
         fun create(): ApiService {
             val gson = GsonBuilder()
                 .registerTypeAdapter(ZonedDateTime::class.java, ZonedDateTimeAdapter())
