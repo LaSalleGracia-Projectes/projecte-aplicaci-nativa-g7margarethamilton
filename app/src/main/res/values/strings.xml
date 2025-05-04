@@ -146,4 +146,10 @@
     <string name="schedule_title_empty">Title cannot be empty</string>
     <string name="schedule_create">Create</string>
     <string name="schedule_no_agenda">No agenda selected</string>
+
+    <!-- Today Tasks -->
+    <string name="today_tasks_title">Today\'s Tasks</string>
+    <string name="today_tasks_no_tasks">No tasks for today</string>
+    <string name="today_tasks_completed">Completed Tasks</string>
+    <string name="today_tasks_pending">Pending Tasks</string>
 </resources>

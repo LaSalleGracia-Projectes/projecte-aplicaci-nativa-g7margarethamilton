@@ -67,7 +67,7 @@ fun HomeView(navController: NavController, viewModel: UserViewModel) {
             ) {
                 HomeOptionButton(
                     title = localizedContext.getString(R.string.home_view_task),
-                    onClick = { navController.navigate(Routes.Schedule.route) },
+                    onClick = { navController.navigate(Routes.TodayTasks.route) },
                     modifier = Modifier.weight(1f)
                 )
             }
