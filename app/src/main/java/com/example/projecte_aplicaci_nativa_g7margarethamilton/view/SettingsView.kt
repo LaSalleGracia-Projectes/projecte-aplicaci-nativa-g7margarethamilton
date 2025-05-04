@@ -1,13 +1,32 @@
 package com.example.projecte_aplicaci_nativa_g7margarethamilton.view
 
-import TermsModal
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowForward
-import androidx.compose.material.icons.filled.*
-import androidx.compose.material3.*
+import androidx.compose.material.icons.filled.Email
+import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -17,27 +36,32 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import androidx.navigation.NavController
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.navigation.compose.rememberNavController
 import androidx.compose.ui.graphics.PathFillType
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.StrokeJoin
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.graphics.vector.path
+import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import com.example.projecte_aplicaci_nativa_g7margarethamilton.R
 import com.example.projecte_aplicaci_nativa_g7margarethamilton.Routes
+import com.example.projecte_aplicaci_nativa_g7margarethamilton.viewModel.UserViewModel
+import com.example.projecte_aplicaci_nativa_g7margarethamilton.viewModel.setLocale
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SettingsView(navController: NavController) {
+fun SettingsView(viewModel: UserViewModel, navController: NavController) {
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
     var showTermsModal by remember { mutableStateOf(false) }
+    val context = LocalContext.current
+    val lang = viewModel.getSavedLanguage(context)
+    val localizedContext = context.setLocale(lang)
 
     Scaffold(
         modifier = Modifier
@@ -47,7 +71,7 @@ fun SettingsView(navController: NavController) {
             CenterAlignedTopAppBar(
                 title = {
                     Text(
-                        text = "Ajustes",
+                        text = localizedContext.getString(R.string.settings_view_title),
                         fontSize = 30.sp,
                         fontWeight = FontWeight.SemiBold,
                         color = MaterialTheme.colorScheme.onSecondary,
@@ -74,28 +98,28 @@ fun SettingsView(navController: NavController) {
             Spacer(modifier = Modifier.height(8.dp))
             
             SettingOption(
-                title = "Terms and conditions",
+                title = localizedContext.getString(R.string.settings_view_terms_and_conditions),
                 icon = Article,
                 onClick = { showTermsModal = true }
             )
             if (showTermsModal) {
-                TermsModal(onDismiss = { showTermsModal = false })
+                TermsModal(onDismiss = { showTermsModal = false }, viewModel = viewModel)
             }
             
             SettingOption(
-                title = "About Us",
+                title = localizedContext.getString(R.string.settings_view_about),
                 icon = Icons.Default.Info,
                 onClick = { navController.navigate(Routes.AboutUs.route) }
             )
             
             SettingOption(
-                title = "Contact",
+                title = localizedContext.getString(R.string.settings_view_contact),
                 icon = Icons.Default.Email,
                 onClick = { navController.navigate(Routes.ContactUs.route) }
             )
             
             SettingOption(
-                title = "Advanced settings",
+                title = localizedContext.getString(R.string.settings_view_advanced_settings),
                 icon = Icons.Default.Settings,
                 onClick = { navController.navigate(Routes.ProfileSettings.route) }
             )
@@ -103,7 +127,6 @@ fun SettingsView(navController: NavController) {
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SettingOption(
     title: String,
@@ -155,15 +178,7 @@ fun SettingOption(
     }
 }
 
-@Preview(showBackground = true, showSystemUi = true)
-@Composable
-fun SettingsViewPreview() {
-    val navController = rememberNavController()
-    SettingsView(navController)
-}
-
-
-public val Article: ImageVector
+val Article: ImageVector
     get() {
         if (_Article != null) {
             return _Article!!

@@ -1,31 +1,24 @@
 package com.example.projecte_aplicaci_nativa_g7margarethamilton.view
 
-import android.os.Build
 import android.util.Log
-import androidx.annotation.RequiresApi
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.Spring
-//import androidx.compose.animation.core.animateContentSize
-//import androidx.compose.animation.core.expandVertically
-//import androidx.compose.animation.core.fadeIn
-//import androidx.compose.animation.core.fadeOut
 import androidx.compose.animation.core.spring
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.ArrowForward
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.ArrowForward
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.filled.Delete
@@ -37,6 +30,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -45,14 +39,12 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.projecte_aplicaci_nativa_g7margarethamilton.Routes
+import com.example.projecte_aplicaci_nativa_g7margarethamilton.R
 import com.example.projecte_aplicaci_nativa_g7margarethamilton.model.moduls.Schedule
 import com.example.projecte_aplicaci_nativa_g7margarethamilton.model.moduls.Schedule_task
 import com.example.projecte_aplicaci_nativa_g7margarethamilton.viewModel.ScheduleViewModel
 import com.example.projecte_aplicaci_nativa_g7margarethamilton.viewModel.UserViewModel
-import kotlinx.coroutines.flow.filter
-import java.time.LocalDate
-import java.time.OffsetDateTime
-import java.time.format.DateTimeFormatter
+import com.example.projecte_aplicaci_nativa_g7margarethamilton.viewModel.setLocale
 import java.util.*
 
 
@@ -61,7 +53,7 @@ import java.util.*
 fun ScheduleView(
     navController: NavController,
     userViewModel: UserViewModel,
-    viewModel: ScheduleViewModel = androidx.lifecycle.viewmodel.compose.viewModel {
+    viewModel: ScheduleViewModel = viewModel {
         ScheduleViewModel(userViewModel)
     }
 ) {
@@ -75,27 +67,29 @@ fun ScheduleView(
     val showAddTaskDialog = remember { mutableStateOf(false) }
     val calendar = Calendar.getInstance()
     val currentDay = calendar.get(Calendar.DAY_OF_WEEK)
-    val week_day = remember { mutableIntStateOf(calendar.get(Calendar.DAY_OF_WEEK)) }
-    var diaSemanaString = when (week_day.intValue) {
-        1 -> "Domingo"
-        2 -> "Lunes"
-        3 -> "Martes"
-        4 -> "Miércoles"
-        5 -> "Jueves"
-        6 -> "Viernes"
-        7 -> "Sábado"
+    val weekDay = remember { mutableIntStateOf(calendar.get(Calendar.DAY_OF_WEEK)) }
+    val context = LocalContext.current
+    val lang = userViewModel.getSavedLanguage(context)
+    val localizedContext = context.setLocale(lang)
+    val diaSemanaString = when (weekDay.intValue) {
+        1 -> localizedContext.getString(R.string.common_sunday)
+        2 -> localizedContext.getString(R.string.common_monday)
+        3 -> localizedContext.getString(R.string.common_tuesday)
+        4 -> localizedContext.getString(R.string.common_wednesday)
+        5 -> localizedContext.getString(R.string.common_thursday)
+        6 -> localizedContext.getString(R.string.common_friday)
+        7 -> localizedContext.getString(R.string.common_saturday)
         else -> ""
     }
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
 
-
     // Filtrar tareas cuando cambia el día de la semana
-    LaunchedEffect(week_day.intValue) {
-        viewModel.filterTasksByDay(week_day.intValue)
+    LaunchedEffect(weekDay.intValue) {
+        viewModel.filterTasksByDay(weekDay.intValue)
     }
 
-
     //añadirDatosPrueba(viewModel, userViewModel)
+    viewModel.filterTasksByDay(weekDay.intValue)
 
     LaunchedEffect(currentUser) {
         currentUser?.email?.let { email ->
@@ -106,46 +100,47 @@ fun ScheduleView(
 
     Scaffold(
         modifier = Modifier
-            .nestedScroll(scrollBehavior.nestedScrollConnection),
-        //.padding(40.dp),
-
+            .nestedScroll(scrollBehavior.nestedScrollConnection)
+            .padding(top = 40.dp),                // mateix padding que Calendar
         topBar = {
             CenterAlignedTopAppBar(
                 title = {
                     Text(
-                        text = "Agenda",
-                        fontSize = 20.sp,
+                        text = localizedContext.getString(R.string.schedule_view_title),
+                        fontSize = 30.sp,        // mateix fontSize que Calendar
                         fontWeight = FontWeight.SemiBold,
                         color = MaterialTheme.colorScheme.onSecondary
                     )
                 },
                 navigationIcon = {
-                    // Close button
-                    IconButton(
-                        onClick = { navController.navigate(Routes.Home.route) },
-                    ) {
+                    IconButton(onClick = { navController.popBackStack() }) {
                         Icon(
-                            imageVector = Icons.Default.Close,
-                            contentDescription = "Cerrar",
+                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,   // igual que Calendar
+                            contentDescription = localizedContext.getString(R.string.schedule_close),
                             tint = MaterialTheme.colorScheme.onBackground
                         )
                     }
                 },
                 actions = {
-                    // Calendar button
                     IconButton(
-                        onClick = { /* navController.navigate(Routes.Calendar.route)*/ },
+                        onClick = { navController.navigate(Routes.Calendar.route) }
                     ) {
                         Icon(
                             imageVector = Icons.Default.DateRange,
-                            contentDescription = "Calendario",
+                            contentDescription = localizedContext.getString(R.string.schedule_calendar),
                             tint = MaterialTheme.colorScheme.onBackground
                         )
                     }
-                }
+                },
+                colors = TopAppBarDefaults.topAppBarColors(   // mateix esquema de colors
+                    containerColor = MaterialTheme.colorScheme.background,
+                    titleContentColor = MaterialTheme.colorScheme.onSecondary
+                ),
+                scrollBehavior = scrollBehavior               // idèntic valor
             )
         },
-        bottomBar = { BottomNavBar(navController) }
+        bottomBar = { BottomNavBar(navController) },
+        containerColor = MaterialTheme.colorScheme.background
     ) { paddingValues ->
         Column(
             modifier = Modifier
@@ -184,11 +179,11 @@ fun ScheduleView(
             ) {
                 IconButton(
                     onClick = {
-                        week_day.intValue = if (week_day.intValue == 1) 7 else week_day.intValue - 1
+                        weekDay.intValue = if (weekDay.intValue == 1) 7 else weekDay.intValue - 1
                     }
                 ) {
                     Icon(
-                        imageVector = Icons.Default.ArrowBack,
+                        imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                         contentDescription = "Día anterior"
                     )
                 }
@@ -196,7 +191,7 @@ fun ScheduleView(
                 Column(
                     modifier = Modifier
                         .clickable {
-                            week_day.intValue = currentDay
+                            weekDay.intValue = currentDay
                         },
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
@@ -206,9 +201,9 @@ fun ScheduleView(
                         fontWeight = FontWeight.Bold,
                         color = MaterialTheme.colorScheme.onSecondary
                     )
-                    if (currentDay == week_day.intValue) {
+                    if (currentDay == weekDay.intValue) {
                         Text(
-                            text = "Hoy",
+                            text = localizedContext.getString(R.string.common_today),
                             fontSize = 16.sp,
                             fontWeight = FontWeight.Thin,
                             color = MaterialTheme.colorScheme.onSecondary
@@ -218,11 +213,11 @@ fun ScheduleView(
 
                 IconButton(
                     onClick = {
-                        week_day.intValue = if (week_day.intValue == 7) 1 else week_day.intValue + 1
+                        weekDay.intValue = if (weekDay.intValue == 7) 1 else weekDay.intValue + 1
                     }
                 ) {
                     Icon(
-                        imageVector = Icons.Default.ArrowForward,
+                        imageVector = Icons.AutoMirrored.Filled.ArrowForward,
                         contentDescription = "Día siguiente"
                     )
                 }
@@ -256,7 +251,7 @@ fun ScheduleView(
             ) {
                 if (filteredTasks.isEmpty()) {
                     Text(
-                        text = "No hay tareas programadas para este día.",
+                        text = localizedContext.getString(R.string.schedule_no_tasks),
                         fontSize = 16.sp,
                         color = MaterialTheme.colorScheme.onSecondary,
                         modifier = Modifier.padding(16.dp)
@@ -268,7 +263,7 @@ fun ScheduleView(
                             onDelete = {
                                 viewModel.deleteScheduleTask(task.id.toString())
                                 // Recargar tareas tras crear una
-                                viewModel.filterTasksByDay(week_day.intValue)
+                                viewModel.filterTasksByDay(weekDay.intValue)
                             }
                         )
                         Spacer(modifier = Modifier.height(8.dp))
@@ -282,9 +277,10 @@ fun ScheduleView(
                 onClick = { showAddTaskDialog.value = true },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(top = 16.dp)
+                    .padding(top = 16.dp),
+                enabled = currentSchedule != null,
             ) {
-                Text("Añadir Tarea")
+                Text(localizedContext.getString(R.string.schedule_add_task))
             }
         }
     }
@@ -302,12 +298,12 @@ fun ScheduleView(
                             content = content,
                             startTime = startTime,
                             endTime = endTime,
-                            week_day = week_day.intValue,
+                            week_day = weekDay.intValue,
                             categoryId = categoryId,
                             email = email
                         )
                         // Recargar tareas tras crear una
-                        viewModel.filterTasksByDay(week_day.intValue)
+                        viewModel.filterTasksByDay(weekDay.intValue)
                     }
                 }
                 showAddTaskDialog.value = false
@@ -436,9 +432,16 @@ fun ScheduleDropdown(
     onCreateSchedule: (String, Int) -> Unit,
     onDelete: () -> Unit
 ) {
+    val userViewModel: UserViewModel = viewModel()
+    val context = LocalContext.current
+    val lang = userViewModel.getSavedLanguage(context)
+    val localizedContext = context.setLocale(lang)
+
     var expanded by remember { mutableStateOf(false) }
     var showCreateDialog by remember { mutableStateOf(false) }
-    val selectedText = currentSchedule?.title ?: "Ninguna agenda seleccionada"
+    val selectedText = currentSchedule?.title ?: localizedContext.getString(R.string.schedule_no_agenda)
+
+
 
     Box(
         modifier = Modifier
@@ -483,7 +486,7 @@ fun ScheduleDropdown(
                             tint = MaterialTheme.colorScheme.primary
                         )
                         Text(
-                            "Crear nueva agenda",
+                            localizedContext.getString(R.string.schedule_new_agenda),
                             color = MaterialTheme.colorScheme.primary,
                             fontWeight = FontWeight.Bold
                         )
@@ -555,14 +558,19 @@ fun CreateScheduleDialog(
     onConfirm: (String, Int) -> Unit
 ) {
     var title by remember { mutableStateOf("") }
-    var categoryId by remember { mutableStateOf(1) } // Valor por defecto
+    val categoryId by remember { mutableStateOf(1) } // Valor por defecto
     var titleError by remember { mutableStateOf(false) }
+
+    val userViewModel: UserViewModel = viewModel()
+    val context = LocalContext.current
+    val lang = userViewModel.getSavedLanguage(context)
+    val localizedContext = context.setLocale(lang)
 
     AlertDialog(
         onDismissRequest = onDismiss,
         title = {
             Text(
-                "Nueva Agenda",
+                localizedContext.getString(R.string.schedule_new_agenda),
                 style = MaterialTheme.typography.titleLarge
             )
         },
@@ -579,13 +587,13 @@ fun CreateScheduleDialog(
                         title = it
                         titleError = it.isBlank()
                     },
-                    label = { Text("Título de la agenda") },
+                    label = { Text(localizedContext.getString(R.string.common_title)) },
                     modifier = Modifier.fillMaxWidth(),
                     isError = titleError,
                     supportingText = {
                         if (titleError) {
                             Text(
-                                text = "El título no puede estar vacío",
+                                text = localizedContext.getString(R.string.schedule_title_empty),
                                 color = MaterialTheme.colorScheme.error
                             )
                         }
@@ -606,12 +614,12 @@ fun CreateScheduleDialog(
                     }
                 }
             ) {
-                Text("Crear")
+                Text(localizedContext.getString(R.string.schedule_create))
             }
         },
         dismissButton = {
             TextButton(onClick = onDismiss) {
-                Text("Cancelar")
+                Text(localizedContext.getString(R.string.calendar_cancel))
             }
         }
     )
@@ -623,7 +631,7 @@ fun CreateScheduleDialog(
 fun TaskPreview() {
 
     val navController = rememberNavController()
-    val userViewModel = androidx.lifecycle.viewmodel.compose.viewModel<UserViewModel>()
+    val userViewModel = viewModel<UserViewModel>()
     ScheduleView(navController, userViewModel)
 }
 
@@ -637,13 +645,18 @@ fun AddTaskDialog(
     var content by remember { mutableStateOf("") }
     var startTime by remember { mutableStateOf("") }
     var endTime by remember { mutableStateOf("") }
-    var categoryId by remember { mutableStateOf(1) }
+    val categoryId by remember { mutableStateOf(1) }
 
     // Estado para validación de errores
     var titleError by remember { mutableStateOf(false) }
     var contentError by remember { mutableStateOf(false) }
     var startTimeError by remember { mutableStateOf(false) }
     var endTimeError by remember { mutableStateOf(false) }
+
+    val userViewModel: UserViewModel = viewModel()
+    val context = LocalContext.current
+    val lang = userViewModel.getSavedLanguage(context)
+    val localizedContext = context.setLocale(lang)
 
     // Regex para validar formato de hora
     val timeFormatRegex = Regex("^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$")
@@ -660,7 +673,7 @@ fun AddTaskDialog(
 
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text("Nueva Tarea") },
+        title = { Text(localizedContext.getString(R.string.schedule_new_task)) },
         text = {
             Column(
                 modifier = Modifier.fillMaxWidth(),
@@ -673,13 +686,13 @@ fun AddTaskDialog(
                         title = it
                         titleError = it.isBlank()
                     },
-                    label = { Text("Título") },
+                    label = { Text(localizedContext.getString(R.string.common_title)) },
                     modifier = Modifier.fillMaxWidth(),
                     isError = titleError,
                     supportingText = {
                         if (titleError) {
                             Text(
-                                text = "El título no puede estar vacío",
+                                text = localizedContext.getString(R.string.schedule_title_empty),
                                 color = MaterialTheme.colorScheme.error
                             )
                         }
@@ -693,13 +706,13 @@ fun AddTaskDialog(
                         content = it
                         contentError = it.isBlank()
                     },
-                    label = { Text("Contenido") },
+                    label = { Text(localizedContext.getString(R.string.common_description)) },
                     modifier = Modifier.fillMaxWidth(),
                     isError = contentError,
                     supportingText = {
                         if (contentError) {
                             Text(
-                                text = "El contenido no puede estar vacío",
+                                text = localizedContext.getString(R.string.common_empty_field),
                                 color = MaterialTheme.colorScheme.error
                             )
                         }
@@ -713,13 +726,13 @@ fun AddTaskDialog(
                         startTime = it
                         startTimeError = it.isBlank() || !it.matches(timeFormatRegex)
                     },
-                    label = { Text("Hora de inicio (HH:mm)") },
+                    label = { Text("${localizedContext.getString(R.string.common_start_hour)} (HH:mm)") },
                     modifier = Modifier.fillMaxWidth(),
                     isError = startTimeError,
                     supportingText = {
                         if (startTimeError) {
                             Text(
-                                text = "Formato de hora inválido (HH:mm)",
+                                text = "${localizedContext.getString(R.string.common_invalid_format)} (HH:mm)",
                                 color = MaterialTheme.colorScheme.error
                             )
                         }
@@ -733,13 +746,13 @@ fun AddTaskDialog(
                         endTime = it
                         endTimeError = it.isBlank() || !it.matches(timeFormatRegex)
                     },
-                    label = { Text("Hora de fin (HH:mm)") },
+                    label = { Text("${localizedContext.getString(R.string.common_end_hour)} (HH:mm)") },
                     modifier = Modifier.fillMaxWidth(),
                     isError = endTimeError,
                     supportingText = {
                         if (endTimeError) {
                             Text(
-                                text = "Formato de hora inválido (HH:mm)",
+                                text = "${localizedContext.getString(R.string.common_invalid_format)} (HH:mm)",
                                 color = MaterialTheme.colorScheme.error
                             )
                         }
@@ -755,12 +768,12 @@ fun AddTaskDialog(
                     }
                 }
             ) {
-                Text("Añadir")
+                Text(localizedContext.getString(R.string.schedule_add))
             }
         },
         dismissButton = {
             TextButton(onClick = onDismiss) {
-                Text("Cancelar")
+                Text(localizedContext.getString(R.string.calendar_cancel))
             }
         }
     )

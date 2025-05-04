@@ -26,11 +26,14 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import com.example.projecte_aplicaci_nativa_g7margarethamilton.R
 import com.example.projecte_aplicaci_nativa_g7margarethamilton.viewModel.UserViewModel
+import com.example.projecte_aplicaci_nativa_g7margarethamilton.viewModel.setLocale
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -46,6 +49,11 @@ fun EditProfileView(
     val updateMsg   by viewModel.updateMsg.collectAsState()
     val updateError by viewModel.updateError.collectAsState()
 
+    val context = LocalContext.current
+    val lang = viewModel.getSavedLanguage(context)
+    val localizedContext = context.setLocale(lang)
+
+    viewModel.loadSession()
     Scaffold(
         modifier = Modifier
             .nestedScroll(scrollBehavior.nestedScrollConnection)
@@ -54,7 +62,7 @@ fun EditProfileView(
             CenterAlignedTopAppBar(
                 title = {
                     Text(
-                        text = "Editar perfil",
+                        text = localizedContext.getString(R.string.edit_profile_view_title),
                         fontSize = 30.sp,
                         fontWeight = FontWeight.SemiBold,
                         color = MaterialTheme.colorScheme.onSecondary
@@ -70,7 +78,7 @@ fun EditProfileView(
                     }
                 },
                 actions = {
-                    IconButton(onClick = { viewModel.updateProfile() }) {
+                    IconButton(onClick = { viewModel.updateProfile(false) }) {
                         Icon(
                             imageVector = Icons.Default.Check,
                             contentDescription = "Confirmar",
@@ -100,7 +108,9 @@ fun EditProfileView(
                 OutlinedTextField(
                     value = nickname,
                     onValueChange = { viewModel.nicknameField.value = it },
-                    label = { Text("Nickname") },
+                    label = { Text(
+                        text = localizedContext.getString(R.string.edit_profile_view_nickname),
+                    ) },
                     modifier = Modifier.fillMaxWidth()
                 )
 
@@ -109,7 +119,9 @@ fun EditProfileView(
                 OutlinedTextField(
                     value = avatarUrl,
                     onValueChange = { viewModel.avatarUrlField.value = it },
-                    label = { Text("Avatar URL") },
+                    label = { Text(
+                        text = localizedContext.getString(R.string.edit_profile_view_avatar),
+                    ) },
                     modifier = Modifier.fillMaxWidth()
                 )
 

@@ -1,0 +1,156 @@
+<resources>
+    <string name="app_name">projecte-aplicaci-nativa-g7margarethamilton</string>
+    <!-- Welcome View -->
+    <string name="welcome_view_title">Benvingut/da</string>
+    <string name="welcome_view_subtitle">a</string>
+    <string name="welcome_view_login_button">Iniciar sessió</string>
+    <string name="welcome_view_register_button">Registrar-se</string>
+    <!-- Login View -->
+    <string name="login_view_title">Iniciar sessió</string>
+    <string name="login_view_email_placeholder">Correu electrònic</string>
+    <string name="login_view_password_placeholder">Contrasenya</string>
+    <string name="login_view_forgot_password">Has oblidat la contrasenya?</string>
+    <string name="login_view_login_button">Iniciar sessió</string>
+    <string name="login_view_or">o</string>
+    <string name="login_view_google_button">Inicia sessió amb Google</string>
+    <!-- Forgot Password View -->
+    <string name="forgot_password_view_title">Has oblidat la contrasenya?</string>
+    <string name="forgot_password_view_description">Si us plau, introdueix el teu correu electrònic per restablir la contrasenya:</string>
+    <string name="forgot_password_view_email_placeholder">exemple@correu.com</string>
+    <string name="forgot_password_view_send_button">Enviar</string>
+    <string name="forgot_password_view_cancel_button">Cancel·lar</string>
+    <!-- Register View -->
+    <string name="register_view_title">Registre</string>
+    <string name="register_view_name_placeholder">Nom</string>
+    <string name="register_view_email_placeholder">Correu electrònic</string>
+    <string name="register_view_password_placeholder">Contrasenya</string>
+    <string name="register_view_confirm_password_placeholder">Confirma la contrasenya</string>
+    <string name="register_view_register_button">Registrar-se</string>
+    <string name="register_view_or">o</string>
+    <string name="register_view_google_button">Registra\'t amb Google</string>
+
+    <!-- Home View -->
+    <string name="home_view_title">Què fem avui?</string>
+    <string name="home_view_task">Tasques d\'avui</string>
+    <string name="home_view_schedule">Horari</string>
+    <string name="home_view_calendar">Calendari</string>
+    <string name="home_view_list">Compra</string>
+    <string name="home_view_training">Entrenament</string>
+    <!-- Shopping List View -->
+    <string name="shopping_list_view_title">Llista de la compra</string>
+    <string name="shopping_list_view_in_construction">Proximament</string>
+    <!-- Training View -->
+    <string name="training_view_title">Entrenament</string>
+    <string name="training_view_in_construction">Proximament</string>
+
+    <!-- Settings View -->
+    <string name="settings_view_title">Configuració</string>
+    <string name="settings_view_terms_and_conditions">Termes &amp; Condicions</string>
+    <string name="settings_view_about">Sobre nosaltres</string>
+    <string name="settings_view_contact">Contacte</string>
+    <string name="settings_view_advanced_settings">Configuració avançada</string>
+    <!-- Terms and Conditions View -->
+    <string name="terms_and_conditions_view_title">Termes i Condicions</string>
+    <string name="terms_and_conditions_view_accept">Acceptar</string>
+    <string name="terms_and_conditions_view_content">1. Acceptació dels termes\nEn accedir i utilitzar aquesta aplicació, accepteu estar subjecte a aquests termes i condicions.\n\n2. Ús de l\'aplicació\nAquesta aplicació està destinada únicament a fins de registre i ús personal.\n\n3. Privacitat\nEns comprometem a protegir la vostra privacitat i dades personals d\'acord amb la nostra política de privacitat.\n\n4. Modificacions\nEns reservem el dret de modificar aquests termes en qualsevol moment.\n\n5. Limitació de responsabilitat\nNo ens fem responsables de cap dany directe o indirecte que pugui sorgir de l\'ús d\'aquesta aplicació.</string>
+    <!-- About View -->
+    <string name="about_view_title">Sobre nosaltres</string>
+    <string name="about_view_description">La nostra aplicació Flow2Day està dissenyada per ajudar-te a gestionar el teu temps de manera eficient i efectiva. Amb una interfície intuïtiva i eines potents, t\'ajudem a mantenir-te organitzat i centrat en els teus objectius.</string>
+    <string name="about_view_developer_1">Hola sóc en Carlos</string>
+    <string name="about_view_developer_2">Hola sóc en Jaime</string>
+    <string name="about_view_developer_3">Hola sóc na Nahomy</string>
+    <string name="about_view_developer_4">Hola sóc en Jaume</string>
+    <!-- Advanced Settings View -->
+    <string name="advanced_settings_view_title">Configuració avançada</string>
+    <string name="advanced_settings_view_theme">Tema (Clar/Fosc)</string>
+    <string name="advanced_settings_view_language">Idioma</string>
+    <string name="advanced_settings_view_notifications">Notificacions</string>
+    <string name="advanced_settings_view_merge_task">Unir tasques horari i calendari</string>
+
+    <!-- Profile View -->
+    <string name="profile_view_title">Perfil</string>
+    <string name="profile_view_date">Usuari/a des-de:</string>
+    <string name="profile_view_change_password">Canviar contrassenya</string>
+    <string name="profile_view_delete_account">Esborrar compte</string>
+    <string name="profile_view_logout">Tancar sessió</string>
+    <string name="profile_view_logout_on_all_devices">Tancar sessió en tots els dispositius</string>
+    <!-- Edit Profile View -->
+    <string name="edit_profile_view_title">Editar perfil</string>
+    <string name="edit_profile_view_nickname">Nom d\'usuari</string>
+    <string name="edit_profile_view_avatar">Url d\'Avatar</string>
+    <!-- Contact View -->
+    <string name="contact_view_title">Contacta\'ns</string>
+    <string name="contact_view_problem_title">Tens algun problema?</string>
+    <string name="contact_view_problem_description">T\'escoltem. Si tens alguna pregunta, suggeriment o comentari, no dubtis en escriure\'ns. Som aquí per ajudar-te.</string>
+    <string name="contact_view_write_here">Escriu aquí...</string>
+    <string name="contact_view_send">Enviar</string>
+    <string name="contact_view_success_title">Gràcies pel teu missatge!</string>
+    <string name="contact_view_success_description">Hem rebut el teu comentari i ens posarem en contacte amb tu el més aviat possible.</string>
+    <string name="contact_view_back">Tornar</string>
+    
+    <!-- Common -->
+    <string name="common_back">Tornar</string>
+    <string name="common_save">Desar</string>
+    <string name="common_title">Títol</string>
+    <string name="common_description">Descripció</string>
+    <string name="common_app_name">Flow2Day!</string>
+    <string name="common_image_description">Imatge %1$d</string>
+    <string name="common_monday">Dilluns</string>
+    <string name="common_tuesday">Dimarts</string>
+    <string name="common_wednesday">Dimecres</string>
+    <string name="common_thursday">Dijous</string>
+    <string name="common_friday">Divendres</string>
+    <string name="common_saturday">Dissabte</string>
+    <string name="common_sunday">Diumenge</string>
+    <string name="common_today">Avui</string>
+    <string name="common_empty_field">Aquest camp no pot estar buit</string>
+    <string name="common_start_hour">Hora d\'inici</string>
+    <string name="common_end_hour">Hora de finalització</string>
+    <string name="common_invalid_format">Format invàlid</string>
+    <string name="common_create">Crear</string>
+
+
+    <!-- Calendar -->
+    <string name="calendar_weekdays">Dl,Dt,Dc,Dj,Dv,Ds,Dg</string>
+    <string name="calendar_hour">%02d</string>
+    <string name="calendar_view_title">Calendari</string>
+    <string name="calendar_create">Crear Calendari</string>
+    <string name="calendar_create_new">Crear</string>
+    <string name="calendar_cancel">Cancel·lar</string>
+    <string name="calendar_create_new_calendar">Crear nou calendari</string>
+    <string name="calendar_edit_task">Editar tasca</string>
+    <string name="calendar_delete_task">Eliminar tasca</string>
+    <string name="calendar_create_event">Crear Esdeveniment</string>
+    <string name="calendar_edit_event">Editar Esdeveniment</string>
+    <string name="calendar_save">Desar</string>
+    <string name="calendar_select_time">Seleccionar hora</string>
+    <string name="calendar_24h_format">Format 24 hores</string>
+    <string name="calendar_accept">Acceptar</string>
+    <string name="calendar_select_date">Seleccionar data</string>
+    <string name="calendar_previous_month">Mes anterior</string>
+    <string name="calendar_next_month">Mes següent</string>
+    <string name="calendar_date">Data</string>
+    <string name="calendar_no_tasks">No hay tareas programadas para este día</string>
+    <string name="calendar_no_agenda">No hi ha agenda seleccionada</string>
+    <string name="calendar_date_pattern">d \'de\' MMMM \'de\' yyyy</string>
+
+    <!-- Schedule -->
+    <string name="schedule_view_title">Horari</string>
+    <string name="schedule_close">Tancar</string>
+    <string name="schedule_calendar">Calendari</string>
+    <string name="schedule_no_tasks">No hi ha tasques programades per a aquest dia</string>
+    <string name="schedule_add_task">Afegir Tasca</string>
+    <string name="schedule_new_task">Nova Tasca</string>
+    <string name="schedule_add">Afegir</string>
+    <string name="schedule_new_agenda">Nova Agenda</string>
+    <string name="schedule_title_empty">El títol no pot estar buit</string>
+    <string name="schedule_create">Crear</string>
+    <string name="schedule_no_agenda">No hi ha agenda seleccionada</string>
+
+    <!-- Today Tasks -->
+    <string name="today_tasks_title">Tasques d\'avui</string>
+    <string name="today_tasks_no_tasks">Cap tasca per avui</string>
+    <string name="today_tasks_completed">Tasques completades</string>
+    <string name="today_tasks_pending">Tasques pendents</string>
+
+</resources>

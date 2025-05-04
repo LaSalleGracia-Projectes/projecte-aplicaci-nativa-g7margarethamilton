@@ -1,21 +1,16 @@
 package com.example.projecte_aplicaci_nativa_g7margarethamilton.viewModel
 
-import android.os.Build
 import android.util.Log
-import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModel
 import com.example.projecte_aplicaci_nativa_g7margarethamilton.api.ApiRepository
 import com.example.projecte_aplicaci_nativa_g7margarethamilton.model.moduls.Schedule
 import com.example.projecte_aplicaci_nativa_g7margarethamilton.model.moduls.Schedule_task
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.filter
-import kotlinx.coroutines.flow.last
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.time.LocalDate
 
 class ScheduleViewModel(
     private val userViewModel: UserViewModel
@@ -64,7 +59,6 @@ class ScheduleViewModel(
      * @param categoryId ID de la categoría
      * @param email Email del usuario
      */
-    @RequiresApi(Build.VERSION_CODES.O)
     fun addTaskToSchedule(
         scheduleId: String,
         title: String,
@@ -249,39 +243,12 @@ class ScheduleViewModel(
         )
     }
 
-//    fun createNewSchedule(title: String, email: String, categoryId: Int) {
-//        val token = userViewModel.token.value ?: return
-//
-//        CoroutineScope(Dispatchers.IO).launch {
-//            try {
-//                _isLoading.value = true
-//                val response = repository.createSchedule(
-//                    token = token,
-//                    userId = email,
-//                    title = title,
-//                    isFavorite = false,
-//                    categoryId = categoryId
-//                )
-//
-//                withContext(Dispatchers.Main) {
-//                    if (response.isSuccessful) {
-//                        // Recargar los schedules para obtener el nuevo
-//                        loadSchedules()
-//                        //setCurrentSchedule(response.body()!!)
-//                        _error.value = null
-//                    } else {
-//                        _error.value = "Error al crear la agenda: ${response.message()}"
-//                    }
-//                }
-//            } catch (e: Exception) {
-//                withContext(Dispatchers.Main) {
-//                    _error.value = "Error: ${e.message}"
-//                }
-//            } finally {
-//                _isLoading.value = false
-//            }
-//        }
-//    }
+    /**
+     * Crea un nuevo horario y lo establece como el actual.
+     * @param title Título del nuevo horario
+     * @param email Email del usuario
+     * @param categoryId ID de la categoría
+     */
     fun createNewSchedule(
         title: String,
         email: String,

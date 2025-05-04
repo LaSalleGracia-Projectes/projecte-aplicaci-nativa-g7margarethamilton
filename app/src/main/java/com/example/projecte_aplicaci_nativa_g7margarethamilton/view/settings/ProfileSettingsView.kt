@@ -1,4 +1,3 @@
-// File: view/settings/ProfileSettingsView.kt
 package com.example.projecte_aplicaci_nativa_g7margarethamilton.view.settings
 
 import androidx.compose.foundation.background
@@ -11,12 +10,16 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.projecte_aplicaci_nativa_g7margarethamilton.R
+import com.example.projecte_aplicaci_nativa_g7margarethamilton.Routes
 import com.example.projecte_aplicaci_nativa_g7margarethamilton.view.BottomNavBar
 import com.example.projecte_aplicaci_nativa_g7margarethamilton.viewModel.UserViewModel
+import com.example.projecte_aplicaci_nativa_g7margarethamilton.viewModel.setLocale
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -25,43 +28,56 @@ fun ProfileSettingsView(
     viewModel: UserViewModel
 ) {
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
+    val context = LocalContext.current
+    val lang = viewModel.getSavedLanguage(context)
+    val localizedContext = context.setLocale(lang)
 
     // Carreguem settings un cop en iniciar la vista
-    LaunchedEffect(Unit) { viewModel.loadSettings() }
+    LaunchedEffect(Unit) { viewModel.loadSettings(context) }
 
     // Estats locals per al dropdown d'idioma
     var expandedLanguage by remember { mutableStateOf(false) }
-    val languageOptions = listOf("ca", "es", "en")
-    val selectedLanguage by viewModel.langCodeField.collectAsState()
+    data class LanguageOption(val code: String, val flag: String, val label: String)
+
+    val languageOptions = listOf(
+        LanguageOption("en", "🇬🇧", "English"),
+        LanguageOption("ca", "🇦🇩", "Català"),
+        LanguageOption("es", "🇪🇸", "Español")
+    )
+    val selectedLanguageCode by viewModel.langCodeField.collectAsState()
+    val selectedLanguage = languageOptions.first { it.code == selectedLanguageCode }
 
     Scaffold(
         modifier = Modifier
             .nestedScroll(scrollBehavior.nestedScrollConnection)
-            .padding(top = 40.dp),
+            .padding(top = 45.dp),
         topBar = {
             CenterAlignedTopAppBar(
                 title = {
                     Text(
-                        text = "Configuració de perfil",
+                        text = localizedContext.getString(R.string.advanced_settings_view_title),
                         fontSize = 30.sp,
                         fontWeight = FontWeight.SemiBold,
                         color = MaterialTheme.colorScheme.onSecondary,
                     )
                 },
                 navigationIcon = {
-                    IconButton(onClick = { navController.popBackStack() }) {
+                    IconButton(onClick = { navController.navigate(Routes.Settings.route) }) {
                         Icon(
                             imageVector = Icons.Default.ArrowBack,
-                            contentDescription = "Volver",
+                            contentDescription = localizedContext.getString(R.string.common_back),
                             tint = MaterialTheme.colorScheme.onBackground
                         )
                     }
                 },
                 actions = {
-                    IconButton(onClick = { viewModel.updateSettings() }) {
+                    IconButton(onClick = {
+                        viewModel.updateSettings(context)
+                        navController.navigate(Routes.ProfileSettings.route)
+                    }) {
                         Icon(
                             imageVector = Icons.Default.Check,
-                            contentDescription = "Guardar",
+                            contentDescription = localizedContext.getString(R.string.common_save),
                             tint = MaterialTheme.colorScheme.onSecondary
                         )
                     }
@@ -86,7 +102,7 @@ fun ProfileSettingsView(
         ) {
             // Modo oscuro
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Text("Modo oscuro")
+                Text(localizedContext.getString(R.string.advanced_settings_view_theme))
                 Spacer(modifier = Modifier.weight(1f))
                 Switch(
                     checked = viewModel.themeModeField.collectAsState().value,
@@ -102,9 +118,9 @@ fun ProfileSettingsView(
                 modifier = Modifier.fillMaxWidth()
             ) {
                 OutlinedTextField(
-                    value = selectedLanguage,
+                    value = "${selectedLanguage.flag}  ${selectedLanguage.label}",
                     onValueChange = {},
-                    label = { Text("Idioma") },
+                    label = { Text(localizedContext.getString(R.string.advanced_settings_view_language)) },
                     readOnly = true,
                     trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expandedLanguage) },
                     modifier = Modifier.menuAnchor()
@@ -115,9 +131,9 @@ fun ProfileSettingsView(
                 ) {
                     languageOptions.forEach { option ->
                         DropdownMenuItem(
-                            text = { Text(option) },
+                            text = { Text("${option.flag}  ${option.label}") },
                             onClick = {
-                                viewModel.langCodeField.value = option
+                                viewModel.langCodeField.value = option.code
                                 expandedLanguage = false
                             }
                         )
@@ -128,7 +144,7 @@ fun ProfileSettingsView(
 
             // Notificacions
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Text("Notificacions")
+                Text(localizedContext.getString(R.string.advanced_settings_view_notifications))
                 Spacer(modifier = Modifier.weight(1f))
                 Switch(
                     checked = viewModel.allowNotificationField.collectAsState().value,
@@ -139,7 +155,7 @@ fun ProfileSettingsView(
 
             // Merge calendari
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Text("Unir calendari d'horaris")
+                Text(localizedContext.getString(R.string.advanced_settings_view_merge_task))
                 Spacer(modifier = Modifier.weight(1f))
                 Switch(
                     checked = viewModel.mergeScheduleCalendarField.collectAsState().value,

@@ -1,3 +1,5 @@
+package com.example.projecte_aplicaci_nativa_g7margarethamilton.view
+
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -18,10 +20,19 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.TextButton
+import androidx.compose.ui.platform.LocalContext
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.projecte_aplicaci_nativa_g7margarethamilton.R
+import com.example.projecte_aplicaci_nativa_g7margarethamilton.viewModel.UserViewModel
+import com.example.projecte_aplicaci_nativa_g7margarethamilton.viewModel.setLocale
 
 @Composable
 fun Terms() {
     var showTermsModal by remember { mutableStateOf(false) }
+    val viewModel: UserViewModel = viewModel()
+    val context = LocalContext.current
+    val lang = viewModel.getSavedLanguage(context)
+    val localizedContext = context.setLocale(lang)
 
     Row(
         modifier = Modifier
@@ -30,30 +41,33 @@ fun Terms() {
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Start
     ) {
-
         Text(
-            text = "Al registrar-te estàs acceptant els ",
+            text = localizedContext.getString(R.string.terms_and_conditions_view_title),
             style = MaterialTheme.typography.bodySmall,
             modifier = Modifier.padding(start = 8.dp)
         )
         Text(
-            text = "Terminis i Condicions",
+            text = localizedContext.getString(R.string.terms_and_conditions_view_accept),
             modifier = Modifier.clickable { showTermsModal = true }
         )
     }
 
     if (showTermsModal) {
-        TermsModal(onDismiss = { showTermsModal = false })
+        TermsModal(onDismiss = { showTermsModal = false }, viewModel = viewModel)
     }
 }
 
 @Composable
-fun TermsModal(onDismiss: () -> Unit) {
+fun TermsModal(onDismiss: () -> Unit, viewModel: UserViewModel) {
+    val context = LocalContext.current
+    val lang = viewModel.getSavedLanguage(context)
+    val localizedContext = context.setLocale(lang)
+
     AlertDialog(
         onDismissRequest = onDismiss,
         title = {
             Text(
-                text = "Terminis i Condicions",
+                text = localizedContext.getString(R.string.terms_and_conditions_view_title),
                 style = MaterialTheme.typography.titleLarge
             )
         },
@@ -64,29 +78,14 @@ fun TermsModal(onDismiss: () -> Unit) {
                     .padding(vertical = 8.dp)
             ) {
                 Text(
-                    text = """
-                        1. Aceptación de los términos
-                        Al acceder y utilizar esta aplicación, usted acepta estar sujeto a estos términos y condiciones.
-
-                        2. Uso de la aplicación
-                        Esta aplicación está destinada únicamente a fines de registro y uso personal.
-
-                        3. Privacidad
-                        Nos comprometemos a proteger su privacidad y datos personales de acuerdo con nuestra política de privacidad.
-
-                        4. Modificaciones
-                        Nos reservamos el derecho de modificar estos términos en cualquier momento.
-
-                        5. Limitación de responsabilidad
-                        No nos hacemos responsables de cualquier daño directo o indirecto que pueda surgir del uso de esta aplicación.
-                    """.trimIndent(),
+                    text = localizedContext.getString(R.string.terms_and_conditions_view_content),
                     style = MaterialTheme.typography.bodyMedium
                 )
             }
         },
         confirmButton = {
             TextButton(onClick = onDismiss) {
-                Text("Aceptar")
+                Text(localizedContext.getString(R.string.terms_and_conditions_view_accept))
             }
         },
         modifier = Modifier
