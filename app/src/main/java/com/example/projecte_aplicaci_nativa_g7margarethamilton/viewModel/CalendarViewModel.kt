@@ -1,8 +1,6 @@
 package com.example.projecte_aplicaci_nativa_g7margarethamilton.viewModel
 
-import android.os.Build
 import android.util.Log
-import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModel
 import com.example.projecte_aplicaci_nativa_g7margarethamilton.api.ApiRepository
 import com.example.projecte_aplicaci_nativa_g7margarethamilton.model.moduls.Calendar
@@ -14,8 +12,6 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.time.LocalDate
-import java.time.LocalTime
-import java.sql.Time
 
 class CalendarViewModel(
     private val userViewModel: UserViewModel
@@ -46,7 +42,6 @@ class CalendarViewModel(
         _selectedDate.value = date
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     fun loadCalendars() {
         val token = userViewModel.token.value ?: return
 
@@ -67,7 +62,6 @@ class CalendarViewModel(
         Log.d("CalendarViewModel", "Current calendar set to: ${calendar.title}")
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     fun createNewCalendar(
         title: String,
         email: String,
@@ -91,7 +85,6 @@ class CalendarViewModel(
         )
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     fun createCalendarTask(
         title: String,
         content: String,
@@ -113,8 +106,8 @@ class CalendarViewModel(
                     content = content,
                     isCompleted = false,
                     priority = 1,
-                    startTime = startTime.toString(),
-                    endTime = endTime.toString(),
+                    startTime = startTime,
+                    endTime = endTime,
                     calendarId = currentCalendarId,
                     categoryId = categoryId
                 )
@@ -147,7 +140,6 @@ class CalendarViewModel(
         )
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     fun updateCalendarTask(
         taskId: Int,
         title: String,
