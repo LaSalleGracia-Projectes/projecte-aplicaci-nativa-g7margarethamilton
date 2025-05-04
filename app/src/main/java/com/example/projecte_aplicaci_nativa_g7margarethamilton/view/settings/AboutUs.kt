@@ -144,12 +144,11 @@ fun CarruselImagenes(images: List<Int>, texts: List<String>) {
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(200.dp)
-        ) { page ->
-            Image(
-                painter = painterResource(id = images[page]),
-                contentDescription = null,
-
+                .height(300.dp)
+                .padding(horizontal = 16.dp)
+        ) {
+            HorizontalPager(
+                state = pagerState,
                 modifier = Modifier
                     .fillMaxSize()
             ) { page ->

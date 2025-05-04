@@ -83,13 +83,13 @@ fun ScheduleView(
     val lang = userViewModel.getSavedLanguage(context)
     val localizedContext = context.setLocale(lang)
     var diaSemanaString = when (week_day.intValue) {
-        1 -> "Domingo"
-        2 -> "Lunes"
-        3 -> "Martes"
-        4 -> "Miércoles"
-        5 -> "Jueves"
-        6 -> "Viernes"
-        7 -> "Sábado"
+        1 -> localizedContext.getString(R.string.common_sunday)
+        2 -> localizedContext.getString(R.string.common_monday)
+        3 -> localizedContext.getString(R.string.common_tuesday)
+        4 -> localizedContext.getString(R.string.common_wednesday)
+        5 -> localizedContext.getString(R.string.common_thursday)
+        6 -> localizedContext.getString(R.string.common_friday)
+        7 -> localizedContext.getString(R.string.common_saturday)
         else -> ""
     }
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
@@ -212,7 +212,7 @@ fun ScheduleView(
                     )
                     if (currentDay == week_day.intValue) {
                         Text(
-                            text = "Hoy",
+                            text = localizedContext.getString(R.string.common_today),
                             fontSize = 16.sp,
                             fontWeight = FontWeight.Thin,
                             color = MaterialTheme.colorScheme.onSecondary
@@ -441,9 +441,16 @@ fun ScheduleDropdown(
     onCreateSchedule: (String, Int) -> Unit,
     onDelete: () -> Unit
 ) {
+    val userViewModel: UserViewModel = viewModel()
+    val context = LocalContext.current
+    val lang = userViewModel.getSavedLanguage(context)
+    val localizedContext = context.setLocale(lang)
+
     var expanded by remember { mutableStateOf(false) }
     var showCreateDialog by remember { mutableStateOf(false) }
-    val selectedText = currentSchedule?.title ?: "Ninguna agenda seleccionada"
+    val selectedText = currentSchedule?.title ?: localizedContext.getString(R.string.schedule_no_agenda)
+
+
 
     Box(
         modifier = Modifier
@@ -488,7 +495,7 @@ fun ScheduleDropdown(
                             tint = MaterialTheme.colorScheme.primary
                         )
                         Text(
-                            "Crear nueva agenda",
+                            localizedContext.getString(R.string.schedule_new_agenda),
                             color = MaterialTheme.colorScheme.primary,
                             fontWeight = FontWeight.Bold
                         )
@@ -589,7 +596,7 @@ fun CreateScheduleDialog(
                         title = it
                         titleError = it.isBlank()
                     },
-                    label = { Text("Título de la agenda") },
+                    label = { Text(localizedContext.getString(R.string.common_title)) },
                     modifier = Modifier.fillMaxWidth(),
                     isError = titleError,
                     supportingText = {
@@ -675,7 +682,7 @@ fun AddTaskDialog(
 
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text("Nueva Tarea") },
+        title = { Text(localizedContext.getString(R.string.schedule_new_task)) },
         text = {
             Column(
                 modifier = Modifier.fillMaxWidth(),
@@ -688,13 +695,13 @@ fun AddTaskDialog(
                         title = it
                         titleError = it.isBlank()
                     },
-                    label = { Text("Título") },
+                    label = { Text(localizedContext.getString(R.string.common_title)) },
                     modifier = Modifier.fillMaxWidth(),
                     isError = titleError,
                     supportingText = {
                         if (titleError) {
                             Text(
-                                text = "El título no puede estar vacío",
+                                text = localizedContext.getString(R.string.schedule_title_empty),
                                 color = MaterialTheme.colorScheme.error
                             )
                         }
@@ -708,13 +715,13 @@ fun AddTaskDialog(
                         content = it
                         contentError = it.isBlank()
                     },
-                    label = { Text("Contenido") },
+                    label = { Text(localizedContext.getString(R.string.common_description)) },
                     modifier = Modifier.fillMaxWidth(),
                     isError = contentError,
                     supportingText = {
                         if (contentError) {
                             Text(
-                                text = "El contenido no puede estar vacío",
+                                text = localizedContext.getString(R.string.common_empty_field),
                                 color = MaterialTheme.colorScheme.error
                             )
                         }
@@ -728,13 +735,13 @@ fun AddTaskDialog(
                         startTime = it
                         startTimeError = it.isBlank() || !it.matches(timeFormatRegex)
                     },
-                    label = { Text("Hora de inicio (HH:mm)") },
+                    label = { Text("${localizedContext.getString(R.string.common_start_hour)} (HH:mm)") },
                     modifier = Modifier.fillMaxWidth(),
                     isError = startTimeError,
                     supportingText = {
                         if (startTimeError) {
                             Text(
-                                text = "Formato de hora inválido (HH:mm)",
+                                text = "${localizedContext.getString(R.string.common_invalid_format)} (HH:mm)",
                                 color = MaterialTheme.colorScheme.error
                             )
                         }
@@ -748,13 +755,13 @@ fun AddTaskDialog(
                         endTime = it
                         endTimeError = it.isBlank() || !it.matches(timeFormatRegex)
                     },
-                    label = { Text("Hora de fin (HH:mm)") },
+                    label = { Text("${localizedContext.getString(R.string.common_end_hour)} (HH:mm)") },
                     modifier = Modifier.fillMaxWidth(),
                     isError = endTimeError,
                     supportingText = {
                         if (endTimeError) {
                             Text(
-                                text = "Formato de hora inválido (HH:mm)",
+                                text = "${localizedContext.getString(R.string.common_invalid_format)} (HH:mm)",
                                 color = MaterialTheme.colorScheme.error
                             )
                         }
