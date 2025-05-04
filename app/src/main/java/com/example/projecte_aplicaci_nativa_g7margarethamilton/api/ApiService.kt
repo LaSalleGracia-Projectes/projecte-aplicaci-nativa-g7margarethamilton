@@ -21,32 +21,64 @@ import retrofit2.http.PUT
 import retrofit2.http.Path
 import java.time.ZonedDateTime
 
+/**
+ * Respuesta del servidor para el registro de usuario
+ */
 data class RegisterResponse(
     val message: String,
     val avatar_url: String
 )
 
+/**
+ * Respuesta del servidor para el inicio de sesión
+ */
 data class LoginResponse(
     val tokenApp: String,
     val user: User,
     val message: String
 )
 
+/**
+ * Interfaz que define todos los endpoints de la API REST.
+ * 
+ * Esta interfaz proporciona métodos para interactuar con:
+ * - Autenticación de usuarios
+ * - Gestión de usuarios
+ * - Gestión de calendarios
+ * - Gestión de horarios
+ * - Gestión de tareas
+ */
 interface ApiService {
 
-    //REGISTER
+    /**
+     * Endpoints de Autenticación
+     */
+    
+    /**
+     * Registra un nuevo usuario en el sistema
+     * @param usuario Datos del usuario a registrar
+     * @return Respuesta con mensaje de confirmación y URL del avatar
+     */
     @POST("auth/register")
     suspend fun register(
         @Body usuario: User
     ): Response<RegisterResponse>
 
-    //LOGIN
+    /**
+     * Inicia sesión de usuario en la aplicación
+     * @param usuario Credenciales del usuario
+     * @return Respuesta con token, datos del usuario y mensaje
+     */
     @POST("auth/app/login")
     suspend fun login(
         @Body usuario: User
     ): Response<LoginResponse>
 
-    //LOGIN WITH GOOGLE
+    /**
+     * Inicia sesión usando Google OAuth
+     * @param body Mapa con el token de ID de Google
+     * @return Respuesta con token, datos del usuario y mensaje
+     */
     @POST("auth/app/google")
     suspend fun loginWithGoogle(
         @Body body: Map<String, String>
@@ -62,7 +94,7 @@ interface ApiService {
     ): Response<Map<String, String>>
 
     /**
-     * GET dades d’un usuari per email
+     * GET dades d'un usuari per email
      */
     @GET("user/{email}")
     suspend fun getUser(
