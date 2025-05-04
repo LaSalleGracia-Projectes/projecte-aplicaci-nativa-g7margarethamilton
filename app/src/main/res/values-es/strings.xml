@@ -13,6 +13,9 @@
     <string name="login_view_login_button">Iniciar sesión</string>
     <string name="login_view_or">o</string>
     <string name="login_view_google_button">Iniciar sesión con Google</string>
+    <string name="login_password_error">La contraseña debe tener al menos 8 caracteres y contener al menos una letra y un número</string>
+    <string name="login_email_error">El correo electrónico no es válido</string>
+    <string name="login_confirm_password_error">Las contraseñas no coinciden</string>
     <!-- Forgot Password View -->
     <string name="forgot_password_view_title">¿Has olvidado la contraseña?</string>
     <string name="forgot_password_view_description">Por favor, introduce tu correo electrónico para restablecer la contraseña:</string>
