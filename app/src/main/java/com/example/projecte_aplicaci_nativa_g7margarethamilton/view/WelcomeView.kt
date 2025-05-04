@@ -1,34 +1,55 @@
 package com.example.projecte_aplicaci_nativa_g7margarethamilton.view
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.*
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.projecte_aplicaci_nativa_g7margarethamilton.R
 import com.example.projecte_aplicaci_nativa_g7margarethamilton.Routes
+import com.example.projecte_aplicaci_nativa_g7margarethamilton.viewModel.UserViewModel
+import com.example.projecte_aplicaci_nativa_g7margarethamilton.viewModel.setLocale
 
 @Composable
-fun WelcomeView(navController: NavController) {
+fun WelcomeView(navController: NavController, viewModel: UserViewModel) {
+    val context = LocalContext.current
+    val selectedLang by viewModel.langCodeField.collectAsState()
+    val themeModeField by viewModel.themeModeField.collectAsState()
+
+    LaunchedEffect(Unit) {
+        if (!viewModel.hasForcedEnglish) {
+            viewModel.langCodeField.value = "en"
+            context.setLocale("en")
+            viewModel.saveLanguageToPrefs(context, "en")
+            viewModel.loadSettings(context)
+            viewModel.userHasSelectedLang = true
+            viewModel.hasForcedEnglish = true
+        }
+    }
+
+    // 🔤 Texts traduïts amb locale aplicat
+    val localizedContext = context.setLocale(selectedLang)
+
+    val languageOptions = listOf(
+        "ca" to "🇦🇩",
+        "es" to "🇪🇸",
+        "en" to "🇬🇧"
+    )
+
+    var dropdownExpanded by remember { mutableStateOf(false) }
+
+    val selectedEmoji = if (viewModel.userHasSelectedLang) {
+        languageOptions.firstOrNull { it.first == selectedLang }?.second ?: "🌐"
+    } else {
+        "🌐"
+    }
+
     Scaffold { paddingValues ->
         Box(
             modifier = Modifier
@@ -38,88 +59,104 @@ fun WelcomeView(navController: NavController) {
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(24.dp),
+                    .padding(horizontal = 24.dp)
+                    .padding(top = 48.dp, bottom = 140.dp),
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                // Welcome Text
                 Text(
-                    text = "Welcome",
+                    text = localizedContext.getString(R.string.welcome_view_title),
                     fontSize = 36.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.onSecondary,
-                    textAlign = TextAlign.Center
+                    fontWeight = FontWeight.Bold
                 )
-
                 Spacer(modifier = Modifier.height(8.dp))
-
                 Text(
-                    text = "to",
-                    fontSize = 32.sp,
-                    color = MaterialTheme.colorScheme.onSecondary,
-                    textAlign = TextAlign.Center
+                    text = localizedContext.getString(R.string.welcome_view_subtitle),
+                    fontSize = 32.sp
                 )
-
                 Spacer(modifier = Modifier.height(8.dp))
+                Text("Flow2Day!", fontSize = 36.sp, fontWeight = FontWeight.Bold)
+                Spacer(modifier = Modifier.height(64.dp))
 
-                Text(
-                    text = "Flow2Day!",
-                    fontSize = 36.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.onSecondary,
-                    textAlign = TextAlign.Center
-                )
-
-                Spacer(modifier = Modifier.height(100.dp))
-
-                // Login Button
                 Button(
-                    onClick = {navController.navigate(Routes.Login.route)},
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(56.dp),
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = MaterialTheme.colorScheme.primary
-                    ),
-                    shape = MaterialTheme.shapes.small
+                    onClick = { navController.navigate(Routes.Login.route) },
+                    modifier = Modifier.fillMaxWidth(0.85f).height(50.dp)
                 ) {
                     Text(
-                        text = "Login",
-                        fontSize = 16.sp,
-                        color = MaterialTheme.colorScheme.onPrimary,
+                        text = localizedContext.getString(R.string.welcome_view_login_button),
+                        fontSize = 16.sp
                     )
                 }
 
-                Spacer(modifier = Modifier.height(16.dp))
+                Spacer(modifier = Modifier.height(12.dp))
 
-                // Register Button
                 Button(
-                    onClick = {navController.navigate(Routes.Register.route)},
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(56.dp),
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = MaterialTheme.colorScheme.primary
-                    ),
-                    shape = MaterialTheme.shapes.small
+                    onClick = { navController.navigate(Routes.Register.route) },
+                    modifier = Modifier.fillMaxWidth(0.85f).height(50.dp)
                 ) {
                     Text(
-                        text = "Register",
-                        fontSize = 16.sp,
-                        color = MaterialTheme.colorScheme.onPrimary,
+                        text = localizedContext.getString(R.string.welcome_view_register_button),
+                        fontSize = 16.sp
                     )
                 }
             }
-        }
-    }
-}
 
-@Preview(showBackground = true)
-@Composable
-fun WelcomeViewPreview() {
-    MaterialTheme {
-        Surface {
-            //WelcomeView()
+            // 🌍 Idioma i tema
+            Row(
+                modifier = Modifier
+                    .align(Alignment.BottomCenter)
+                    .fillMaxWidth()
+                    .padding(20.dp),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Box(
+                    modifier = Modifier
+                        .clickable { dropdownExpanded = true }
+                        .padding(8.dp)
+                ) {
+                    Text(
+                        text = selectedEmoji,
+                        fontSize = 32.sp
+                    )
+
+                    DropdownMenu(
+                        expanded = dropdownExpanded,
+                        onDismissRequest = { dropdownExpanded = false }
+                    ) {
+                        languageOptions.forEach { (code, emoji) ->
+                            DropdownMenuItem(
+                                text = {
+                                    Text(text = emoji, fontSize = 28.sp)
+                                },
+                                onClick = {
+                                    viewModel.langCodeField.value = code
+                                    viewModel.saveLanguageToPrefs(context, code)
+                                    context.setLocale(code)
+                                    viewModel.loadSettings(context)
+                                    dropdownExpanded = false
+                                    viewModel.userHasSelectedLang = true
+                                }
+                            )
+                        }
+                    }
+                }
+
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.padding(end = 8.dp)
+                ) {
+                    Text(
+                        text = if (themeModeField) "🌙" else "☀️",
+                        fontSize = 20.sp,
+                        modifier = Modifier.padding(end = 6.dp)
+                    )
+                    Switch(
+                        checked = themeModeField,
+                        onCheckedChange = { viewModel.themeModeField.value = it }
+                    )
+                }
+            }
         }
     }
 }

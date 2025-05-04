@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.*
@@ -17,6 +18,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -26,91 +28,106 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.projecte_aplicaci_nativa_g7margarethamilton.R
+import com.example.projecte_aplicaci_nativa_g7margarethamilton.viewModel.UserViewModel
+import com.example.projecte_aplicaci_nativa_g7margarethamilton.viewModel.setLocale
 
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
 @Composable
-fun AboutUsView(navController: NavController) {
+fun AboutUsView(viewModel: UserViewModel, navController: NavController) {
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
-    val backgroundColor = Color(0xFFF8F8F8)
+
+    val context = LocalContext.current
+    val lang = viewModel.getSavedLanguage(context)
+    val localizedContext = context.setLocale(lang)
 
     val images = listOf(
-        R.drawable.profile_avatar_placeholder_large,
-        R.drawable.profile_avatar_placeholder_large,
-        R.drawable.profile_avatar_placeholder_large,
-        R.drawable.profile_avatar_placeholder_large
+        R.drawable.carlos,
+        R.drawable.jaime,
+        R.drawable.suki,
+        R.drawable.jaume
     )
 
     val texts = listOf(
-        "Hola soy Carlos.\n",
-        "Hola soy Jaime.\n",
-        "Hola soy Nahomy.\n",
-        "Hola soy Jaume.\n"
+        "${localizedContext.getString(R.string.about_view_developer_1)}\n",
+        "${localizedContext.getString(R.string.about_view_developer_2)}\n",
+        "${localizedContext.getString(R.string.about_view_developer_3)}\n",
+        "${localizedContext.getString(R.string.about_view_developer_4)}\n"
     )
 
     Scaffold(
-        modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
+        modifier = Modifier
+            .nestedScroll(scrollBehavior.nestedScrollConnection)
+            .padding(top = 40.dp),
         topBar = {
             CenterAlignedTopAppBar(
                 title = {
                     Text(
-                        text = "Sobre nosotros",
+                        text = localizedContext.getString(R.string.about_view_title),
                         fontSize = 30.sp,
                         fontWeight = FontWeight.SemiBold,
-                        color = Color.Black
+                        color = MaterialTheme.colorScheme.onSecondary
                     )
                 },
                 navigationIcon = {
                     IconButton(onClick = { navController.popBackStack() }) {
                         Icon(
                             imageVector = Icons.Default.ArrowBack,
-                            contentDescription = "Volver",
-                            tint = Color.Black
+                            contentDescription = localizedContext.getString(R.string.common_back),
+                            tint = MaterialTheme.colorScheme.onBackground
                         )
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = backgroundColor,
-                    titleContentColor = Color.Black
+                    containerColor = MaterialTheme.colorScheme.background
                 ),
                 scrollBehavior = scrollBehavior
             )
         },
-        containerColor = backgroundColor
     ) { paddingValues ->
-        Column(
+        Box(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
-                .padding(16.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
+                .background(MaterialTheme.colorScheme.background)
         ) {
-            Spacer(modifier = Modifier.height(8.dp))
-
-            CarruselImagenes(images = images, texts = texts)
-
-            Spacer(modifier = Modifier.height(24.dp))
-            Column {
-                Text(
-                    text = "Flow2Day!",
-                    fontSize = 30.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = Color(0xFF2E3B4E),
-                    textAlign = TextAlign.Start,
-                    modifier = Modifier.padding(horizontal = 16.dp)
-                )
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(16.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
                 Spacer(modifier = Modifier.height(8.dp))
-                Text(
-                    text = "Nuestra aplicación Flow2Day está diseñada para ayudarte a gestionar tu tiempo de manera eficiente y efectiva. Con una interfaz intuitiva y herramientas poderosas, te ayudamos a mantenerte organizado y enfocado en tus objetivos.",
-                    fontSize = 18.sp,
-                    color = Color(0xFF2E3B4E),
-                    textAlign = TextAlign.Start,
-                    modifier = Modifier
-                        .padding(horizontal = 16.dp)
-                        .align(Alignment.Start)
-                )
+
+                CarruselImagenes(images = images, texts = texts)
+
+                Spacer(modifier = Modifier.height(24.dp))
+
+                Column {
+                    Text(
+                        text = localizedContext.getString(R.string.common_app_name),
+                        fontSize = 30.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = MaterialTheme.colorScheme.onBackground,
+                        textAlign = TextAlign.Start,
+                        modifier = Modifier.padding(horizontal = 16.dp)
+                    )
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Text(
+                        text = localizedContext.getString(R.string.about_view_description),
+                        fontSize = 18.sp,
+                        color = MaterialTheme.colorScheme.onBackground,
+                        textAlign = TextAlign.Start,
+                        modifier = Modifier
+                            .padding(horizontal = 16.dp)
+                            .align(Alignment.Start)
+                    )
+
+                }
+
 
             }
+
         }
     }
 }
@@ -124,20 +141,35 @@ fun CarruselImagenes(images: List<Int>, texts: List<String>) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        HorizontalPager(
-            state = pagerState,
+        Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(200.dp)
-        ) { page ->
-            Image(
-                painter = painterResource(id = images[page]),
-                contentDescription = "Imagen ${page + 1}",
+                .height(300.dp)
+                .padding(horizontal = 16.dp)
+        ) {
+            HorizontalPager(
+                state = pagerState,
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .clip(MaterialTheme.shapes.medium),
-                contentScale = ContentScale.Crop
-            )
+                    .fillMaxSize()
+            ) { page ->
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(4.dp)
+                        .clip(RoundedCornerShape(16.dp))
+                        .background(MaterialTheme.colorScheme.surface),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Image(
+                        painter = painterResource(id = images[page]),
+                        contentDescription = "Imagen ${page + 1}",
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(16.dp),
+                        contentScale = ContentScale.Fit
+                    )
+                }
+            }
         }
 
         Row(
@@ -148,13 +180,13 @@ fun CarruselImagenes(images: List<Int>, texts: List<String>) {
             verticalAlignment = Alignment.CenterVertically
         ) {
             repeat(images.size) { iteration ->
-                val color = if (currentPage == iteration) Color(0xFF2E3B4E) else Color.LightGray
+                val color = if (currentPage == iteration) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.surfaceVariant
                 Box(
                     modifier = Modifier
-                        .padding(2.dp)
+                        .padding(4.dp)
                         .clip(CircleShape)
                         .background(color)
-                        .size(8.dp)
+                        .size(if (currentPage == iteration) 10.dp else 8.dp)
                 )
             }
         }
@@ -162,17 +194,9 @@ fun CarruselImagenes(images: List<Int>, texts: List<String>) {
         Text(
             text = texts[currentPage],
             fontSize = 16.sp,
-            color = Color(0xFF2E3B4E),
+            color = MaterialTheme.colorScheme.onBackground,
             textAlign = TextAlign.Center,
             modifier = Modifier.padding(horizontal = 16.dp)
         )
     }
 }
-
-@Preview(showBackground = true, showSystemUi = true)
-@Composable
-fun AboutUsViewPreview() {
-    val navController = rememberNavController()
-    AboutUsView(navController)
-}
-

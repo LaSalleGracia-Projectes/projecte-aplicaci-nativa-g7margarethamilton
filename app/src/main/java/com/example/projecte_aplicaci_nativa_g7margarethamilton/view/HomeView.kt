@@ -24,18 +24,21 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.navigation.NavController
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.compose.rememberNavController
 import com.example.projecte_aplicaci_nativa_g7margarethamilton.Routes
+import com.example.projecte_aplicaci_nativa_g7margarethamilton.R
+import com.example.projecte_aplicaci_nativa_g7margarethamilton.viewModel.UserViewModel
+import com.example.projecte_aplicaci_nativa_g7margarethamilton.viewModel.setLocale
 
 @Composable
-fun HomeView(navController: NavController) {
+fun HomeView(navController: NavController, viewModel: UserViewModel) {
+    val context = LocalContext.current
+    val lang = viewModel.getSavedLanguage(context)
+    val localizedContext = context.setLocale(lang)
     Scaffold(
         bottomBar = { BottomNavBar(navController) }
     ) { paddingValues ->
@@ -50,7 +53,7 @@ fun HomeView(navController: NavController) {
 
             // Título principal
             Text(
-                text = "What we do today?",
+                text = localizedContext.getString(R.string.home_view_title),
                 fontSize = 28.sp,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.onSecondary
@@ -63,8 +66,8 @@ fun HomeView(navController: NavController) {
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 HomeOptionButton(
-                    title = "Tareas del día",
-                    onClick = { navController.navigate(Routes.DailyTasks.route) },
+                    title = localizedContext.getString(R.string.home_view_task),
+                    onClick = { navController.navigate(Routes.Schedule.route) },
                     modifier = Modifier.weight(1f)
                 )
             }
@@ -78,8 +81,9 @@ fun HomeView(navController: NavController) {
             ) {
                 // Botón Agenda
                 HomeOptionButton(
-                    title = "Agenda",
-                    onClick = { /*TODO: navigate to Agenda*/ },
+
+                    title = localizedContext.getString(R.string.home_view_schedule),
+                    onClick = { navController.navigate(Routes.Schedule.route) },
                     modifier = Modifier.weight(1f)
                 )
 
@@ -87,8 +91,8 @@ fun HomeView(navController: NavController) {
 
                 // Botón Calendari
                 HomeOptionButton(
-                    title = "Calendari",
-                    onClick = { /* TODO: Navigate to Calendar */ },
+                    title = localizedContext.getString(R.string.home_view_calendar),
+                    onClick = { navController.navigate(Routes.Calendar.route) },
                     modifier = Modifier.weight(1f)
                 )
             }
@@ -101,8 +105,8 @@ fun HomeView(navController: NavController) {
             ) {
                 // Botón Lista compra
                 HomeOptionButton(
-                    title = "Lista compra",
-                    onClick = { /* TODO: Navigate to Shopping List */ },
+                    title = localizedContext.getString(R.string.home_view_list),
+                    onClick = { navController.navigate(Routes.ShoppingList.route) },
                     modifier = Modifier.weight(1f)
                 )
 
@@ -110,8 +114,8 @@ fun HomeView(navController: NavController) {
 
                 // Botón Rutines exercici
                 HomeOptionButton(
-                    title = "Exercici",
-                    onClick = { /* TODO: Navigate to Exercise Routines */ },
+                    title = localizedContext.getString(R.string.home_view_training),
+                    onClick = { navController.navigate(Routes.Exercises.route) },
                     modifier = Modifier.weight(1f)
                 )
             }
@@ -151,12 +155,5 @@ fun HomeOptionButton(
             modifier = Modifier.align(Alignment.CenterEnd)
         )
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun HomeViewPreview() {
-    val navController = rememberNavController()
-    HomeView(navController = navController)
 }
 

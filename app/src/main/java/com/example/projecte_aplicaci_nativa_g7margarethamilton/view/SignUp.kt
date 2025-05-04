@@ -1,6 +1,5 @@
 package com.example.projecte_aplicaci_nativa_g7margarethamilton.view
 
-import Terms
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Box
@@ -35,10 +34,12 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.projecte_aplicaci_nativa_g7margarethamilton.R
 import com.example.projecte_aplicaci_nativa_g7margarethamilton.Routes
 import com.example.projecte_aplicaci_nativa_g7margarethamilton.model.GoogleAuthUiClient
 import com.example.projecte_aplicaci_nativa_g7margarethamilton.viewModel.UserViewModel
 import com.example.projecte_aplicaci_nativa_g7margarethamilton.model.User
+import com.example.projecte_aplicaci_nativa_g7margarethamilton.viewModel.setLocale
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.common.api.ApiException
 
@@ -56,14 +57,15 @@ fun SignIn(navController: NavController, viewModel: UserViewModel) {
     val correctFormat by viewModel.correctFormat.collectAsState()
     val missatgeRegister by viewModel.missatgeRegister.collectAsState()
     val context = LocalContext.current
-
+    val lang = viewModel.getSavedLanguage(context)
+    val localizedContext = context.setLocale(lang)
     val launcher = rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         try {
             val account = GoogleSignIn.getSignedInAccountFromIntent(result.data)
                 .getResult(ApiException::class.java)
             val idToken = account?.idToken
             if (idToken != null) {
-                viewModel.loginWithGoogle(idToken)
+                viewModel.loginWithGoogle(context, idToken)
             }
         } catch (e: ApiException) {
             // Error al fer login amb Google
@@ -104,7 +106,7 @@ fun SignIn(navController: NavController, viewModel: UserViewModel) {
 
             // Register subtitle
             Text(
-                text = "Register",
+                text = localizedContext.getString(R.string.register_view_title),
                 fontSize = 18.sp,
                 color =  MaterialTheme.colorScheme.onSecondary,
                 modifier = Modifier.padding(bottom = 24.dp)
@@ -118,7 +120,7 @@ fun SignIn(navController: NavController, viewModel: UserViewModel) {
                     viewModel.validateNickname(it)
                     viewModel.validateSignUp(nickname, email, password, confirmPassword)
                 },
-                placeholder = { Text("Nombre") },
+                placeholder = { Text(localizedContext.getString(R.string.register_view_name_placeholder)) },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(bottom = 12.dp),
@@ -139,7 +141,7 @@ fun SignIn(navController: NavController, viewModel: UserViewModel) {
                     viewModel.validateEmail(it)
                     viewModel.validateSignUp(nickname, email, password, confirmPassword)
                 },
-                placeholder = { Text("Email") },
+                placeholder = { Text(localizedContext.getString(R.string.register_view_email_placeholder)) },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(bottom = 12.dp),
@@ -161,7 +163,7 @@ fun SignIn(navController: NavController, viewModel: UserViewModel) {
                     viewModel.validatePassword(it)
                     viewModel.validateSignUp(nickname, email, password, confirmPassword)
                 },
-                placeholder = { Text("Contraseña") },
+                placeholder = { Text(localizedContext.getString(R.string.register_view_password_placeholder)) },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(bottom = 12.dp),
@@ -184,7 +186,7 @@ fun SignIn(navController: NavController, viewModel: UserViewModel) {
                     viewModel.validateConfirmPassword(password, it)
                     viewModel.validateSignUp(nickname, email, password, confirmPassword)
                 },
-                placeholder = { Text("Repite la contraseña") },
+                placeholder = { Text(localizedContext.getString(R.string.register_view_confirm_password_placeholder)) },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(bottom = 24.dp),
@@ -225,7 +227,9 @@ fun SignIn(navController: NavController, viewModel: UserViewModel) {
                 shape = MaterialTheme.shapes.small,
                 enabled = correctFormat
             ) {
-                Text("Register")
+                Text(
+                    text = localizedContext.getString(R.string.register_view_register_button),
+                )
             }
 
             if (missatgeRegister.isNotEmpty()) {
@@ -258,7 +262,7 @@ fun SignIn(navController: NavController, viewModel: UserViewModel) {
                 shape = MaterialTheme.shapes.small,
                 enabled = true
             ) {
-                Text("Register With Google")
+                Text(localizedContext.getString(R.string.register_view_google_button))
             }
 
             Terms()

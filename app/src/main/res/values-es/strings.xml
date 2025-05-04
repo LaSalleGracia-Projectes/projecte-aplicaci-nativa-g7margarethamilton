@@ -1,0 +1,150 @@
+<resources>
+    <string name="app_name">projecte-aplicaci-nativa-g7margarethamilton</string>
+    <!-- Welcome View -->
+    <string name="welcome_view_title">Bienvenido/a</string>
+    <string name="welcome_view_subtitle">a</string>
+    <string name="welcome_view_login_button">Iniciar sesión</string>
+    <string name="welcome_view_register_button">Registrarse</string>
+    <!-- Login View -->
+    <string name="login_view_title">Iniciar sesión</string>
+    <string name="login_view_email_placeholder">Correo electrónico</string>
+    <string name="login_view_password_placeholder">Contraseña</string>
+    <string name="login_view_forgot_password">¿Olvidaste tu contraseña?</string>
+    <string name="login_view_login_button">Iniciar sesión</string>
+    <string name="login_view_or">o</string>
+    <string name="login_view_google_button">Iniciar sesión con Google</string>
+    <!-- Forgot Password View -->
+    <string name="forgot_password_view_title">¿Has olvidado la contraseña?</string>
+    <string name="forgot_password_view_description">Por favor, introduce tu correo electrónico para restablecer la contraseña:</string>
+    <string name="forgot_password_view_email_placeholder">ejemplo@correo.com</string>
+    <string name="forgot_password_view_send_button">Enviar</string>
+    <string name="forgot_password_view_cancel_button">Cancelar</string>
+    <!-- Register View -->
+    <string name="register_view_title">Registro</string>
+    <string name="register_view_name_placeholder">Nombre</string>
+    <string name="register_view_email_placeholder">Correo electrónico</string>
+    <string name="register_view_password_placeholder">Contraseña</string>
+    <string name="register_view_confirm_password_placeholder">Confirmar contraseña</string>
+    <string name="register_view_register_button">Registrarse</string>
+    <string name="register_view_or">o</string>
+    <string name="register_view_google_button">Regístrate con Google</string>
+
+    <!-- Home View -->
+    <string name="home_view_title">¿Qué hacemos hoy?</string>
+    <string name="home_view_task">Tareas de hoy</string>
+    <string name="home_view_schedule">Horario</string>
+    <string name="home_view_calendar">Calendario</string>
+    <string name="home_view_list">Compra</string>
+    <string name="home_view_training">Entrenamiento</string>
+    <!-- Shopping List View -->
+    <string name="shopping_list_view_title">Lista de la compra</string>
+    <string name="shopping_list_view_in_construction">Próximamente</string>
+    <!-- Training View -->
+    <string name="training_view_title">Entrenamiento</string>
+    <string name="training_view_in_construction">Próximamente</string>
+
+    <!-- Settings View -->
+    <string name="settings_view_title">Configuración</string>
+    <string name="settings_view_terms_and_conditions">Términos &amp; Condiciones</string>
+    <string name="settings_view_about">Sobre nosotros</string>
+    <string name="settings_view_contact">Contacto</string>
+    <string name="settings_view_advanced_settings">Configuración avanzada</string>
+    <!-- Terms and Conditions View -->
+    <string name="terms_and_conditions_view_title">Términos y Condiciones</string>
+    <string name="terms_and_conditions_view_accept">Aceptar</string>
+    <string name="terms_and_conditions_view_content">1. Aceptación de los términos\nAl acceder y utilizar esta aplicación, usted acepta estar sujeto a estos términos y condiciones.\n\n2. Uso de la aplicación\nEsta aplicación está destinada únicamente a fines de registro y uso personal.\n\n3. Privacidad\nNos comprometemos a proteger su privacidad y datos personales de acuerdo con nuestra política de privacidad.\n\n4. Modificaciones\nNos reservamos el derecho de modificar estos términos en cualquier momento.\n\n5. Limitación de responsabilidad\nNo nos hacemos responsables de cualquier daño directo o indirecto que pueda surgir del uso de esta aplicación.</string>
+    <!-- About View -->
+    <string name="about_view_title">Sobre nosotros</string>
+    <string name="about_view_description">Nuestra aplicación Flow2Day está diseñada para ayudarte a gestionar tu tiempo de manera eficiente y efectiva. Con una interfaz intuitiva y herramientas potentes, te ayudamos a mantenerte organizado y enfocado en tus objetivos.</string>
+    <string name="about_view_developer_1">Hola, soy Carlos</string>
+    <string name="about_view_developer_2">Hola, soy Jaime</string>
+    <string name="about_view_developer_3">Hola, soy Nahomy</string>
+    <string name="about_view_developer_4">Hola, soy Jaume</string>
+    <!-- Advanced Settings View -->
+    <string name="advanced_settings_view_title">Configuración avanzada</string>
+    <string name="advanced_settings_view_theme">Tema (Claro/Oscuro)</string>
+    <string name="advanced_settings_view_language">Idioma</string>
+    <string name="advanced_settings_view_notifications">Notificaciones</string>
+    <string name="advanced_settings_view_merge_task">Unir tareas de horario y calendario</string>
+
+    <!-- Profile View -->
+    <string name="profile_view_title">Perfil</string>
+    <string name="profile_view_date">Usuario/a desde:</string>
+    <string name="profile_view_change_password">Cambiar contraseña</string>
+    <string name="profile_view_delete_account">Eliminar cuenta</string>
+    <string name="profile_view_logout">Cerrar sesión</string>
+    <string name="profile_view_logout_on_all_devices">Cerrar sesión en todos los dispositivos</string>
+    <!-- Edit Profile View -->
+    <string name="edit_profile_view_title">Editar perfil</string>
+    <string name="edit_profile_view_nickname">Nombre de usuario</string>
+    <string name="edit_profile_view_avatar">URL del avatar</string>
+    <!-- Contact View -->
+    <string name="contact_view_title">Contáctanos</string>
+    <string name="contact_view_problem_title">¿Tienes algún problema?</string>
+    <string name="contact_view_problem_description">Te escuchamos. Si tienes alguna pregunta, sugerencia o comentario, no dudes en escribirnos. Estamos aquí para ayudarte.</string>
+    <string name="contact_view_write_here">Escribe aquí...</string>
+    <string name="contact_view_send">Enviar</string>
+    <string name="contact_view_success_title">¡Gracias por tu mensaje!</string>
+    <string name="contact_view_success_description">Hemos recibido tu comentario y nos pondremos en contacto contigo lo antes posible.</string>
+    <string name="contact_view_back">Volver</string>
+    
+    <!-- Common -->
+    <string name="common_back">Volver</string>
+    <string name="common_save">Guardar</string>
+    <string name="common_title">Título</string>
+    <string name="common_description">Descripción</string>
+    <string name="common_app_name">Flow2Day!</string>
+    <string name="common_image_description">Imagen %1$d</string>
+    <string name="common_monday">Lunes</string>
+    <string name="common_tuesday">Martes</string>
+    <string name="common_wednesday">Miércoles</string>
+    <string name="common_thursday">Jueves</string>
+    <string name="common_friday">Viernes</string>
+    <string name="common_saturday">Sábado</string>
+    <string name="common_sunday">Domingo</string>
+    <string name="common_today">Hoy</string>
+    <string name="common_empty_field">Este campo no puede estar vacío</string>
+    <string name="common_start_hour">Hora de inicio</string>
+    <string name="common_end_hour">Hora de fin</string>
+    <string name="common_invalid_format">Formato inválido</string>
+    <string name="common_create">Crear</string>
+
+
+
+    <!-- Calendar -->
+    <string name="calendar_weekdays">L,M,X,J,V,S,D</string>
+    <string name="calendar_hour">%02d</string>
+    <string name="calendar_view_title">Calendario</string>
+    <string name="calendar_create">Crear Calendario</string>
+    <string name="calendar_create_new">Crear</string>
+    <string name="calendar_cancel">Cancelar</string>
+    <string name="calendar_create_new_calendar">Crear nuevo calendario</string>
+    <string name="calendar_edit_task">Editar tarea</string>
+    <string name="calendar_delete_task">Eliminar tarea</string>
+    <string name="calendar_create_event">Crear Evento</string>
+    <string name="calendar_edit_event">Editar Evento</string>
+    <string name="calendar_save">Guardar</string>
+    <string name="calendar_select_time">Seleccionar hora</string>
+    <string name="calendar_24h_format">Formato 24 horas</string>
+    <string name="calendar_accept">Aceptar</string>
+    <string name="calendar_select_date">Seleccionar fecha</string>
+    <string name="calendar_previous_month">Mes anterior</string>
+    <string name="calendar_next_month">Mes siguiente</string>
+    <string name="calendar_no_tasks">No hay tareas programadas para este día</string>
+    <string name="calendar_no_agenda">No hay agenda seleccionada</string>
+    <string name="calendar_date">Fecha</string>
+    <string name="calendar_date_pattern">d \'de\' MMMM \'de\' yyyy</string>
+
+    <!-- Schedule -->
+    <string name="schedule_view_title">Agenda</string>
+    <string name="schedule_close">Cerrar</string>
+    <string name="schedule_calendar">Calendario</string>
+    <string name="schedule_no_tasks">No hay tareas programadas para este día</string>
+    <string name="schedule_add_task">Añadir Tarea</string>
+    <string name="schedule_new_task">Nueva Tarea</string>
+    <string name="schedule_add">Añadir</string>
+    <string name="schedule_new_agenda">Nueva Agenda</string>
+    <string name="schedule_title_empty">El título no puede estar vacío</string>
+    <string name="schedule_create">Crear</string>
+    <string name="schedule_no_agenda">No hay agenda seleccionada</string>
+</resources>
