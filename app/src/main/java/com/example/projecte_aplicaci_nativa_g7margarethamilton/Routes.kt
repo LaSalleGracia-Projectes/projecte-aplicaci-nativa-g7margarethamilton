@@ -19,4 +19,5 @@ sealed class Routes(val route: String) {
     object EditProfile : Routes("edit_profile")
     object Exercises : Routes("exercises")
     object ShoppingList : Routes("shopping_list")
+    object TodayTasks : Routes("today_tasks")
 }

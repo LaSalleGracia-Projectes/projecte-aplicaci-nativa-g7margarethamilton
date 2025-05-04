@@ -146,4 +146,11 @@
     <string name="schedule_title_empty">El títol no pot estar buit</string>
     <string name="schedule_create">Crear</string>
     <string name="schedule_no_agenda">No hi ha agenda seleccionada</string>
+
+    <!-- Today Tasks -->
+    <string name="today_tasks_title">Tasques d\'avui</string>
+    <string name="today_tasks_no_tasks">Cap tasca per avui</string>
+    <string name="today_tasks_completed">Tasques completades</string>
+    <string name="today_tasks_pending">Tasques pendents</string>
+
 </resources>
