@@ -1,13 +1,11 @@
 package com.example.projecte_aplicaci_nativa_g7margarethamilton.api
 
-import android.os.Build
-import androidx.annotation.RequiresApi
 import com.example.projecte_aplicaci_nativa_g7margarethamilton.model.User
 import retrofit2.Response
 
 
 class ApiRepository {
-    val apiInterface = ApiService.create()
+    private val apiInterface = ApiService.create()
 
     //AUTH
     suspend fun register(usuari: User) = apiInterface.register(usuari)
@@ -29,14 +27,12 @@ class ApiRepository {
             }
         )
 
-    @RequiresApi(Build.VERSION_CODES.O)
     suspend fun getUser(token: String, email: String) =
         apiInterface.getUser(
             "Bearer $token",
             email
         )
 
-    @RequiresApi(Build.VERSION_CODES.O)
     suspend fun updateUser(
         token: String,
         email: String,
@@ -51,20 +47,17 @@ class ApiRepository {
         UpdateUserRequest(nickname, avatarUrl, password, isAdmin, isBanned)
     )
 
-    @RequiresApi(Build.VERSION_CODES.O)
     suspend fun deleteUser(token: String, email: String) =
         apiInterface.deleteUser(
             "Bearer $token",
             email
         )
 
-    @RequiresApi(Build.VERSION_CODES.O)
     suspend fun getUserSettings(
         token: String,
         email: String
     ) = apiInterface.getUserSettings("Bearer $token", email)
 
-    @RequiresApi(Build.VERSION_CODES.O)
     suspend fun updateUserSettings(
         token: String,
         email: String,

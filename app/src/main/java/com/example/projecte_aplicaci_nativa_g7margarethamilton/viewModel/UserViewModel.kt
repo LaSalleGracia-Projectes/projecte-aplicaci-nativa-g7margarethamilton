@@ -325,9 +325,6 @@ class UserViewModel : ViewModel() {
         val t    = token.value ?: return
         val user = currentUser.value ?: return
 
-        if (changePassword){
-
-        }
 
         viewModelScope.launch(Dispatchers.IO) {
             try {

@@ -1,31 +1,24 @@
 package com.example.projecte_aplicaci_nativa_g7margarethamilton.view
 
-import android.os.Build
 import android.util.Log
-import androidx.annotation.RequiresApi
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.Spring
-//import androidx.compose.animation.core.animateContentSize
-//import androidx.compose.animation.core.expandVertically
-//import androidx.compose.animation.core.fadeIn
-//import androidx.compose.animation.core.fadeOut
 import androidx.compose.animation.core.spring
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.ArrowForward
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.ArrowForward
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.filled.Delete
@@ -52,10 +45,6 @@ import com.example.projecte_aplicaci_nativa_g7margarethamilton.model.moduls.Sche
 import com.example.projecte_aplicaci_nativa_g7margarethamilton.viewModel.ScheduleViewModel
 import com.example.projecte_aplicaci_nativa_g7margarethamilton.viewModel.UserViewModel
 import com.example.projecte_aplicaci_nativa_g7margarethamilton.viewModel.setLocale
-import kotlinx.coroutines.flow.filter
-import java.time.LocalDate
-import java.time.OffsetDateTime
-import java.time.format.DateTimeFormatter
 import java.util.*
 
 
@@ -64,7 +53,7 @@ import java.util.*
 fun ScheduleView(
     navController: NavController,
     userViewModel: UserViewModel,
-    viewModel: ScheduleViewModel = androidx.lifecycle.viewmodel.compose.viewModel {
+    viewModel: ScheduleViewModel = viewModel {
         ScheduleViewModel(userViewModel)
     }
 ) {
@@ -78,11 +67,11 @@ fun ScheduleView(
     val showAddTaskDialog = remember { mutableStateOf(false) }
     val calendar = Calendar.getInstance()
     val currentDay = calendar.get(Calendar.DAY_OF_WEEK)
-    val week_day = remember { mutableIntStateOf(calendar.get(Calendar.DAY_OF_WEEK)) }
+    val weekDay = remember { mutableIntStateOf(calendar.get(Calendar.DAY_OF_WEEK)) }
     val context = LocalContext.current
     val lang = userViewModel.getSavedLanguage(context)
     val localizedContext = context.setLocale(lang)
-    var diaSemanaString = when (week_day.intValue) {
+    val diaSemanaString = when (weekDay.intValue) {
         1 -> localizedContext.getString(R.string.common_sunday)
         2 -> localizedContext.getString(R.string.common_monday)
         3 -> localizedContext.getString(R.string.common_tuesday)
@@ -96,8 +85,8 @@ fun ScheduleView(
 
 
     // Filtrar tareas cuando cambia el día de la semana
-    LaunchedEffect(week_day.intValue) {
-        viewModel.filterTasksByDay(week_day.intValue)
+    LaunchedEffect(weekDay.intValue) {
+        viewModel.filterTasksByDay(weekDay.intValue)
     }
 
 
@@ -188,11 +177,11 @@ fun ScheduleView(
             ) {
                 IconButton(
                     onClick = {
-                        week_day.intValue = if (week_day.intValue == 1) 7 else week_day.intValue - 1
+                        weekDay.intValue = if (weekDay.intValue == 1) 7 else weekDay.intValue - 1
                     }
                 ) {
                     Icon(
-                        imageVector = Icons.Default.ArrowBack,
+                        imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                         contentDescription = "Día anterior"
                     )
                 }
@@ -200,7 +189,7 @@ fun ScheduleView(
                 Column(
                     modifier = Modifier
                         .clickable {
-                            week_day.intValue = currentDay
+                            weekDay.intValue = currentDay
                         },
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
@@ -210,7 +199,7 @@ fun ScheduleView(
                         fontWeight = FontWeight.Bold,
                         color = MaterialTheme.colorScheme.onSecondary
                     )
-                    if (currentDay == week_day.intValue) {
+                    if (currentDay == weekDay.intValue) {
                         Text(
                             text = localizedContext.getString(R.string.common_today),
                             fontSize = 16.sp,
@@ -222,11 +211,11 @@ fun ScheduleView(
 
                 IconButton(
                     onClick = {
-                        week_day.intValue = if (week_day.intValue == 7) 1 else week_day.intValue + 1
+                        weekDay.intValue = if (weekDay.intValue == 7) 1 else weekDay.intValue + 1
                     }
                 ) {
                     Icon(
-                        imageVector = Icons.Default.ArrowForward,
+                        imageVector = Icons.AutoMirrored.Filled.ArrowForward,
                         contentDescription = "Día siguiente"
                     )
                 }
@@ -272,7 +261,7 @@ fun ScheduleView(
                             onDelete = {
                                 viewModel.deleteScheduleTask(task.id.toString())
                                 // Recargar tareas tras crear una
-                                viewModel.filterTasksByDay(week_day.intValue)
+                                viewModel.filterTasksByDay(weekDay.intValue)
                             }
                         )
                         Spacer(modifier = Modifier.height(8.dp))
@@ -307,12 +296,12 @@ fun ScheduleView(
                             content = content,
                             startTime = startTime,
                             endTime = endTime,
-                            week_day = week_day.intValue,
+                            week_day = weekDay.intValue,
                             categoryId = categoryId,
                             email = email
                         )
                         // Recargar tareas tras crear una
-                        viewModel.filterTasksByDay(week_day.intValue)
+                        viewModel.filterTasksByDay(weekDay.intValue)
                     }
                 }
                 showAddTaskDialog.value = false
@@ -567,10 +556,10 @@ fun CreateScheduleDialog(
     onConfirm: (String, Int) -> Unit
 ) {
     var title by remember { mutableStateOf("") }
-    var categoryId by remember { mutableStateOf(1) } // Valor por defecto
+    val categoryId by remember { mutableStateOf(1) } // Valor por defecto
     var titleError by remember { mutableStateOf(false) }
 
-    var userViewModel: UserViewModel = viewModel()
+    val userViewModel: UserViewModel = viewModel()
     val context = LocalContext.current
     val lang = userViewModel.getSavedLanguage(context)
     val localizedContext = context.setLocale(lang)
@@ -640,7 +629,7 @@ fun CreateScheduleDialog(
 fun TaskPreview() {
 
     val navController = rememberNavController()
-    val userViewModel = androidx.lifecycle.viewmodel.compose.viewModel<UserViewModel>()
+    val userViewModel = viewModel<UserViewModel>()
     ScheduleView(navController, userViewModel)
 }
 
@@ -654,7 +643,7 @@ fun AddTaskDialog(
     var content by remember { mutableStateOf("") }
     var startTime by remember { mutableStateOf("") }
     var endTime by remember { mutableStateOf("") }
-    var categoryId by remember { mutableStateOf(1) }
+    val categoryId by remember { mutableStateOf(1) }
 
     // Estado para validación de errores
     var titleError by remember { mutableStateOf(false) }
@@ -662,7 +651,7 @@ fun AddTaskDialog(
     var startTimeError by remember { mutableStateOf(false) }
     var endTimeError by remember { mutableStateOf(false) }
 
-    var userViewModel: UserViewModel = viewModel()
+    val userViewModel: UserViewModel = viewModel()
     val context = LocalContext.current
     val lang = userViewModel.getSavedLanguage(context)
     val localizedContext = context.setLocale(lang)

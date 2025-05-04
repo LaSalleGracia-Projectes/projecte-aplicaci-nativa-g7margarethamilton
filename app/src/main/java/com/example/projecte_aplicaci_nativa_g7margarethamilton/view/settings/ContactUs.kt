@@ -13,7 +13,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CenterAlignedTopAppBar
@@ -37,11 +37,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import com.example.projecte_aplicaci_nativa_g7margarethamilton.viewModel.UserViewModel
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.runtime.collectAsState
@@ -84,7 +82,7 @@ fun ContactUsView(navController: NavController, viewModel: UserViewModel) {
                 navigationIcon = {
                     IconButton(onClick = { navController.popBackStack() }) {
                         Icon(
-                            imageVector = Icons.Default.ArrowBack,
+                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                             contentDescription = localizedContext.getString(R.string.common_back),
                             tint = MaterialTheme.colorScheme.onBackground
                         )
@@ -216,8 +214,8 @@ fun ContactForm(
         Spacer(modifier = Modifier.padding(8.dp))
 
         var text by remember { mutableStateOf("") }
-        var maxChars = 140
-        var isTextValid = text.length <= maxChars && text.isNotEmpty()
+        val maxChars = 140
+        val isTextValid = text.length <= maxChars && text.isNotEmpty()
         
         Box(
             modifier = Modifier
@@ -276,14 +274,5 @@ fun ContactForm(
     }
 }
 
-@Preview(showBackground = true, showSystemUi = true)
-@Composable
-fun ContactUsViewPreview() {
-    val navController = rememberNavController()
-    ContactUsView(
-        navController,
-        viewModel = TODO()
-    )
-}
 
 
