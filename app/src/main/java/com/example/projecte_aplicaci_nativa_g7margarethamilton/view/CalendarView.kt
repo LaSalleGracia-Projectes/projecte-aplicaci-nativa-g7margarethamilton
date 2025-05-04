@@ -30,6 +30,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -37,10 +38,13 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.example.projecte_aplicaci_nativa_g7margarethamilton.R
 import com.example.projecte_aplicaci_nativa_g7margarethamilton.model.moduls.Calendar_task
 import com.example.projecte_aplicaci_nativa_g7margarethamilton.viewModel.CalendarViewModel
 import com.example.projecte_aplicaci_nativa_g7margarethamilton.viewModel.UserViewModel
+import com.example.projecte_aplicaci_nativa_g7margarethamilton.viewModel.setLocale
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
@@ -66,6 +70,9 @@ fun CalendarView(
     var showCreateEventDialog by remember { mutableStateOf(false) }
     var showDayDetail by remember { mutableStateOf(false) }
     val currentUser by userViewModel.currentUser.collectAsState()
+    val context = LocalContext.current
+    val lang = userViewModel.getSavedLanguage(context)
+    val localizedContext = context.setLocale(lang)
 
     LaunchedEffect(Unit) {
         calendarViewModel.loadCalendars()
@@ -79,7 +86,7 @@ fun CalendarView(
             CenterAlignedTopAppBar(
                 title = {
                     Text(
-                        text = "Calendario",
+                        text = localizedContext.getString(R.string.calendar_view_title),
                         fontSize = 30.sp,
                         fontWeight = FontWeight.SemiBold,
                         color = MaterialTheme.colorScheme.onSecondary,
@@ -121,7 +128,7 @@ fun CalendarView(
                     Icon(Icons.Default.KeyboardArrowLeft, "Mes anterior")
                 }
                 Text(
-                    text = currentMonth.format(DateTimeFormatter.ofPattern("MMMM yyyy", Locale("es"))),
+                    text = currentMonth.format(DateTimeFormatter.ofPattern("MMMM yyyy", Locale(lang))),
                     style = MaterialTheme.typography.titleLarge,
                     modifier = Modifier.clickable { currentMonth = YearMonth.now() }
                 )
@@ -135,7 +142,7 @@ fun CalendarView(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceEvenly
             ) {
-                val daysOfWeek = listOf("Lun", "Mar", "Mié", "Jue", "Vie", "Sáb", "Dom")
+                val daysOfWeek = localizedContext.getString(R.string.calendar_weekdays).split(",")
                 daysOfWeek.forEach { day ->
                     Text(
                         text = day,
@@ -155,7 +162,7 @@ fun CalendarView(
                     contentAlignment = Alignment.Center
                 ) {
                     Button(onClick = { showCreateCalendarDialog = true }) {
-                        Text("Crear Calendario")
+                        Text(localizedContext.getString(R.string.calendar_create))
                     }
                 }
             } else {
@@ -199,7 +206,7 @@ fun CalendarView(
                             .padding(horizontal = 16.dp, vertical = 8.dp)
                     ) {
                         Text(
-                            text = date.format(DateTimeFormatter.ofPattern("d 'de' MMMM 'de' yyyy", Locale("es"))),
+                            text = date.format(DateTimeFormatter.ofPattern(localizedContext.getString(R.string.calendar_date_pattern), Locale(lang))),
                             style = MaterialTheme.typography.titleMedium,
                             fontWeight = FontWeight.Bold
                         )
@@ -342,15 +349,20 @@ fun CreateCalendarDialog(
     onConfirm: (String) -> Unit
 ) {
     var title by remember { mutableStateOf("") }
+    var viewModel: UserViewModel = viewModel()
+
+    val context = LocalContext.current
+    val lang = viewModel.getSavedLanguage(context)
+    val localizedContext = context.setLocale(lang)
 
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text("Crear Calendario") },
+        title = { Text(localizedContext.getString(R.string.calendar_create_new_calendar)) },
         text = {
             OutlinedTextField(
                 value = title,
                 onValueChange = { title = it },
-                label = { Text("Título del calendario") }
+                label = { Text(localizedContext.getString(R.string.common_title)) }
             )
         },
         confirmButton = {
@@ -358,12 +370,12 @@ fun CreateCalendarDialog(
                 onClick = { onConfirm(title) },
                 enabled = title.isNotBlank()
             ) {
-                Text("Crear")
+                Text(localizedContext.getString(R.string.common_create))
             }
         },
         dismissButton = {
             TextButton(onClick = onDismiss) {
-                Text("Cancelar")
+                Text(localizedContext.getString(R.string.calendar_cancel))
             }
         }
     )
@@ -378,6 +390,11 @@ fun TaskItem(
     onDeleteTask: () -> Unit = {}
 ) {
     var showEditDialog by remember { mutableStateOf(false) }
+    var viewModel: UserViewModel = viewModel()
+
+    val context = LocalContext.current
+    val lang = viewModel.getSavedLanguage(context)
+    val localizedContext = context.setLocale(lang)
     
     Card(
         modifier = Modifier
@@ -459,14 +476,14 @@ fun TaskItem(
                     IconButton(onClick = { showEditDialog = true }) {
                         Icon(
                             imageVector = Icons.Default.Edit,
-                            contentDescription = "Editar tarea",
+                            contentDescription = localizedContext.getString(R.string.calendar_edit_task),
                             tint = MaterialTheme.colorScheme.primary
                         )
                     }
                     IconButton(onClick = onDeleteTask) {
                         Icon(
                             imageVector = Icons.Default.Delete,
-                            contentDescription = "Eliminar tarea",
+                            contentDescription = localizedContext.getString(R.string.calendar_delete_task),
                             tint = MaterialTheme.colorScheme.error
                         )
                     }
@@ -529,6 +546,10 @@ fun EditTaskDialog(
     var showStartTimePicker by remember { mutableStateOf(false) }
     var showEndTimePicker by remember { mutableStateOf(false) }
     var showDatePicker by remember { mutableStateOf(false) }
+    var viewModel: UserViewModel = viewModel()
+    val context = LocalContext.current
+    val lang = viewModel.getSavedLanguage(context)
+    val localizedContext = context.setLocale(lang)
 
     // Función simple para combinar fecha y hora en el formato requerido
     fun combineDateTime(date: LocalDate, hour: Int, minute: Int): String {
@@ -539,37 +560,37 @@ fun EditTaskDialog(
 
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text("Editar Evento") },
+        title = { Text(localizedContext.getString(R.string.calendar_edit_event)) },
         text = {
             Column {
                 OutlinedTextField(
                     value = title,
                     onValueChange = { title = it },
-                    label = { Text("Título") },
+                    label = { Text(localizedContext.getString(R.string.common_title)) },
                     modifier = Modifier.fillMaxWidth()
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 OutlinedTextField(
                     value = content,
                     onValueChange = { content = it },
-                    label = { Text("Descripción") },
+                    label = { Text(localizedContext.getString(R.string.common_description)) },
                     modifier = Modifier.fillMaxWidth()
                 )
                 Spacer(modifier = Modifier.height(16.dp))
                 
                 // Selector de fecha
-                Text("Fecha", style = MaterialTheme.typography.bodyMedium)
+                Text(localizedContext.getString(R.string.calendar_select_date), style = MaterialTheme.typography.bodyMedium)
                 OutlinedButton(
                     onClick = { showDatePicker = true },
                     modifier = Modifier.fillMaxWidth()
                 ) {
-                    Text(selectedDate.format(DateTimeFormatter.ofPattern("d 'de' MMMM 'de' yyyy", Locale("es"))))
+                    Text(selectedDate.format(DateTimeFormatter.ofPattern(localizedContext.getString(R.string.calendar_date_pattern), Locale(lang))))
                 }
                 
                 Spacer(modifier = Modifier.height(8.dp))
                 
                 // Selector de hora de inicio
-                Text("Hora de inicio", style = MaterialTheme.typography.bodyMedium)
+                Text(localizedContext.getString(R.string.common_start_hour), style = MaterialTheme.typography.bodyMedium)
                 OutlinedButton(
                     onClick = { showStartTimePicker = true },
                     modifier = Modifier.fillMaxWidth()
@@ -580,7 +601,7 @@ fun EditTaskDialog(
                 Spacer(modifier = Modifier.height(8.dp))
                 
                 // Selector de hora de fin
-                Text("Hora de fin", style = MaterialTheme.typography.bodyMedium)
+                Text(localizedContext.getString(R.string.common_end_hour), style = MaterialTheme.typography.bodyMedium)
                 OutlinedButton(
                     onClick = { showEndTimePicker = true },
                     modifier = Modifier.fillMaxWidth()
@@ -603,12 +624,12 @@ fun EditTaskDialog(
                 },
                 enabled = title.isNotBlank()
             ) {
-                Text("Guardar")
+                Text(localizedContext.getString(R.string.calendar_accept))
             }
         },
         dismissButton = {
             TextButton(onClick = onDismiss) {
-                Text("Cancelar")
+                Text(localizedContext.getString(R.string.calendar_cancel))
             }
         }
     )
@@ -657,6 +678,10 @@ fun TimePickerDialog(
     var isHourSelection by remember { mutableStateOf(true) }
     val hourScrollState = rememberScrollState()
     val minuteScrollState = rememberScrollState()
+    var userViewModel: UserViewModel = viewModel()
+    val context = LocalContext.current
+    val lang = userViewModel.getSavedLanguage(context)
+    val localizedContext = context.setLocale(lang)
 
     LaunchedEffect(isHourSelection) {
         // Scroll to center selected value when switching between hour/minute
@@ -675,7 +700,7 @@ fun TimePickerDialog(
         shape = RoundedCornerShape(16.dp),
         title = {
             Text(
-                text = "Seleccionar hora",
+                text = localizedContext.getString(R.string.calendar_select_time),
                 style = MaterialTheme.typography.headlineSmall,
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier.padding(bottom = 8.dp)
@@ -843,38 +868,38 @@ fun TimePickerDialog(
                         )
 
                         // Center indicator
-                        Divider(
+                        HorizontalDivider(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .align(Alignment.Center)
                                 .padding(horizontal = 16.dp),
-                            color = MaterialTheme.colorScheme.primary.copy(alpha = 0.2f),
-                            thickness = 2.dp
+                            thickness = 2.dp,
+                            color = MaterialTheme.colorScheme.primary.copy(alpha = 0.2f)
                         )
 
-                        Divider(
+                        HorizontalDivider(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .offset(y = 25.dp)
                                 .align(Alignment.Center)
                                 .padding(horizontal = 16.dp),
-                            color = MaterialTheme.colorScheme.primary.copy(alpha = 0.1f),
-                            thickness = 1.dp
+                            thickness = 1.dp,
+                            color = MaterialTheme.colorScheme.primary.copy(alpha = 0.1f)
                         )
 
-                        Divider(
+                        HorizontalDivider(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .offset(y = -25.dp)
                                 .align(Alignment.Center)
                                 .padding(horizontal = 16.dp),
-                            color = MaterialTheme.colorScheme.primary.copy(alpha = 0.1f),
-                            thickness = 1.dp
+                            thickness = 1.dp,
+                            color = MaterialTheme.colorScheme.primary.copy(alpha = 0.1f)
                         )
                     }
 
                     // Vertical divider
-                    Divider(
+                    HorizontalDivider(
                         modifier = Modifier
                             .width(1.dp)
                             .fillMaxHeight()
@@ -962,33 +987,33 @@ fun TimePickerDialog(
                         )
 
                         // Center indicator
-                        Divider(
+                        HorizontalDivider(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .align(Alignment.Center)
                                 .padding(horizontal = 16.dp),
-                            color = MaterialTheme.colorScheme.primary.copy(alpha = 0.2f),
-                            thickness = 2.dp
+                            thickness = 2.dp,
+                            color = MaterialTheme.colorScheme.primary.copy(alpha = 0.2f)
                         )
 
-                        Divider(
+                        HorizontalDivider(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .offset(y = 25.dp)
                                 .align(Alignment.Center)
                                 .padding(horizontal = 16.dp),
-                            color = MaterialTheme.colorScheme.primary.copy(alpha = 0.1f),
-                            thickness = 1.dp
+                            thickness = 1.dp,
+                            color = MaterialTheme.colorScheme.primary.copy(alpha = 0.1f)
                         )
 
-                        Divider(
+                        HorizontalDivider(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .offset(y = -25.dp)
+                                .offset(y = (-25).dp)
                                 .align(Alignment.Center)
                                 .padding(horizontal = 16.dp),
-                            color = MaterialTheme.colorScheme.primary.copy(alpha = 0.1f),
-                            thickness = 1.dp
+                            thickness = 1.dp,
+                            color = MaterialTheme.colorScheme.primary.copy(alpha = 0.1f)
                         )
                     }
                 }
@@ -996,7 +1021,7 @@ fun TimePickerDialog(
                 // Time period AM/PM indicator (optional)
                 if (isHourSelection) {
                     Text(
-                        text = "Formato 24 horas",
+                        text = localizedContext.getString(R.string.calendar_24h_format),
                         style = MaterialTheme.typography.bodySmall,
                         modifier = Modifier.padding(top = 8.dp),
                         color = MaterialTheme.colorScheme.onSurfaceVariant
@@ -1010,7 +1035,7 @@ fun TimePickerDialog(
                 modifier = Modifier.padding(horizontal = 8.dp),
                 shape = RoundedCornerShape(8.dp)
             ) {
-                Text("Aceptar")
+                Text(localizedContext.getString(R.string.calendar_accept))
             }
         },
         dismissButton = {
@@ -1018,7 +1043,7 @@ fun TimePickerDialog(
                 onClick = onDismiss,
                 modifier = Modifier.padding(horizontal = 8.dp)
             ) {
-                Text("Cancelar")
+                Text(localizedContext.getString(R.string.calendar_cancel))
             }
         }
     )
@@ -1054,17 +1079,22 @@ fun DayDetailDialog(
     onAddTask: () -> Unit,
     onUpdateTask: (Calendar_task) -> Unit
 ) {
+    val userViewModel: UserViewModel = viewModel()
+    val context = LocalContext.current
+    val lang = userViewModel.getSavedLanguage(context)
+    val localizedContext = context.setLocale(lang)
+
     AlertDialog(
         onDismissRequest = onDismiss,
         title = {
             Text(
-                text = date.format(DateTimeFormatter.ofPattern("d 'de' MMMM 'de' yyyy", Locale("es")))
+                text = date.format(DateTimeFormatter.ofPattern(localizedContext.getString(R.string.calendar_date_pattern), Locale(lang)))
             )
         },
         text = {
             Column {
                 if (tasks.isEmpty()) {
-                    Text("No hay tareas para este día")
+                    Text(localizedContext.getString(R.string.calendar_no_tasks))
                 } else {
                     tasks.forEach { task ->
                         TaskItem(
@@ -1084,12 +1114,12 @@ fun DayDetailDialog(
         },
         confirmButton = {
             Button(onClick = onAddTask) {
-                Text("Añadir tarea")
+                Text(localizedContext.getString(R.string.schedule_add_task))
             }
         },
         dismissButton = {
             TextButton(onClick = onDismiss) {
-                Text("Cerrar")
+                Text(localizedContext.getString(R.string.calendar_cancel))
             }
         }
     )
@@ -1111,6 +1141,11 @@ fun CreateEventDialog(
     var showStartTimePicker by remember { mutableStateOf(false) }
     var showEndTimePicker by remember { mutableStateOf(false) }
 
+    val userViewModel: UserViewModel = viewModel()
+    val context = LocalContext.current
+    val lang = userViewModel.getSavedLanguage(context)
+    val localizedContext = context.setLocale(lang)
+
     // Función para formatear la fecha y hora al formato requerido
     fun formatDateTime(date: LocalDate, hour: Int, minute: Int): String {
         return "${date.format(DateTimeFormatter.ISO_DATE)} ${String.format("%02d:%02d:00", hour, minute)}"
@@ -1118,33 +1153,33 @@ fun CreateEventDialog(
 
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text("Crear Evento") },
+        title = { Text(localizedContext.getString(R.string.calendar_create_event)) },
         text = {
             Column {
                 OutlinedTextField(
                     value = title,
                     onValueChange = { title = it },
-                    label = { Text("Título") },
+                    label = { Text(localizedContext.getString(R.string.common_title)) },
                     modifier = Modifier.fillMaxWidth()
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 OutlinedTextField(
                     value = content,
                     onValueChange = { content = it },
-                    label = { Text("Descripción") },
+                    label = { Text(localizedContext.getString(R.string.common_description)) },
                     modifier = Modifier.fillMaxWidth()
                 )
                 Spacer(modifier = Modifier.height(16.dp))
                 
                 // Selector de fecha
-                Text("Fecha", style = MaterialTheme.typography.bodyMedium)
+                Text(localizedContext.getString(R.string.calendar_date), style = MaterialTheme.typography.bodyMedium)
                 Text(
-                    text = selectedDate.format(DateTimeFormatter.ofPattern("d 'de' MMMM 'de' yyyy", Locale("es"))),
+                    text = selectedDate.format(DateTimeFormatter.ofPattern(localizedContext.getString(R.string.calendar_date_pattern), Locale(lang))),
                     modifier = Modifier.padding(vertical = 8.dp)
                 )
                 
                 // Selector de hora de inicio
-                Text("Hora de inicio", style = MaterialTheme.typography.bodyMedium)
+                Text(localizedContext.getString(R.string.common_start_hour), style = MaterialTheme.typography.bodyMedium)
                 OutlinedButton(
                     onClick = { showStartTimePicker = true },
                     modifier = Modifier.fillMaxWidth()
@@ -1155,7 +1190,7 @@ fun CreateEventDialog(
                 Spacer(modifier = Modifier.height(8.dp))
                 
                 // Selector de hora de fin
-                Text("Hora de fin", style = MaterialTheme.typography.bodyMedium)
+                Text(localizedContext.getString(R.string.common_end_hour), style = MaterialTheme.typography.bodyMedium)
                 OutlinedButton(
                     onClick = { showEndTimePicker = true },
                     modifier = Modifier.fillMaxWidth()
@@ -1176,12 +1211,12 @@ fun CreateEventDialog(
                 },
                 enabled = title.isNotBlank()
             ) {
-                Text("Crear")
+                Text(localizedContext.getString(R.string.common_create))
             }
         },
         dismissButton = {
             TextButton(onClick = onDismiss) {
-                Text("Cancelar")
+                Text(localizedContext.getString(R.string.calendar_cancel))
             }
         }
     )
@@ -1218,6 +1253,11 @@ fun DatePickerDialog(
 ) {
     var selectedDate by remember { mutableStateOf(initialDate) }
     var currentYearMonth by remember { mutableStateOf(YearMonth.from(initialDate)) }
+    val userViewModel: UserViewModel = viewModel()
+    val context = LocalContext.current
+    val lang = userViewModel.getSavedLanguage(context)
+    val localizedContext = context.setLocale(lang)
+
 
     AlertDialog(
         onDismissRequest = onDismiss,
@@ -1230,7 +1270,7 @@ fun DatePickerDialog(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
-                    text = "Seleccionar fecha",
+                    text = localizedContext.getString(R.string.calendar_select_date),
                     style = MaterialTheme.typography.headlineSmall,
                     fontWeight = FontWeight.Bold
                 )
@@ -1243,18 +1283,18 @@ fun DatePickerDialog(
                     IconButton(onClick = { 
                         currentYearMonth = currentYearMonth.minusMonths(1)
                     }) {
-                        Icon(Icons.Default.KeyboardArrowLeft, "Mes anterior")
+                        Icon(Icons.Default.KeyboardArrowLeft, localizedContext.getString(R.string.calendar_previous_month))
                     }
                     Text(
                         text = currentYearMonth.format(
-                            DateTimeFormatter.ofPattern("MMMM yyyy", Locale("es"))
+                            DateTimeFormatter.ofPattern("MMMM yyyy", Locale(lang))
                         ),
                         style = MaterialTheme.typography.titleMedium
                     )
                     IconButton(onClick = { 
                         currentYearMonth = currentYearMonth.plusMonths(1)
                     }) {
-                        Icon(Icons.Default.KeyboardArrowRight, "Mes siguiente")
+                        Icon(Icons.Default.KeyboardArrowRight, localizedContext.getString(R.string.calendar_next_month))
                     }
                 }
             }
@@ -1270,7 +1310,8 @@ fun DatePickerDialog(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-                    listOf("L", "M", "X", "J", "V", "S", "D").forEach { day ->
+                    val weekdays = localizedContext.getString(R.string.calendar_weekdays).split(",")
+                    weekdays.forEach { day ->
                         Text(
                             text = day,
                             modifier = Modifier.padding(4.dp),
@@ -1325,12 +1366,12 @@ fun DatePickerDialog(
             TextButton(
                 onClick = { onConfirm(selectedDate) }
             ) {
-                Text("Aceptar")
+                Text(localizedContext.getString(R.string.calendar_accept))
             }
         },
         dismissButton = {
             TextButton(onClick = onDismiss) {
-                Text("Cancelar")
+                Text(localizedContext.getString(R.string.calendar_cancel))
             }
         }
     )
