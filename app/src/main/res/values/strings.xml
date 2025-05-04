@@ -82,7 +82,7 @@
     <string name="contact_view_title">Contact us</string>
     <string name="contact_view_problem_title">Do you have a problem?</string>
     <string name="contact_view_problem_description">We\'re listening. If you have any questions, suggestions or comments, don\'t hesitate to write to us. We\'re here to help.</string>
-    <string name="contact_view_write_here">Write here...</string>
+    <string name="contact_view_write_here">Write here…</string>
     <string name="contact_view_send">Send</string>
     <string name="contact_view_success_title">Thank you for your message!</string>
     <string name="contact_view_success_description">We have received your comment and will get back to you as soon as possible.</string>
@@ -91,19 +91,36 @@
     <!-- Common -->
     <string name="common_back">Back</string>
     <string name="common_save">Save</string>
+    <string name="common_title">Title</string>
+    <string name="common_description">Description</string>
     <string name="common_app_name">Flow2Day!</string>
     <string name="common_image_description">Image %1$d</string>
+    <string name="common_monday">Monday</string>
+    <string name="common_tuesday">Tuesday</string>
+    <string name="common_wednesday">Wednesday</string>
+    <string name="common_thursday">Thursday</string>
+    <string name="common_friday">Friday</string>
+    <string name="common_saturday">Saturday</string>
+    <string name="common_sunday">Sunday</string>
+    <string name="common_empty_field">This field cannot be empty</string>
+    <string name="common_today">Today</string>
+    <string name="common_start_hour">Start hour</string>
+    <string name="common_end_hour">End hour</string>
+    <string name="common_invalid_format">Invalid format</string>
+    <string name="common_create">Create</string>
+
     
     <!-- Calendar -->
-    <string name="calendar_weekdays">M,T,W,T,F,S,S</string>
+    <string name="calendar_weekdays">Mon,Tue,Wed,Thu,Fri,Sat,Sun</string>
     <string name="calendar_hour">%02d</string>
     <string name="calendar_view_title">Calendar</string>
     <string name="calendar_create">Create Calendar</string>
     <string name="calendar_create_new">Create</string>
     <string name="calendar_cancel">Cancel</string>
-    <string name="calendar_create_new_agenda">Create new calendar</string>
+    <string name="calendar_create_new_calendar">Create new calendar</string>
     <string name="calendar_edit_task">Edit task</string>
     <string name="calendar_delete_task">Delete task</string>
+    <string name="calendar_create_event">Create Event</string>
     <string name="calendar_edit_event">Edit Event</string>
     <string name="calendar_save">Save</string>
     <string name="calendar_select_time">Select time</string>
@@ -112,6 +129,10 @@
     <string name="calendar_select_date">Select date</string>
     <string name="calendar_previous_month">Previous month</string>
     <string name="calendar_next_month">Next month</string>
+    <string name="calendar_date">Date</string>
+    <string name="calendar_no_tasks">No tasks for today</string>
+    <string name="calendar_no_agenda">No agenda selected</string>
+    <string name="calendar_date_pattern">d \'of\' MMMM, yyyy</string>
 
     <!-- Schedule -->
     <string name="schedule_view_title">Schedule</string>
@@ -124,4 +145,5 @@
     <string name="schedule_new_agenda">New Schedule</string>
     <string name="schedule_title_empty">Title cannot be empty</string>
     <string name="schedule_create">Create</string>
+    <string name="schedule_no_agenda">No agenda selected</string>
 </resources>

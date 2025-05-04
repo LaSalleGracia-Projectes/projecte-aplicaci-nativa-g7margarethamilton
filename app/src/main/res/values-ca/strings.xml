@@ -91,9 +91,25 @@
     <!-- Common -->
     <string name="common_back">Tornar</string>
     <string name="common_save">Desar</string>
+    <string name="common_title">Títol</string>
+    <string name="common_description">Descripció</string>
     <string name="common_app_name">Flow2Day!</string>
     <string name="common_image_description">Imatge %1$d</string>
-    
+    <string name="common_monday">Dilluns</string>
+    <string name="common_tuesday">Dimarts</string>
+    <string name="common_wednesday">Dimecres</string>
+    <string name="common_thursday">Dijous</string>
+    <string name="common_friday">Divendres</string>
+    <string name="common_saturday">Dissabte</string>
+    <string name="common_sunday">Diumenge</string>
+    <string name="common_today">Avui</string>
+    <string name="common_empty_field">Aquest camp no pot estar buit</string>
+    <string name="common_start_hour">Hora d\'inici</string>
+    <string name="common_end_hour">Hora de finalització</string>
+    <string name="common_invalid_format">Format invàlid</string>
+    <string name="common_create">Crear</string>
+
+
     <!-- Calendar -->
     <string name="calendar_weekdays">Dl,Dt,Dc,Dj,Dv,Ds,Dg</string>
     <string name="calendar_hour">%02d</string>
@@ -101,9 +117,10 @@
     <string name="calendar_create">Crear Calendari</string>
     <string name="calendar_create_new">Crear</string>
     <string name="calendar_cancel">Cancel·lar</string>
-    <string name="calendar_create_new_agenda">Crear nou calendari</string>
+    <string name="calendar_create_new_calendar">Crear nou calendari</string>
     <string name="calendar_edit_task">Editar tasca</string>
     <string name="calendar_delete_task">Eliminar tasca</string>
+    <string name="calendar_create_event">Crear Esdeveniment</string>
     <string name="calendar_edit_event">Editar Esdeveniment</string>
     <string name="calendar_save">Desar</string>
     <string name="calendar_select_time">Seleccionar hora</string>
@@ -112,6 +129,10 @@
     <string name="calendar_select_date">Seleccionar data</string>
     <string name="calendar_previous_month">Mes anterior</string>
     <string name="calendar_next_month">Mes següent</string>
+    <string name="calendar_date">Data</string>
+    <string name="calendar_no_tasks">No hay tareas programadas para este día</string>
+    <string name="calendar_no_agenda">No hi ha agenda seleccionada</string>
+    <string name="calendar_date_pattern">d \'de\' MMMM \'de\' yyyy</string>
 
     <!-- Schedule -->
     <string name="schedule_view_title">Agenda</string>
@@ -124,4 +145,5 @@
     <string name="schedule_new_agenda">Nova Agenda</string>
     <string name="schedule_title_empty">El títol no pot estar buit</string>
     <string name="schedule_create">Crear</string>
+    <string name="schedule_no_agenda">No hi ha agenda seleccionada</string>
 </resources>
