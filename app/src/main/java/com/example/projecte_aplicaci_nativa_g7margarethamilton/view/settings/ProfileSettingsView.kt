@@ -37,8 +37,15 @@ fun ProfileSettingsView(
 
     // Estats locals per al dropdown d'idioma
     var expandedLanguage by remember { mutableStateOf(false) }
-    val languageOptions = listOf("ca", "es", "en")
-    val selectedLanguage by viewModel.langCodeField.collectAsState()
+    data class LanguageOption(val code: String, val flag: String, val label: String)
+
+    val languageOptions = listOf(
+        LanguageOption("en", "🇬🇧", "English"),
+        LanguageOption("ca", "🇦🇩", "Català"),
+        LanguageOption("es", "🇪🇸", "Español")
+    )
+    val selectedLanguageCode by viewModel.langCodeField.collectAsState()
+    val selectedLanguage = languageOptions.first { it.code == selectedLanguageCode }
 
     Scaffold(
         modifier = Modifier
@@ -111,7 +118,7 @@ fun ProfileSettingsView(
                 modifier = Modifier.fillMaxWidth()
             ) {
                 OutlinedTextField(
-                    value = selectedLanguage,
+                    value = "${selectedLanguage.flag}  ${selectedLanguage.label}",
                     onValueChange = {},
                     label = { Text(localizedContext.getString(R.string.advanced_settings_view_language)) },
                     readOnly = true,
@@ -124,9 +131,9 @@ fun ProfileSettingsView(
                 ) {
                     languageOptions.forEach { option ->
                         DropdownMenuItem(
-                            text = { Text(option) },
+                            text = { Text("${option.flag}  ${option.label}") },
                             onClick = {
-                                viewModel.langCodeField.value = option
+                                viewModel.langCodeField.value = option.code
                                 expandedLanguage = false
                             }
                         )
