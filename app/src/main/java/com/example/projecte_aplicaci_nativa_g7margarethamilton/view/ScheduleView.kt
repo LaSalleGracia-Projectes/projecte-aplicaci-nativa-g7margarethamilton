@@ -89,6 +89,7 @@ fun ScheduleView(
     }
 
     //añadirDatosPrueba(viewModel, userViewModel)
+    viewModel.filterTasksByDay(weekDay.intValue)
 
     LaunchedEffect(currentUser) {
         currentUser?.email?.let { email ->
@@ -122,7 +123,7 @@ fun ScheduleView(
                 },
                 actions = {
                     IconButton(
-                        onClick = { /* navController.navigate(Routes.Calendar.route) */ }
+                        onClick = { navController.navigate(Routes.Calendar.route) }
                     ) {
                         Icon(
                             imageVector = Icons.Default.DateRange,
