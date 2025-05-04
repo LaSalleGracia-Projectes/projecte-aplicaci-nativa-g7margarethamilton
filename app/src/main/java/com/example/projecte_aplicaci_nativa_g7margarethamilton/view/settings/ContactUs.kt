@@ -45,6 +45,9 @@ import androidx.navigation.compose.rememberNavController
 import com.example.projecte_aplicaci_nativa_g7margarethamilton.viewModel.UserViewModel
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.runtime.collectAsState
+import androidx.compose.ui.platform.LocalContext
+import com.example.projecte_aplicaci_nativa_g7margarethamilton.R
+import com.example.projecte_aplicaci_nativa_g7margarethamilton.viewModel.setLocale
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -53,6 +56,9 @@ fun ContactUsView(navController: NavController, viewModel: UserViewModel) {
     var showSuccessScreen by remember { mutableStateOf(false) }
     val updateMsg by viewModel.updateMsg.collectAsState()
     val updateError by viewModel.updateError.collectAsState()
+    val context = LocalContext.current
+    val lang = viewModel.getSavedLanguage(context)
+    val localizedContext = context.setLocale(lang)
 
     LaunchedEffect(updateMsg) {
         if (updateMsg != null) {
@@ -69,7 +75,7 @@ fun ContactUsView(navController: NavController, viewModel: UserViewModel) {
             CenterAlignedTopAppBar(
                 title = {
                     Text(
-                        text = "Contáctanos",
+                        text = localizedContext.getString(R.string.contact_view_title),
                         fontSize = 30.sp,
                         fontWeight = FontWeight.SemiBold,
                         color = MaterialTheme.colorScheme.onSecondary
@@ -79,7 +85,7 @@ fun ContactUsView(navController: NavController, viewModel: UserViewModel) {
                     IconButton(onClick = { navController.popBackStack() }) {
                         Icon(
                             imageVector = Icons.Default.ArrowBack,
-                            contentDescription = "Volver",
+                            contentDescription = localizedContext.getString(R.string.common_back),
                             tint = MaterialTheme.colorScheme.onBackground
                         )
                     }
@@ -101,7 +107,8 @@ fun ContactUsView(navController: NavController, viewModel: UserViewModel) {
                 SuccessScreen(
                     onBackClick = {
                         navController.popBackStack()
-                    }
+                    },
+                    viewModel = viewModel
                 )
             } else {
                 ContactForm(
@@ -115,8 +122,13 @@ fun ContactUsView(navController: NavController, viewModel: UserViewModel) {
 
 @Composable
 fun SuccessScreen(
-    onBackClick: () -> Unit
+    onBackClick: () -> Unit,
+    viewModel: UserViewModel
 ) {
+    val context = LocalContext.current
+    val lang = viewModel.getSavedLanguage(context)
+    val localizedContext = context.setLocale(lang)
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -135,7 +147,7 @@ fun SuccessScreen(
         Spacer(modifier = Modifier.height(32.dp))
         
         Text(
-            text = "¡Gracias por tu mensaje!",
+            text = localizedContext.getString(R.string.contact_view_success_title),
             fontSize = 24.sp,
             fontWeight = FontWeight.Bold,
             color = MaterialTheme.colorScheme.onSecondary,
@@ -145,7 +157,7 @@ fun SuccessScreen(
         Spacer(modifier = Modifier.height(16.dp))
         
         Text(
-            text = "Hemos recibido tu comentario y nos pondremos en contacto contigo lo antes posible.",
+            text = localizedContext.getString(R.string.contact_view_success_description),
             fontSize = 16.sp,
             color = MaterialTheme.colorScheme.onSecondary,
             textAlign = androidx.compose.ui.text.style.TextAlign.Center,
@@ -163,7 +175,7 @@ fun SuccessScreen(
                 containerColor = MaterialTheme.colorScheme.primary
             )
         ) {
-            Text("Volver", fontSize = 16.sp)
+            Text(localizedContext.getString(R.string.contact_view_back), fontSize = 16.sp)
         }
         
         Spacer(modifier = Modifier.weight(0.2f))
@@ -175,13 +187,17 @@ fun ContactForm(
     viewModel: UserViewModel,
     updateError: String?
 ) {
+    val context = LocalContext.current
+    val lang = viewModel.getSavedLanguage(context)
+    val localizedContext = context.setLocale(lang)
+
     Column(
         modifier = Modifier
             .fillMaxSize()
             .padding(16.dp)
     ) {
         Text(
-            text = "¿Tienes algún problema?",
+            text = localizedContext.getString(R.string.contact_view_problem_title),
             fontSize = 24.sp,
             fontWeight = FontWeight.SemiBold,
             color = MaterialTheme.colorScheme.onSecondary,
@@ -191,7 +207,7 @@ fun ContactForm(
         Spacer(modifier = Modifier.padding(8.dp))
         
         Text(
-            text = "Te escuchamos. Si tienes alguna pregunta, sugerencia o comentario, no dudes en escribirnos. Estamos aquí para ayudarte.",
+            text = localizedContext.getString(R.string.contact_view_problem_description),
             fontSize = 20.sp,
             color = MaterialTheme.colorScheme.onSecondary,
             modifier = Modifier.padding(16.dp)
@@ -220,7 +236,7 @@ fun ContactForm(
                 singleLine = false,
                 decorationBox = { innerTextField ->
                     if (text.isEmpty()) {
-                        Text("Escribe aquí...", color = Color.Gray)
+                        Text(localizedContext.getString(R.string.contact_view_write_here), color = Color.Gray)
                     }
                     innerTextField()
                 }
@@ -255,7 +271,7 @@ fun ContactForm(
             shape = MaterialTheme.shapes.small,
             enabled = isTextValid
         ) {
-            Text("Enviar")
+            Text(localizedContext.getString(R.string.contact_view_send))
         }
     }
 }

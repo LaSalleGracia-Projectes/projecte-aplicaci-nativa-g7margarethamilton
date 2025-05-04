@@ -1,6 +1,5 @@
 package com.example.projecte_aplicaci_nativa_g7margarethamilton.view
 
-import Terms
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Box

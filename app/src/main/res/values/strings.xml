@@ -52,6 +52,7 @@
     <!-- Terms and Conditions View -->
     <string name="terms_and_conditions_view_title">Terms &amp; Conditions</string>
     <string name="terms_and_conditions_view_accept">Accept</string>
+    <string name="terms_and_conditions_view_content">1. Acceptance of Terms\nBy accessing and using this application, you agree to be bound by these terms and conditions.\n\n2. Application Use\nThis application is intended for registration and personal use only.\n\n3. Privacy\nWe are committed to protecting your privacy and personal data in accordance with our privacy policy.\n\n4. Modifications\nWe reserve the right to modify these terms at any time.\n\n5. Limitation of Liability\nWe are not responsible for any direct or indirect damages that may arise from the use of this application.</string>
     <!-- About View -->
     <string name="about_view_title">About us</string>
     <string name="about_view_description">Our Flow2Day app is designed to help you manage your time efficiently and effectively. With an intuitive interface and powerful tools, we help you stay organized and focused on your goals.</string>
@@ -77,4 +78,50 @@
     <string name="edit_profile_view_title">Edit Profile</string>
     <string name="edit_profile_view_nickname">Username</string>
     <string name="edit_profile_view_avatar">Avatar URL</string>
+    <!-- Contact View -->
+    <string name="contact_view_title">Contact us</string>
+    <string name="contact_view_problem_title">Do you have a problem?</string>
+    <string name="contact_view_problem_description">We\'re listening. If you have any questions, suggestions or comments, don\'t hesitate to write to us. We\'re here to help.</string>
+    <string name="contact_view_write_here">Write here...</string>
+    <string name="contact_view_send">Send</string>
+    <string name="contact_view_success_title">Thank you for your message!</string>
+    <string name="contact_view_success_description">We have received your comment and will get back to you as soon as possible.</string>
+    <string name="contact_view_back">Back</string>
+    
+    <!-- Common -->
+    <string name="common_back">Back</string>
+    <string name="common_save">Save</string>
+    <string name="common_app_name">Flow2Day!</string>
+    <string name="common_image_description">Image %1$d</string>
+    
+    <!-- Calendar -->
+    <string name="calendar_weekdays">M,T,W,T,F,S,S</string>
+    <string name="calendar_hour">%02d</string>
+    <string name="calendar_view_title">Calendar</string>
+    <string name="calendar_create">Create Calendar</string>
+    <string name="calendar_create_new">Create</string>
+    <string name="calendar_cancel">Cancel</string>
+    <string name="calendar_create_new_agenda">Create new calendar</string>
+    <string name="calendar_edit_task">Edit task</string>
+    <string name="calendar_delete_task">Delete task</string>
+    <string name="calendar_edit_event">Edit Event</string>
+    <string name="calendar_save">Save</string>
+    <string name="calendar_select_time">Select time</string>
+    <string name="calendar_24h_format">24-hour format</string>
+    <string name="calendar_accept">Accept</string>
+    <string name="calendar_select_date">Select date</string>
+    <string name="calendar_previous_month">Previous month</string>
+    <string name="calendar_next_month">Next month</string>
+
+    <!-- Schedule -->
+    <string name="schedule_view_title">Schedule</string>
+    <string name="schedule_close">Close</string>
+    <string name="schedule_calendar">Calendar</string>
+    <string name="schedule_no_tasks">No tasks scheduled for this day</string>
+    <string name="schedule_add_task">Add Task</string>
+    <string name="schedule_new_task">New Task</string>
+    <string name="schedule_add">Add</string>
+    <string name="schedule_new_agenda">New Schedule</string>
+    <string name="schedule_title_empty">Title cannot be empty</string>
+    <string name="schedule_create">Create</string>
 </resources>

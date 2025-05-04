@@ -37,6 +37,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -45,10 +46,12 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.projecte_aplicaci_nativa_g7margarethamilton.Routes
+import com.example.projecte_aplicaci_nativa_g7margarethamilton.R
 import com.example.projecte_aplicaci_nativa_g7margarethamilton.model.moduls.Schedule
 import com.example.projecte_aplicaci_nativa_g7margarethamilton.model.moduls.Schedule_task
 import com.example.projecte_aplicaci_nativa_g7margarethamilton.viewModel.ScheduleViewModel
 import com.example.projecte_aplicaci_nativa_g7margarethamilton.viewModel.UserViewModel
+import com.example.projecte_aplicaci_nativa_g7margarethamilton.viewModel.setLocale
 import kotlinx.coroutines.flow.filter
 import java.time.LocalDate
 import java.time.OffsetDateTime
@@ -76,6 +79,9 @@ fun ScheduleView(
     val calendar = Calendar.getInstance()
     val currentDay = calendar.get(Calendar.DAY_OF_WEEK)
     val week_day = remember { mutableIntStateOf(calendar.get(Calendar.DAY_OF_WEEK)) }
+    val context = LocalContext.current
+    val lang = userViewModel.getSavedLanguage(context)
+    val localizedContext = context.setLocale(lang)
     var diaSemanaString = when (week_day.intValue) {
         1 -> "Domingo"
         2 -> "Lunes"
@@ -113,32 +119,30 @@ fun ScheduleView(
             CenterAlignedTopAppBar(
                 title = {
                     Text(
-                        text = "Agenda",
+                        text = localizedContext.getString(R.string.schedule_view_title),
                         fontSize = 20.sp,
                         fontWeight = FontWeight.SemiBold,
                         color = MaterialTheme.colorScheme.onSecondary
                     )
                 },
                 navigationIcon = {
-                    // Close button
                     IconButton(
                         onClick = { navController.navigate(Routes.Home.route) },
                     ) {
                         Icon(
                             imageVector = Icons.Default.Close,
-                            contentDescription = "Cerrar",
+                            contentDescription = localizedContext.getString(R.string.schedule_close),
                             tint = MaterialTheme.colorScheme.onBackground
                         )
                     }
                 },
                 actions = {
-                    // Calendar button
                     IconButton(
                         onClick = { /* navController.navigate(Routes.Calendar.route)*/ },
                     ) {
                         Icon(
                             imageVector = Icons.Default.DateRange,
-                            contentDescription = "Calendario",
+                            contentDescription = localizedContext.getString(R.string.schedule_calendar),
                             tint = MaterialTheme.colorScheme.onBackground
                         )
                     }
@@ -256,7 +260,7 @@ fun ScheduleView(
             ) {
                 if (filteredTasks.isEmpty()) {
                     Text(
-                        text = "No hay tareas programadas para este día.",
+                        text = localizedContext.getString(R.string.schedule_no_tasks),
                         fontSize = 16.sp,
                         color = MaterialTheme.colorScheme.onSecondary,
                         modifier = Modifier.padding(16.dp)
@@ -285,7 +289,7 @@ fun ScheduleView(
                     .padding(top = 16.dp),
                 enabled = currentSchedule != null,
             ) {
-                Text("Añadir Tarea")
+                Text(localizedContext.getString(R.string.schedule_add_task))
             }
         }
     }
@@ -559,11 +563,16 @@ fun CreateScheduleDialog(
     var categoryId by remember { mutableStateOf(1) } // Valor por defecto
     var titleError by remember { mutableStateOf(false) }
 
+    var userViewModel: UserViewModel = viewModel()
+    val context = LocalContext.current
+    val lang = userViewModel.getSavedLanguage(context)
+    val localizedContext = context.setLocale(lang)
+
     AlertDialog(
         onDismissRequest = onDismiss,
         title = {
             Text(
-                "Nueva Agenda",
+                localizedContext.getString(R.string.schedule_new_agenda),
                 style = MaterialTheme.typography.titleLarge
             )
         },
@@ -586,7 +595,7 @@ fun CreateScheduleDialog(
                     supportingText = {
                         if (titleError) {
                             Text(
-                                text = "El título no puede estar vacío",
+                                text = localizedContext.getString(R.string.schedule_title_empty),
                                 color = MaterialTheme.colorScheme.error
                             )
                         }
@@ -607,12 +616,12 @@ fun CreateScheduleDialog(
                     }
                 }
             ) {
-                Text("Crear")
+                Text(localizedContext.getString(R.string.schedule_create))
             }
         },
         dismissButton = {
             TextButton(onClick = onDismiss) {
-                Text("Cancelar")
+                Text(localizedContext.getString(R.string.calendar_cancel))
             }
         }
     )
@@ -645,6 +654,11 @@ fun AddTaskDialog(
     var contentError by remember { mutableStateOf(false) }
     var startTimeError by remember { mutableStateOf(false) }
     var endTimeError by remember { mutableStateOf(false) }
+
+    var userViewModel: UserViewModel = viewModel()
+    val context = LocalContext.current
+    val lang = userViewModel.getSavedLanguage(context)
+    val localizedContext = context.setLocale(lang)
 
     // Regex para validar formato de hora
     val timeFormatRegex = Regex("^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$")
@@ -756,12 +770,12 @@ fun AddTaskDialog(
                     }
                 }
             ) {
-                Text("Añadir")
+                Text(localizedContext.getString(R.string.schedule_add))
             }
         },
         dismissButton = {
             TextButton(onClick = onDismiss) {
-                Text("Cancelar")
+                Text(localizedContext.getString(R.string.calendar_cancel))
             }
         }
     )

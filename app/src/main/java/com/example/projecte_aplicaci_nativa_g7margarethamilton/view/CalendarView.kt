@@ -30,6 +30,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -37,10 +38,13 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.example.projecte_aplicaci_nativa_g7margarethamilton.R
 import com.example.projecte_aplicaci_nativa_g7margarethamilton.model.moduls.Calendar_task
 import com.example.projecte_aplicaci_nativa_g7margarethamilton.viewModel.CalendarViewModel
 import com.example.projecte_aplicaci_nativa_g7margarethamilton.viewModel.UserViewModel
+import com.example.projecte_aplicaci_nativa_g7margarethamilton.viewModel.setLocale
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
@@ -66,6 +70,9 @@ fun CalendarView(
     var showCreateEventDialog by remember { mutableStateOf(false) }
     var showDayDetail by remember { mutableStateOf(false) }
     val currentUser by userViewModel.currentUser.collectAsState()
+    val context = LocalContext.current
+    val lang = userViewModel.getSavedLanguage(context)
+    val localizedContext = context.setLocale(lang)
 
     LaunchedEffect(Unit) {
         calendarViewModel.loadCalendars()
@@ -79,7 +86,7 @@ fun CalendarView(
             CenterAlignedTopAppBar(
                 title = {
                     Text(
-                        text = "Calendario",
+                        text = localizedContext.getString(R.string.calendar_view_title),
                         fontSize = 30.sp,
                         fontWeight = FontWeight.SemiBold,
                         color = MaterialTheme.colorScheme.onSecondary,
@@ -155,7 +162,7 @@ fun CalendarView(
                     contentAlignment = Alignment.Center
                 ) {
                     Button(onClick = { showCreateCalendarDialog = true }) {
-                        Text("Crear Calendario")
+                        Text(localizedContext.getString(R.string.calendar_create))
                     }
                 }
             } else {
@@ -342,6 +349,11 @@ fun CreateCalendarDialog(
     onConfirm: (String) -> Unit
 ) {
     var title by remember { mutableStateOf("") }
+    var viewModel: UserViewModel = viewModel()
+
+    val context = LocalContext.current
+    val lang = viewModel.getSavedLanguage(context)
+    val localizedContext = context.setLocale(lang)
 
     AlertDialog(
         onDismissRequest = onDismiss,
@@ -363,7 +375,7 @@ fun CreateCalendarDialog(
         },
         dismissButton = {
             TextButton(onClick = onDismiss) {
-                Text("Cancelar")
+                Text(localizedContext.getString(R.string.calendar_cancel))
             }
         }
     )
@@ -378,6 +390,11 @@ fun TaskItem(
     onDeleteTask: () -> Unit = {}
 ) {
     var showEditDialog by remember { mutableStateOf(false) }
+    var viewModel: UserViewModel = viewModel()
+
+    val context = LocalContext.current
+    val lang = viewModel.getSavedLanguage(context)
+    val localizedContext = context.setLocale(lang)
     
     Card(
         modifier = Modifier
@@ -459,14 +476,14 @@ fun TaskItem(
                     IconButton(onClick = { showEditDialog = true }) {
                         Icon(
                             imageVector = Icons.Default.Edit,
-                            contentDescription = "Editar tarea",
+                            contentDescription = localizedContext.getString(R.string.calendar_edit_task),
                             tint = MaterialTheme.colorScheme.primary
                         )
                     }
                     IconButton(onClick = onDeleteTask) {
                         Icon(
                             imageVector = Icons.Default.Delete,
-                            contentDescription = "Eliminar tarea",
+                            contentDescription = localizedContext.getString(R.string.calendar_delete_task),
                             tint = MaterialTheme.colorScheme.error
                         )
                     }
@@ -529,6 +546,10 @@ fun EditTaskDialog(
     var showStartTimePicker by remember { mutableStateOf(false) }
     var showEndTimePicker by remember { mutableStateOf(false) }
     var showDatePicker by remember { mutableStateOf(false) }
+    var viewModel: UserViewModel = viewModel()
+    val context = LocalContext.current
+    val lang = viewModel.getSavedLanguage(context)
+    val localizedContext = context.setLocale(lang)
 
     // Función simple para combinar fecha y hora en el formato requerido
     fun combineDateTime(date: LocalDate, hour: Int, minute: Int): String {
@@ -558,7 +579,7 @@ fun EditTaskDialog(
                 Spacer(modifier = Modifier.height(16.dp))
                 
                 // Selector de fecha
-                Text("Fecha", style = MaterialTheme.typography.bodyMedium)
+                Text(localizedContext.getString(R.string.calendar_select_date), style = MaterialTheme.typography.bodyMedium)
                 OutlinedButton(
                     onClick = { showDatePicker = true },
                     modifier = Modifier.fillMaxWidth()
@@ -603,12 +624,12 @@ fun EditTaskDialog(
                 },
                 enabled = title.isNotBlank()
             ) {
-                Text("Guardar")
+                Text(localizedContext.getString(R.string.calendar_accept))
             }
         },
         dismissButton = {
             TextButton(onClick = onDismiss) {
-                Text("Cancelar")
+                Text(localizedContext.getString(R.string.calendar_cancel))
             }
         }
     )
@@ -652,11 +673,15 @@ fun TimePickerDialog(
     onDismiss: () -> Unit,
     onConfirm: (Int, Int) -> Unit
 ) {
+    var userViewModel: UserViewModel = viewModel()
     var selectedHour by remember { mutableStateOf(0) }
     var selectedMinute by remember { mutableStateOf(0) }
     var isHourSelection by remember { mutableStateOf(true) }
     val hourScrollState = rememberScrollState()
     val minuteScrollState = rememberScrollState()
+    val context = LocalContext.current
+    val lang = userViewModel.getSavedLanguage(context)
+    val localizedContext = context.setLocale(lang)
 
     LaunchedEffect(isHourSelection) {
         // Scroll to center selected value when switching between hour/minute
@@ -675,7 +700,7 @@ fun TimePickerDialog(
         shape = RoundedCornerShape(16.dp),
         title = {
             Text(
-                text = "Seleccionar hora",
+                text = localizedContext.getString(R.string.calendar_select_time),
                 style = MaterialTheme.typography.headlineSmall,
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier.padding(bottom = 8.dp)
@@ -996,7 +1021,7 @@ fun TimePickerDialog(
                 // Time period AM/PM indicator (optional)
                 if (isHourSelection) {
                     Text(
-                        text = "Formato 24 horas",
+                        text = localizedContext.getString(R.string.calendar_24h_format),
                         style = MaterialTheme.typography.bodySmall,
                         modifier = Modifier.padding(top = 8.dp),
                         color = MaterialTheme.colorScheme.onSurfaceVariant
@@ -1010,7 +1035,7 @@ fun TimePickerDialog(
                 modifier = Modifier.padding(horizontal = 8.dp),
                 shape = RoundedCornerShape(8.dp)
             ) {
-                Text("Aceptar")
+                Text(localizedContext.getString(R.string.calendar_accept))
             }
         },
         dismissButton = {
@@ -1018,7 +1043,7 @@ fun TimePickerDialog(
                 onClick = onDismiss,
                 modifier = Modifier.padding(horizontal = 8.dp)
             ) {
-                Text("Cancelar")
+                Text(localizedContext.getString(R.string.calendar_cancel))
             }
         }
     )
@@ -1218,6 +1243,11 @@ fun DatePickerDialog(
 ) {
     var selectedDate by remember { mutableStateOf(initialDate) }
     var currentYearMonth by remember { mutableStateOf(YearMonth.from(initialDate)) }
+    val userViewModel: UserViewModel = viewModel()
+    val context = LocalContext.current
+    val lang = userViewModel.getSavedLanguage(context)
+    val localizedContext = context.setLocale(lang)
+
 
     AlertDialog(
         onDismissRequest = onDismiss,
@@ -1230,7 +1260,7 @@ fun DatePickerDialog(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
-                    text = "Seleccionar fecha",
+                    text = localizedContext.getString(R.string.calendar_select_date),
                     style = MaterialTheme.typography.headlineSmall,
                     fontWeight = FontWeight.Bold
                 )
@@ -1243,7 +1273,7 @@ fun DatePickerDialog(
                     IconButton(onClick = { 
                         currentYearMonth = currentYearMonth.minusMonths(1)
                     }) {
-                        Icon(Icons.Default.KeyboardArrowLeft, "Mes anterior")
+                        Icon(Icons.Default.KeyboardArrowLeft, localizedContext.getString(R.string.calendar_previous_month))
                     }
                     Text(
                         text = currentYearMonth.format(
@@ -1254,7 +1284,7 @@ fun DatePickerDialog(
                     IconButton(onClick = { 
                         currentYearMonth = currentYearMonth.plusMonths(1)
                     }) {
-                        Icon(Icons.Default.KeyboardArrowRight, "Mes siguiente")
+                        Icon(Icons.Default.KeyboardArrowRight, localizedContext.getString(R.string.calendar_next_month))
                     }
                 }
             }
@@ -1270,7 +1300,8 @@ fun DatePickerDialog(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-                    listOf("L", "M", "X", "J", "V", "S", "D").forEach { day ->
+                    val weekdays = localizedContext.getString(R.string.calendar_weekdays).split(",")
+                    weekdays.forEach { day ->
                         Text(
                             text = day,
                             modifier = Modifier.padding(4.dp),

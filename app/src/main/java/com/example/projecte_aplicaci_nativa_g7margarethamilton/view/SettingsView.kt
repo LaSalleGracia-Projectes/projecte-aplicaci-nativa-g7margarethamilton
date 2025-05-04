@@ -1,6 +1,5 @@
 package com.example.projecte_aplicaci_nativa_g7margarethamilton.view
 
-import TermsModal
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -86,7 +85,7 @@ fun SettingsView(viewModel: UserViewModel, navController: NavController) {
                 onClick = { showTermsModal = true }
             )
             if (showTermsModal) {
-                TermsModal(onDismiss = { showTermsModal = false })
+                TermsModal(onDismiss = { showTermsModal = false }, viewModel = viewModel)
             }
             
             SettingOption(
