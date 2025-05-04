@@ -149,13 +149,13 @@ fun TodayTasksView(
                             text = today.format(DateTimeFormatter.ofPattern("EEEE", Locale(lang)))
                                 .replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.ROOT) else it.toString() },
                             style = MaterialTheme.typography.titleMedium,
-                            color = MaterialTheme.colorScheme.onPrimaryContainer
+                            color = MaterialTheme.colorScheme.onPrimary
                         )
                         Text(
                             text = today.format(DateTimeFormatter.ofPattern(localizedContext.getString(R.string.calendar_date_pattern), Locale(lang))),
                             style = MaterialTheme.typography.headlineMedium,
                             fontWeight = FontWeight.Bold,
-                            color = MaterialTheme.colorScheme.onPrimaryContainer
+                            color = MaterialTheme.colorScheme.onPrimary
                         )
                     }
                     Icon(
