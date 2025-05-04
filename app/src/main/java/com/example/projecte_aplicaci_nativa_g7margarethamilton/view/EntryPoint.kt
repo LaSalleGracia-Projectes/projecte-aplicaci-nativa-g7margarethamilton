@@ -1,7 +1,6 @@
 package com.example.projecte_aplicaci_nativa_g7margarethamilton.view
 
-import android.os.Build
-import androidx.annotation.RequiresApi
+
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -13,7 +12,6 @@ import com.example.projecte_aplicaci_nativa_g7margarethamilton.view.settings.Pro
 import com.example.projecte_aplicaci_nativa_g7margarethamilton.viewModel.CalendarViewModel
 import com.example.projecte_aplicaci_nativa_g7margarethamilton.viewModel.UserViewModel
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun EntryPoint(
     navController: NavHostController, userViewModel: UserViewModel,
