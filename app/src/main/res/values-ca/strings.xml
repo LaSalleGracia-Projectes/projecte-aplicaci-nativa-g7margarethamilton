@@ -135,7 +135,7 @@
     <string name="calendar_date_pattern">d \'de\' MMMM \'de\' yyyy</string>
 
     <!-- Schedule -->
-    <string name="schedule_view_title">Agenda</string>
+    <string name="schedule_view_title">Horari</string>
     <string name="schedule_close">Tancar</string>
     <string name="schedule_calendar">Calendari</string>
     <string name="schedule_no_tasks">No hi ha tasques programades per a aquest dia</string>

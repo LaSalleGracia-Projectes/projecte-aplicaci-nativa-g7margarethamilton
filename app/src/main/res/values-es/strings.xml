@@ -136,7 +136,7 @@
     <string name="calendar_date_pattern">d \'de\' MMMM \'de\' yyyy</string>
 
     <!-- Schedule -->
-    <string name="schedule_view_title">Agenda</string>
+    <string name="schedule_view_title">Horario</string>
     <string name="schedule_close">Cerrar</string>
     <string name="schedule_calendar">Calendario</string>
     <string name="schedule_no_tasks">No hay tareas programadas para este día</string>
