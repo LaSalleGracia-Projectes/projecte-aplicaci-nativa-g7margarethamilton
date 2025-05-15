@@ -493,7 +493,20 @@ fun TaskItem(
                 Checkbox(
                     checked = task.is_completed,
                     onCheckedChange = { isChecked ->
-                        onUpdateTask(task.copy(is_completed = isChecked))
+                        // Convertir las fechas al formato correcto antes de enviar
+                        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+
+                        // Parsear las fechas ISO y reformatearlas
+                        val startDateTime = ZonedDateTime.parse(task.start_time).toLocalDateTime()
+                        val endDateTime = ZonedDateTime.parse(task.end_time).toLocalDateTime()
+
+                        val formattedStartTime = startDateTime.format(formatter)
+                        val formattedEndTime = endDateTime.format(formatter)
+
+                        onUpdateTask(task.copy(
+                            is_completed = isChecked,
+                            start_time = formattedStartTime,
+                            end_time = formattedEndTime))
                     },
                     colors = CheckboxDefaults.colors(
                         checkedColor = MaterialTheme.colorScheme.primary,

@@ -17,12 +17,12 @@ import java.time.format.DateTimeFormatter
 
 /**
  * ViewModel para la gestión de calendarios y sus tareas asociadas.
- * 
+ *
  * Este ViewModel maneja todas las operaciones relacionadas con calendarios, incluyendo:
  * - Gestión de calendarios (crear, cargar, eliminar)
  * - Gestión de tareas de calendario (crear, actualizar, eliminar)
  * - Manejo del estado de la UI relacionado con calendarios
- * 
+ *
  * @property userViewModel ViewModel del usuario necesario para obtener el token de autenticación
  */
 class CalendarViewModel(
@@ -151,6 +151,7 @@ class CalendarViewModel(
     ) {
         val token = userViewModel.token.value ?: return
         val currentCalendarId = _currentCalendar.value?.id ?: return
+
         // Formato para parsear y formatear las fechas
         val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
 
@@ -239,8 +240,26 @@ class CalendarViewModel(
         categoryId: Int,
         email: String
     ) {
+
         val token = userViewModel.token.value ?: return
+        // Se obtiene el ID del calendario actual
         val currentCalendarId = _currentCalendar.value?.id ?: return
+
+        // Formato para parsear y formatear las fechas
+        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+
+        // Parsear las fechas a LocalDateTime
+        val startDateTime = LocalDateTime.parse(startTime, formatter)
+        val endDateTime = LocalDateTime.parse(endTime, formatter)
+
+        // Sumar 4 horas a cada tiempo
+        val adjustedStartTime = startDateTime.plusHours(4)
+        val adjustedEndTime = endDateTime.plusHours(4)
+
+        // Convertir de nuevo a String con el formato requerido
+        val adjustedStartTimeStr = adjustedStartTime.format(formatter)
+        val adjustedEndTimeStr = adjustedEndTime.format(formatter)
+
 
         executeApiCall(
             apiCall = {
@@ -252,8 +271,8 @@ class CalendarViewModel(
                     content = content,
                     isCompleted = isCompleted,
                     priority = 1,
-                    startTime = startTime,
-                    endTime = endTime,
+                    startTime = adjustedStartTimeStr,
+                    endTime = adjustedEndTimeStr,
                     calendarId = currentCalendarId,
                     categoryId = categoryId
                 )
