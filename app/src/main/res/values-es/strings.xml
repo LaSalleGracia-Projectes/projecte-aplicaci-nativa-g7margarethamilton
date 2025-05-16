@@ -139,7 +139,7 @@
     <string name="calendar_date_pattern">d \'de\' MMMM \'de\' yyyy</string>
 
     <!-- Schedule -->
-    <string name="schedule_view_title">Agenda</string>
+    <string name="schedule_view_title">Horario</string>
     <string name="schedule_close">Cerrar</string>
     <string name="schedule_calendar">Calendario</string>
     <string name="schedule_no_tasks">No hay tareas programadas para este día</string>
@@ -150,4 +150,11 @@
     <string name="schedule_title_empty">El título no puede estar vacío</string>
     <string name="schedule_create">Crear</string>
     <string name="schedule_no_agenda">No hay agenda seleccionada</string>
+
+    <!-- Today Tasks -->
+    <string name="today_tasks_title">Tareas de hoy</string>
+    <string name="today_tasks_no_tasks">No hay tareas para hoy</string>
+    <string name="today_tasks_completed">Tareas completadas</string>
+    <string name="today_tasks_pending">Tareas pendientes</string>
+
 </resources>

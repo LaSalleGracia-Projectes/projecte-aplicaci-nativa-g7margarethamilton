@@ -279,7 +279,7 @@ class UserViewModel : ViewModel() {
                         val loginResponse = response.body()
                         _token.value = loginResponse?.tokenApp
                         _currentUser.value = loginResponse?.user
-                        _missatgeLogin.value = loginResponse?.message ?: "Inicio de sesión exitoso"
+                        _missatgeLogin.value = loginResponse?.message ?: ""
                         loadSettings(context)
                     } else {
                         when (response.code()) {
@@ -318,7 +318,7 @@ class UserViewModel : ViewModel() {
                         val loginResponse = response.body()
                         _token.value = loginResponse?.tokenApp
                         _currentUser.value = loginResponse?.user
-                        _missatgeLogin.value = loginResponse?.message ?: "Login amb Google exitós"
+                        _missatgeLogin.value = loginResponse?.message ?: ""
                         loadSettings(context)
                     } else {
                         _missatgeLogin.value = "Error en iniciar sessió amb Google"

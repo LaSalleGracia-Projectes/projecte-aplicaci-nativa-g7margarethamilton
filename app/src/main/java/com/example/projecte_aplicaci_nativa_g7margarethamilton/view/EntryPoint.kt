@@ -37,5 +37,6 @@ fun EntryPoint(
         composable(Routes.EditProfile.route) { EditProfileView(navController, userViewModel) }
         composable(Routes.Exercises.route) { ExercisesView(userViewModel, navController) }
         composable(Routes.ShoppingList.route) { ShoppingListView(userViewModel, navController) }
+        composable(Routes.TodayTasks.route) { TodayTasksView(userViewModel, calendarViewModel, navController) }
     }
 }

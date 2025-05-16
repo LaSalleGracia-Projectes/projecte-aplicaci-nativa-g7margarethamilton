@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">projecte-aplicaci-nativa-g7margarethamilton</string>
+    <string name="app_name">Flow2Day!</string>
     <!-- Welcome View -->
     <string name="welcome_view_title">Welcome</string>
     <string name="welcome_view_subtitle">to</string>
@@ -150,4 +150,10 @@
     <string name="schedule_title_empty">Title cannot be empty</string>
     <string name="schedule_create">Create</string>
     <string name="schedule_no_agenda">No agenda selected</string>
+
+    <!-- Today Tasks -->
+    <string name="today_tasks_title">Today\'s Tasks</string>
+    <string name="today_tasks_no_tasks">No tasks for today</string>
+    <string name="today_tasks_completed">Completed Tasks</string>
+    <string name="today_tasks_pending">Pending Tasks</string>
 </resources>

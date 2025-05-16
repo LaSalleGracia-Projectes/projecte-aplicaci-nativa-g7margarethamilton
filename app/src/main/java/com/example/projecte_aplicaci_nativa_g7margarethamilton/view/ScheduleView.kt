@@ -83,14 +83,13 @@ fun ScheduleView(
     }
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
 
-
     // Filtrar tareas cuando cambia el día de la semana
     LaunchedEffect(weekDay.intValue) {
         viewModel.filterTasksByDay(weekDay.intValue)
     }
 
-
     //añadirDatosPrueba(viewModel, userViewModel)
+    viewModel.filterTasksByDay(weekDay.intValue)
 
     LaunchedEffect(currentUser) {
         currentUser?.email?.let { email ->
@@ -101,25 +100,22 @@ fun ScheduleView(
 
     Scaffold(
         modifier = Modifier
-            .nestedScroll(scrollBehavior.nestedScrollConnection),
-        //.padding(40.dp),
-
+            .nestedScroll(scrollBehavior.nestedScrollConnection)
+            .padding(top = 40.dp),                // mateix padding que Calendar
         topBar = {
             CenterAlignedTopAppBar(
                 title = {
                     Text(
                         text = localizedContext.getString(R.string.schedule_view_title),
-                        fontSize = 20.sp,
+                        fontSize = 30.sp,        // mateix fontSize que Calendar
                         fontWeight = FontWeight.SemiBold,
                         color = MaterialTheme.colorScheme.onSecondary
                     )
                 },
                 navigationIcon = {
-                    IconButton(
-                        onClick = { navController.navigate(Routes.Home.route) },
-                    ) {
+                    IconButton(onClick = { navController.popBackStack() }) {
                         Icon(
-                            imageVector = Icons.Default.Close,
+                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,   // igual que Calendar
                             contentDescription = localizedContext.getString(R.string.schedule_close),
                             tint = MaterialTheme.colorScheme.onBackground
                         )
@@ -127,7 +123,7 @@ fun ScheduleView(
                 },
                 actions = {
                     IconButton(
-                        onClick = { /* navController.navigate(Routes.Calendar.route)*/ },
+                        onClick = { navController.navigate(Routes.Calendar.route) }
                     ) {
                         Icon(
                             imageVector = Icons.Default.DateRange,
@@ -135,10 +131,16 @@ fun ScheduleView(
                             tint = MaterialTheme.colorScheme.onBackground
                         )
                     }
-                }
+                },
+                colors = TopAppBarDefaults.topAppBarColors(   // mateix esquema de colors
+                    containerColor = MaterialTheme.colorScheme.background,
+                    titleContentColor = MaterialTheme.colorScheme.onSecondary
+                ),
+                scrollBehavior = scrollBehavior               // idèntic valor
             )
         },
-        bottomBar = { BottomNavBar(navController) }
+        bottomBar = { BottomNavBar(navController) },
+        containerColor = MaterialTheme.colorScheme.background
     ) { paddingValues ->
         Column(
             modifier = Modifier
