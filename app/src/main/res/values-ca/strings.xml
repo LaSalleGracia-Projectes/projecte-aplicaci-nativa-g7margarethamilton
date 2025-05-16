@@ -134,7 +134,7 @@
     <string name="calendar_previous_month">Mes anterior</string>
     <string name="calendar_next_month">Mes següent</string>
     <string name="calendar_date">Data</string>
-    <string name="calendar_no_tasks">No hay tareas programadas para este día</string>
+    <string name="calendar_no_tasks">No hi han tasques per avui</string>
     <string name="calendar_no_agenda">No hi ha agenda seleccionada</string>
     <string name="calendar_date_pattern">d \'de\' MMMM \'de\' yyyy</string>
 
