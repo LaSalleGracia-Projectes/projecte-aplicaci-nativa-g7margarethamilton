@@ -202,7 +202,7 @@ fun TodayTasksView(
                     contentAlignment = Alignment.Center
                 ) {
                     Text(
-                        text = "No tasks for today",
+                        text = localizedContext.getString(R.string.calendar_no_tasks),
                         style = MaterialTheme.typography.bodyLarge,
                         textAlign = TextAlign.Center,
                         color = MaterialTheme.colorScheme.onSurfaceVariant

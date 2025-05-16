@@ -13,6 +13,10 @@
     <string name="login_view_login_button">Log In</string>
     <string name="login_view_or">or</string>
     <string name="login_view_google_button">Login With Google</string>
+    <string name="login_password_error">The password must be at least 8 characters long and contain at least one letter and one number</string>
+    <string name="login_email_error">The email address is not valid</string>
+    <string name="login_confirm_password_error">Passwords do not match</string>
+
     <!-- Forgot Password View -->
     <string name="forgot_password_view_title">Forgot your password?</string>
     <string name="forgot_password_view_description">Please enter your email address to reset your password:</string>

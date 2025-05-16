@@ -13,6 +13,10 @@
     <string name="login_view_login_button">Iniciar sessió</string>
     <string name="login_view_or">o</string>
     <string name="login_view_google_button">Inicia sessió amb Google</string>
+    <string name="login_password_error">La contrasenya ha de tenir almenys 8 caràcters i contenir almenys una lletra i un número</string>
+    <string name="login_email_error">El correu electrònic no és vàlid</string>
+    <string name="login_confirm_password_error">Les contrasenyes no coincideixen</string>
+
     <!-- Forgot Password View -->
     <string name="forgot_password_view_title">Has oblidat la contrasenya?</string>
     <string name="forgot_password_view_description">Si us plau, introdueix el teu correu electrònic per restablir la contrasenya:</string>
@@ -130,7 +134,7 @@
     <string name="calendar_previous_month">Mes anterior</string>
     <string name="calendar_next_month">Mes següent</string>
     <string name="calendar_date">Data</string>
-    <string name="calendar_no_tasks">No hay tareas programadas para este día</string>
+    <string name="calendar_no_tasks">No hi han tasques per avui</string>
     <string name="calendar_no_agenda">No hi ha agenda seleccionada</string>
     <string name="calendar_date_pattern">d \'de\' MMMM \'de\' yyyy</string>
 
